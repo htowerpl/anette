@@ -33,6 +33,23 @@ na GitHub Pages po każdym pushu do gałęzi `work` (możesz zmienić gałąź w
 4. W zakładce **Actions → Deployments** znajdziesz status publikacji oraz link podglądu strony.
 5. Aby aktualizacje trafiały na produkcję, kontynuuj pracę na gałęzi `work` lub `main` (workflow wspiera obie).
 
+### Jak wypchnąć zmiany z własnego komputera (HTTPS z tokenem)
+Jeśli korzystasz z klona lokalnego na swoim komputerze:
+
+```bash
+git clone https://github.com/htowerpl/anette.git
+cd anette
+git remote add workdir <adres_tego_repo_lokalnego>  # tylko gdy kopiujesz zmiany z innego katalogu
+git checkout work                                   # upewnij się, że jesteś na gałęzi work
+git pull --rebase                                    # zaktualizuj gałąź
+git push https://<USERNAME>:<TOKEN>@github.com/htowerpl/anette.git work
+```
+
+- `TOKEN` to [Personal Access Token](https://github.com/settings/tokens) z uprawnieniami `repo`.
+- Jeśli masz skonfigurowane SSH, zamiast tokena użyj `git@github.com:htowerpl/anette.git`.
+- W tym środowisku (sesja asystenta) nie ma dostępu do Twojego konta GitHub, więc ostatni krok trzeba wykonać
+  samodzielnie na swoim komputerze.
+
 ### Gdy nadal nie widzisz zmian na GitHubie
 - Sprawdź, czy polecenie `git push` nie zwróciło błędu („repository not found”, brak uprawnień itp.).
 - Zweryfikuj, że lokalne pliki są zacommitowane (`git status` powinien pokazać „nothing to commit”).
