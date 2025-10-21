@@ -22,15 +22,23 @@ multimedialne (wideo, audio, galeria) i bloki informacyjne.
 Repozytorium zawiera gotowy workflow GitHub Actions (`.github/workflows/deploy.yml`), który publikuje statyczną stronę
 na GitHub Pages po każdym pushu do gałęzi `work` (możesz zmienić gałąź według potrzeb).
 
-1. Dodaj zdalne repozytorium i wypchnij gałąź `work`:
+1. Dodaj zdalne repozytorium i wypchnij gałąź z plikami strony:
    ```bash
    git remote add origin https://github.com/htowerpl/anette.git
-   git push -u origin work
+   git push -u origin work   # lub: git push -u origin main
    ```
-2. Wejdź w **Settings → Pages** i wybierz `GitHub Actions` jako źródło (jeśli GitHub jeszcze o to poprosi).
-3. W zakładce **Actions → Deployments** znajdziesz status publikacji oraz link podglądu strony.
-4. Aby aktualizacje trafiały na produkcję, kontynuuj pracę na tej samej gałęzi lub dostosuj workflow do własnego
-   procesu (np. `main`).
+2. Upewnij się, że na GitHubie patrzysz na tę samą gałąź (np. `work`). Jeśli chcesz, aby pliki były od razu na
+   głównej gałęzi, scal `work` do `main` (PR lub `git merge work`).
+3. Wejdź w **Settings → Pages** i wybierz `GitHub Actions` jako źródło (jeśli GitHub jeszcze o to poprosi).
+4. W zakładce **Actions → Deployments** znajdziesz status publikacji oraz link podglądu strony.
+5. Aby aktualizacje trafiały na produkcję, kontynuuj pracę na gałęzi `work` lub `main` (workflow wspiera obie).
+
+### Gdy nadal nie widzisz zmian na GitHubie
+- Sprawdź, czy polecenie `git push` nie zwróciło błędu („repository not found”, brak uprawnień itp.).
+- Zweryfikuj, że lokalne pliki są zacommitowane (`git status` powinien pokazać „nothing to commit”).
+- W przeglądarce repozytorium wybierz właściwą gałąź z rozwijanego menu obok etykiety `main`.
+- Jeśli GitHub Pages pokazuje starą wersję, wymuś ponowną publikację: przejdź do **Actions → Deploy static site to
+  GitHub Pages** i kliknij **Run workflow** na najnowszym commicie.
 
 ## Struktura repozytorium
 - `index.html` – główny plik strony,
