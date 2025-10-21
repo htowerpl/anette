@@ -3,20 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Anette – Multimedia w HTML5</title>
-  <meta name="description" content="Pokazowa strona marki Anette z multimediami HTML5: obraz, audio i wideo." />
+  <title>Aneta Szachniewicz – Stylistka Wizerunku</title>
+  <meta
+    name="description"
+    content="Oficjalna prezentacja Anety Szachniewicz – stylistki i trenerki wizerunku. Poznaj ofertę, warsztaty, metamorfozy i rekomendacje klientek."
+  />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
   <style>
     :root {
-      color-scheme: light dark;
-      --bg: #0f0f0f;
-      --bg-soft: rgba(255, 255, 255, 0.04);
-      --text: #f6f6f6;
-      --text-muted: #d4d4d8;
-      --accent: #ff8a3d;
-      --accent-dark: #e26c1b;
+      color-scheme: light;
+      --bg: #f6f5f2;
+      --fg: #1f1d1b;
+      --muted: #615c57;
+      --accent: #e4b27c;
+      --accent-dark: #c48f58;
+      --card: rgba(255, 255, 255, 0.9);
       font-size: 16px;
     }
 
@@ -26,229 +32,625 @@
 
     body {
       margin: 0;
-      font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: radial-gradient(circle at top right, rgba(255, 138, 61, 0.2), transparent 55%),
-        radial-gradient(circle at bottom left, rgba(255, 138, 61, 0.18), transparent 50%),
-        var(--bg);
-      color: var(--text);
+      font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
     header {
-      padding: clamp(3rem, 4vw, 4.5rem) clamp(1.5rem, 5vw, 4rem) 2rem;
-      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(246, 245, 242, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(97, 92, 87, 0.12);
     }
 
-    header h1 {
-      margin: 0 0 0.75rem;
-      font-family: 'Playfair Display', 'Times New Roman', serif;
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      letter-spacing: 0.04em;
-    }
-
-    header p {
+    .topbar {
+      max-width: 1100px;
       margin: 0 auto;
-      max-width: 640px;
-      line-height: 1.6;
-      font-size: 1.05rem;
-      color: var(--text-muted);
+      padding: 1rem clamp(1.25rem, 5vw, 3rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      font-family: 'Playfair Display', 'Times New Roman', serif;
+      letter-spacing: 0.08em;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      font-size: 0.95rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -0.35rem;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.2s ease;
+    }
+
+    nav a:hover::after,
+    nav a:focus-visible::after {
+      transform: scaleX(1);
     }
 
     main {
       flex: 1;
-      padding: 0 clamp(1.5rem, 5vw, 4rem) clamp(3rem, 5vw, 4.5rem);
-      display: grid;
-      gap: clamp(2rem, 3vw, 3rem);
     }
 
-    .highlight-card {
+    .hero {
       display: grid;
-      gap: 1.5rem;
-      padding: clamp(1.75rem, 3vw, 2.5rem);
-      border-radius: 24px;
-      background: var(--bg-soft);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      align-items: center;
+      gap: clamp(2rem, 6vw, 5rem);
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(3rem, 7vw, 6rem) clamp(1.25rem, 5vw, 3rem) clamp(4rem, 8vw, 7rem);
     }
 
-    .highlight-card h2 {
-      margin: 0;
+    .hero-copy h1 {
+      margin: 0 0 1rem;
       font-family: 'Playfair Display', 'Times New Roman', serif;
-      font-size: 1.9rem;
+      font-size: clamp(2.75rem, 5vw, 4.25rem);
+      letter-spacing: 0.02em;
     }
 
-    .highlight-card p {
-      margin: 0;
-      line-height: 1.7;
-      color: var(--text-muted);
+    .hero-copy p {
+      margin: 0 0 1.5rem;
+      line-height: 1.65;
+      color: var(--muted);
+      font-size: 1.05rem;
     }
 
-    .cta {
+    .cta-button {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.85rem 1.75rem;
-      background: var(--accent);
-      color: #1c1c1c;
-      font-weight: 600;
+      gap: 0.6rem;
+      padding: 0.85rem 1.85rem;
       border-radius: 999px;
+      background: var(--accent);
+      color: #2b2116;
       text-decoration: none;
+      font-weight: 600;
       transition: background 0.2s ease, transform 0.2s ease;
-      width: fit-content;
     }
 
-    .cta:hover,
-    .cta:focus-visible {
+    .cta-button:hover,
+    .cta-button:focus-visible {
       background: var(--accent-dark);
       transform: translateY(-2px);
     }
 
-    .media-grid {
+    .hero-media {
+      position: relative;
       display: grid;
-      gap: clamp(1.5rem, 3vw, 2.5rem);
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
     }
 
-    figure {
-      margin: 0;
-      display: grid;
-      gap: 0.85rem;
+    .hero-media figure,
+    .hero-media .video-wrapper {
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 24px 48px rgba(31, 29, 27, 0.18);
+      border: 1px solid rgba(31, 29, 27, 0.08);
+      background: #fff;
     }
 
-    figure img,
-    video,
-    .video-wrapper {
+    .hero-media img {
       width: 100%;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+      display: block;
     }
 
     .video-wrapper {
       position: relative;
       padding-bottom: 56.25%;
       height: 0;
-      overflow: hidden;
     }
 
     .video-wrapper iframe {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
       border: 0;
-      border-radius: 18px;
     }
 
-    figure figcaption {
-      font-size: 0.95rem;
-      color: var(--text-muted);
+    section {
+      padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 5vw, 3rem);
     }
 
-    audio,
-    video,
-    .video-wrapper iframe {
-      width: 100%;
+    .section-title {
+      font-family: 'Playfair Display', 'Times New Roman', serif;
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      margin: 0 0 1.25rem;
+      text-align: center;
     }
 
-    .audio-card {
-      padding: clamp(1.5rem, 3vw, 2.25rem);
+    .section-intro {
+      max-width: 760px;
+      margin: 0 auto 2.5rem;
+      text-align: center;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .card {
+      padding: 2rem;
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--card);
+      box-shadow: 0 20px 35px rgba(31, 29, 27, 0.08);
+      border: 1px solid rgba(31, 29, 27, 0.05);
+    }
+
+    .card h3 {
+      margin: 0 0 0.8rem;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .card p,
+    .card ul {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.98rem;
+    }
+
+    .card ul {
+      padding-left: 1.1rem;
+      display: grid;
+      gap: 0.45rem;
+      list-style: disc;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.75rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .services-grid article {
+      padding: 2rem;
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 244, 233, 0.95));
+      border: 1px solid rgba(228, 178, 124, 0.25);
+      box-shadow: 0 25px 40px rgba(196, 143, 88, 0.18);
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .services-grid h3 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .services-grid p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .gallery {
+      background: #fff;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .gallery-grid figure {
+      margin: 0;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 16px 32px rgba(31, 29, 27, 0.14);
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      display: block;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .audio-feature {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      max-width: 960px;
+      margin: 0 auto;
+      align-items: center;
+    }
+
+    audio {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid rgba(97, 92, 87, 0.15);
+      background: #fff;
+      padding: 0.5rem;
+    }
+
+    .testimonials {
+      background: linear-gradient(120deg, rgba(228, 178, 124, 0.35), rgba(246, 245, 242, 0.85));
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.75rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    blockquote {
+      margin: 0;
+      padding: 2rem;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(31, 29, 27, 0.08);
+      line-height: 1.7;
+      color: var(--muted);
+      font-style: italic;
+      position: relative;
+    }
+
+    blockquote::before {
+      content: '“';
+      position: absolute;
+      top: -1.5rem;
+      left: 1.5rem;
+      font-size: 4rem;
+      color: rgba(196, 143, 88, 0.35);
+      font-family: 'Playfair Display', serif;
+    }
+
+    blockquote footer {
+      margin-top: 1.25rem;
+      font-style: normal;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .cta-banner {
+      text-align: center;
+      background: #fff8ef;
+      padding: clamp(3rem, 6vw, 4.5rem) clamp(1.25rem, 5vw, 3rem);
+    }
+
+    .cta-banner p {
+      margin: 0 auto 1.75rem;
+      max-width: 640px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .contact {
+      background: #fff;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .contact-info {
       display: grid;
       gap: 1rem;
-      align-content: start;
+      color: var(--muted);
+      font-size: 0.98rem;
     }
 
-    .audio-card h3 {
-      margin: 0;
-      font-size: 1.25rem;
-      font-weight: 500;
+    .contact-info strong {
+      color: var(--fg);
+    }
+
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.35rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input,
+    textarea {
+      padding: 0.85rem 1rem;
+      border-radius: 14px;
+      border: 1px solid rgba(31, 29, 27, 0.15);
+      font: inherit;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
     }
 
     footer {
-      padding: 2rem 1.5rem;
       text-align: center;
+      padding: 2rem 1.5rem 3rem;
+      color: rgba(31, 29, 27, 0.6);
       font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.6);
     }
 
-    @media (max-width: 640px) {
-      header {
-        padding-bottom: 1.5rem;
+    @media (max-width: 720px) {
+      nav {
+        justify-content: center;
       }
 
-      .highlight-card {
-        text-align: left;
+      header {
+        position: static;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Anette – HTML5 Multimedia</h1>
-    <p>
-      Zmysłowy branding luksusowej marki Anette przedstawiony w formie lekkiej, statycznej strony HTML5.
-      Wykorzystaliśmy nowoczesną typografię, akcent pomarańczowy i wbudowane odtwarzacze, by w kilku
-      sekundach zaprezentować klimat kampanii.
-    </p>
+    <div class="topbar">
+      <div class="brand">Aneta Szachniewicz</div>
+      <nav aria-label="Główne">
+        <a href="#o-mnie">O mnie</a>
+        <a href="#oferta">Oferta</a>
+        <a href="#galeria">Galeria</a>
+        <a href="#opinie">Opinie</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+    </div>
   </header>
   <main>
-    <section class="highlight-card" aria-labelledby="multimedia-title">
-      <div>
-        <h2 id="multimedia-title">Multimedia w czystym HTML5</h2>
+    <section class="hero" id="start">
+      <div class="hero-copy">
+        <h1>Stylistka, która widzi Twoją najlepszą wersję</h1>
         <p>
-          Każdy komponent korzysta z natywnych tagów HTML5 — bez dodatkowych bibliotek.
-          Zobacz, jak obraz, audio i wideo mogą koegzystować w eleganckiej kompozycji, gotowej do
-          rozbudowy o bardziej zaawansowane interakcje.
+          Nazywam się <strong>Aneta Szachniewicz</strong> i wspieram kobiety w budowaniu pewności siebie poprzez
+          świadomy wizerunek. Pracuję indywidualnie, prowadzę warsztaty oraz tworzę strategie stylu dla marek
+          premium.
         </p>
+        <a class="cta-button" href="#kontakt">Umów konsultację</a>
       </div>
-      <a class="cta" href="#media">Przejdź do prezentacji</a>
-    </section>
-
-    <section id="media" class="media-grid" aria-label="Galeria multimediów">
-      <figure>
-        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80" alt="Butelka perfum na tle intensywnie pomarańczowego światła" loading="lazy" />
-        <figcaption>
-          Kadr z kampanii Anette — luksusowa butelka perfum oświetlona ciepłym, pomarańczowym światłem.
-        </figcaption>
-      </figure>
-
-      <article class="audio-card">
-        <h3>Motyw przewodni marki</h3>
-        <p>
-          Słuchaj podkładu dźwiękowego, który towarzyszy prezentacji produktów. Klip demonstruje
-          prostotę integracji odtwarzacza audio za pomocą tagu <code>&lt;audio&gt;</code>.
-        </p>
-        <audio controls preload="metadata">
-          <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg" />
-          Twoja przeglądarka nie wspiera odtwarzania audio.
-        </audio>
-      </article>
-
-      <figure>
-        <div class="video-wrapper">
+      <div class="hero-media">
+        <figure>
+          <img
+            src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=1200&q=80"
+            alt="Stylowa kobieta w beżowym garniturze patrząca w przyszłość"
+            loading="lazy"
+          />
+        </figure>
+        <div class="video-wrapper" aria-label="Zapowiedź wideo">
           <iframe
             src="https://www.youtube.com/embed/nQw3lIjjaJg"
-            title="ANETTE – kampania wideo"
+            title="Poznaj filozofię stylu Anety"
             loading="lazy"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen
           ></iframe>
         </div>
-        <figcaption>
-          Dynamiczny klip promujący zapach Anette prosto z kanału YouTube. Odtwórz go, by zobaczyć przekaz
-          marki w ruchu.
-        </figcaption>
-      </figure>
+      </div>
+    </section>
+
+    <section id="o-mnie">
+      <h2 class="section-title">Holistyczne podejście do wizerunku</h2>
+      <p class="section-intro">
+        Inspiracją jest prawdziwa osobowość klientki. Analizuję styl życia, oczekiwania zawodowe oraz wyjątkowe cechy,
+        by stworzyć garderobę i komunikację wizualną, które czują się w 100% autentyczne.
+      </p>
+      <div class="about-grid">
+        <article class="card">
+          <h3>Doświadczenie</h3>
+          <p>
+            12 lat pracy ze sceną, mediami i osobowościami biznesu. Stylizacje na kampanie reklamowe, sesje prasowe i
+            wydarzenia live.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Specjalizacja</h3>
+          <ul>
+            <li>Analiza kolorystyczna i personalny dobór garderoby</li>
+            <li>Strategie wizerunku dla przedsiębiorczyń i liderek</li>
+            <li>Metamorfozy i kompleksowe przeglądy szafy</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Metoda pracy</h3>
+          <p>
+            Spotkania prowadzone są w atmosferze zaufania. Każdy etap kończy się jasnymi rekomendacjami i listą gotowych
+            rozwiązań zakupowych.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="oferta">
+      <h2 class="section-title">Oferta i programy premium</h2>
+      <p class="section-intro">
+        Indywidualne konsultacje, warsztaty dla zespołów i projekty wizerunkowe dla marek. Każdy moduł łączy edukację,
+        praktykę i wsparcie wdrożeniowe.
+      </p>
+      <div class="services-grid">
+        <article>
+          <h3>Sesje indywidualne</h3>
+          <p>
+            Konsultacje 1:1 z analizą sylwetki i stylu życia. Otrzymasz katalog zestawów wraz z przewodnikiem zakupowym
+            dopasowanym do Twoich celów.
+          </p>
+        </article>
+        <article>
+          <h3>Warsztaty dla firm</h3>
+          <p>
+            Szkolenia z dress code'u, autoprezentacji i budowania marki osobistej dla zespołów sprzedaży oraz zarządów.
+          </p>
+        </article>
+        <article>
+          <h3>Stylizacja kampanii</h3>
+          <p>
+            Kompleksowa opieka kreatywna nad sesjami zdjęciowymi i materiałami wideo – od moodboardów po obecność na
+            planie.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="gallery" id="galeria">
+      <h2 class="section-title">Metamorfozy i kulisy pracy</h2>
+      <p class="section-intro">
+        Podgląd kilku realizacji – od garderoby kapsułowej po kampanie reklamowe. Każde zdjęcie opowiada historię
+        przemiany klientki.
+      </p>
+      <div class="gallery-grid">
+        <figure>
+          <img
+            src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80"
+            alt="Uśmiechnięta kobieta podczas profesjonalnej sesji zdjęciowej"
+            loading="lazy"
+          />
+        </figure>
+        <figure>
+          <img
+            src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80"
+            alt="Przygotowanie garderoby na planie filmowym"
+            loading="lazy"
+          />
+        </figure>
+        <figure>
+          <img
+            src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80"
+            alt="Minimalistyczna garderoba kapsułowa"
+            loading="lazy"
+          />
+        </figure>
+        <figure>
+          <img
+            src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80"
+            alt="Zespół kreatywny pracujący nad kampanią wizerunkową"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+    </section>
+
+    <section class="audio-feature" aria-labelledby="podcast">
+      <div>
+        <h2 class="section-title" id="podcast">Posłuchaj mini podcastu</h2>
+        <p class="section-intro">
+          Fragment rozmowy o budowaniu spójnego stylu. Audio stanowi przykład integracji natywnych multimediów HTML5 w
+          ramach strony wizerunkowej.
+        </p>
+      </div>
+      <audio controls preload="metadata">
+        <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg" />
+        Twoja przeglądarka nie wspiera odtwarzania audio.
+      </audio>
+    </section>
+
+    <section class="testimonials" id="opinie">
+      <h2 class="section-title">Rekomendacje klientek</h2>
+      <div class="testimonials-grid">
+        <blockquote>
+          „Już po pierwszej konsultacji czułam, że mój wizerunek wreszcie mówi spójnym głosem. Styl Anety to klasa i
+          lekkość.”
+          <footer>Monika, CEO agencji marketingowej</footer>
+        </blockquote>
+        <blockquote>
+          „Warsztaty dla naszego zespołu sprzedaży zmieniły sposób, w jaki klienci odbierają markę. Bardzo polecam!”
+          <footer>Karolina, dyrektorka sprzedaży</footer>
+        </blockquote>
+        <blockquote>
+          „Metamorfoza garderoby była przełomem – każdy zestaw działa w biurze i po pracy. Oszczędzam czas i czuję się
+          pewniej.”
+          <footer>Justyna, architektka</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="cta-banner">
+      <h2 class="section-title">Gotowa na nowy rozdział?</h2>
+      <p>
+        Skontaktuj się, aby zaplanować konsultację, warsztat lub kompleksowy projekt wizerunkowy. Wspólnie stworzymy
+        styl, który podkreśli Twoją historię.
+      </p>
+      <a class="cta-button" href="#kontakt">Porozmawiajmy</a>
+    </section>
+
+    <section class="contact" id="kontakt">
+      <h2 class="section-title">Kontakt</h2>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <p><strong>Email:</strong> <a href="mailto:kontakt@anetaszachniewicz.pl">kontakt@anetaszachniewicz.pl</a></p>
+          <p><strong>Telefon:</strong> <a href="tel:+48500200300">+48 500 200 300</a></p>
+          <p>
+            <strong>Social media:</strong>
+            <a href="https://www.instagram.com" target="_blank" rel="noreferrer">Instagram</a> ·
+            <a href="https://www.facebook.com" target="_blank" rel="noreferrer">Facebook</a>
+          </p>
+          <p>
+            <strong>Adres gabinetu:</strong> ul. Przykładowa 10, Warszawa (spotkania po wcześniejszej rezerwacji)
+          </p>
+        </div>
+        <form>
+          <label>
+            Imię i nazwisko
+            <input type="text" name="name" placeholder="Twoje imię" required />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" placeholder="adres@email.com" required />
+          </label>
+          <label>
+            Wiadomość
+            <textarea name="message" placeholder="W czym mogę pomóc?" required></textarea>
+          </label>
+          <button class="cta-button" type="submit">Wyślij wiadomość</button>
+        </form>
+      </div>
     </section>
   </main>
   <footer>
-    <p>&copy; 2024 Anette. Projekt demonstracyjny HTML5.</p>
+    <p>&copy; 2024 Aneta Szachniewicz. Projekt demonstracyjny inspirowany stroną devpl8.getspace.us/anetaszachniewicz.</p>
   </footer>
 </body>
 </html>

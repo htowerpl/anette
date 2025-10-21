@@ -1,30 +1,25 @@
-# Anette
+# Anette – strona wizerunkowa
 
-Repozytorium marki **Anette** — połączenie luksusu i minimalistycznej elegancji (paleta z akcentami pomarańczu).
+Statyczna strona w czystym HTML5 prezentująca ofertę i klimat marki **Aneta Szachniewicz**. Projekt inspirowany układem
+z serwisu [devpl8.getspace.us/anetaszachniewicz](https://devpl8.getspace.us/anetaszachniewicz/), rozbudowany o sekcje
+multimedialne (wideo, audio, galeria) i bloki informacyjne.
 
-## Start
-- Wymagania: Node 20+ / pnpm lub npm
-- Devcontainer: planowany (`.devcontainer/devcontainer.json`)
+## Co zawiera projekt?
+- hero z wideo z YouTube i zdjęciem stylizacyjnym,
+- sekcje „O mnie” i „Oferta” z kartami informacyjnymi,
+- galerię realizacji, opinie klientek oraz banner CTA,
+- kontakt z formularzem i danymi teleadresowymi,
+- responsywny design, bez frameworków i bibliotek JS.
 
-## Struktura
-- `src/` – kod źródłowy
-- `public/` – statyczne zasoby (logo, favicon)
-- `docs/` – materiały projektowe
-- `index.html` – statyczna strona demonstracyjna z multimediami
-
-## Uruchomienie (przykład)
-```bash
-npm install
-npm run dev
-```
-
-## Podgląd strony demonstracyjnej
-1. Otwórz `index.html` bezpośrednio w przeglądarce lub uruchom lokalny serwer HTTP, np.:
+## Jak uruchomić podgląd?
+1. Otwórz plik `index.html` w dowolnej współczesnej przeglądarce **lub** uruchom prosty serwer HTTP:
    ```bash
    python -m http.server
    ```
-2. Wejdź na `http://localhost:8000/index.html`, aby zobaczyć:
-   - hero z opisem marki i przyciskiem CTA,
-   - galerię z obrazem w wysokiej rozdzielczości,
-   - kartę audio z natywnym odtwarzaczem,
-   - wideo z plakatem (poster) uruchamiane w odtwarzaczu HTML5.
+2. Wejdź na `http://localhost:8000/index.html`, aby zobaczyć pełną stronę wizerunkową wraz z multimediami.
+
+## Struktura repozytorium
+- `index.html` – główny plik strony,
+- `README.md` – ten opis projektu.
+
+Projekt nie wymaga instalacji zależności ani środowiska wykonawczego – wystarczy przeglądarka.
