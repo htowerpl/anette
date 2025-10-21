@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anette — luksus i minimalizm</title>
+  <meta name="description" content="Marka Anette łączy ponadczasową elegancję z nowoczesnym minimalizmem i akcentami energetycznego pomarańczu.">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #fffdf8;
+      --text: #1e1c1a;
+      --accent: #ff7a18;
+      --accent-soft: rgba(255, 122, 24, 0.12);
+      --muted: rgba(30, 28, 26, 0.68);
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: clamp(16px, 1.1vw + 0.9rem, 20px);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 253, 248, 0.9);
+      border-bottom: 1px solid rgba(30, 28, 26, 0.08);
+      z-index: 10;
+    }
+
+    nav {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-weight: 600;
+      letter-spacing: 0.3rem;
+      font-size: 1rem;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.05rem;
+    }
+
+    .nav-links a {
+      color: inherit;
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 0.25rem;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      bottom: 0;
+      height: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+      background: var(--accent);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a:focus-visible::after {
+      transform: scaleX(1);
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    section {
+      padding: 4rem 0;
+      border-bottom: 1px solid rgba(30, 28, 26, 0.08);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    .hero {
+      display: grid;
+      gap: 3rem;
+      padding-top: 5rem;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 4vw + 1rem, 4.2rem);
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin: 0 0 1.5rem;
+    }
+
+    .hero p {
+      max-width: 36rem;
+      font-size: 1.05em;
+      color: var(--muted);
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.85rem 1.8rem;
+      border-radius: 999px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .cta:hover,
+    .cta:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(255, 122, 24, 0.25);
+    }
+
+    .hero-visual {
+      position: relative;
+      border-radius: 32px;
+      overflow: hidden;
+      min-height: 320px;
+      background: linear-gradient(135deg, var(--accent-soft), rgba(255, 122, 24, 0.35));
+    }
+
+    .hero-visual::after {
+      content: "Anette";
+      position: absolute;
+      inset: 12% 8%;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 28px;
+      display: grid;
+      place-items: center;
+      font-size: clamp(1.8rem, 3vw + 1rem, 3.5rem);
+      letter-spacing: 0.6rem;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .grid {
+      display: grid;
+      gap: 2rem;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    article {
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 18px 46px rgba(30, 28, 26, 0.08);
+      border: 1px solid rgba(30, 28, 26, 0.05);
+      display: grid;
+      gap: 1rem;
+    }
+
+    h2 {
+      font-size: clamp(1.9rem, 2.5vw + 1rem, 2.6rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .timeline {
+      border-left: 1px solid rgba(30, 28, 26, 0.15);
+      padding-left: 1.5rem;
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .timeline span {
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    footer {
+      padding: 3rem 1.5rem 4rem;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    @media (min-width: 900px) {
+      .hero {
+        grid-template-columns: 1.2fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Anette</div>
+      <div class="nav-links">
+        <a href="#kolekcja">Kolekcja</a>
+        <a href="#idea">Idea</a>
+        <a href="#materialy">Materiały</a>
+        <a href="#kontakt">Kontakt</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="start">
+      <div>
+        <span class="pill">Nowa kapsułowa linia 2024</span>
+        <h1>Anette: minimalistyczna siła kobiecości</h1>
+        <p>
+          Marka Anette powstała z miłości do jakości i świadomego luksusu. Tworzymy krótkie serie ubrań,
+          które pozwalają budować garderobę kapsułową — ponadczasową, zachwycającą w dotyku i gotową na
+          codzienne wyzwania.
+        </p>
+        <a class="cta" href="#kolekcja">Poznaj kolekcję</a>
+      </div>
+      <div class="hero-visual" aria-hidden="true"></div>
+    </section>
+
+    <section id="idea">
+      <h2>Nasza idea</h2>
+      <div class="grid grid-3">
+        <article>
+          <h3>Świadomy luksus</h3>
+          <p>
+            Stawiamy na selekcję surowców od europejskich dostawców i limitowane serie produkcyjne. Dzięki temu
+            utrzymujemy najwyższy standard wykończeń i minimalizujemy ślad środowiskowy.
+          </p>
+        </article>
+        <article>
+          <h3>Projektowanie z myślą o Tobie</h3>
+          <p>
+            Sylwetki modeli podkreślają naturalną linię ciała, a neutralna paleta przełamana akcentami pomarańczu
+            dodaje energii każdej stylizacji.
+          </p>
+        </article>
+        <article>
+          <h3>Detal, który zachwyca</h3>
+          <p>
+            Od precyzyjnych szwów po ręcznie wykańczane guziki — każdy element kolekcji Anette ma znaczenie i
+            opowiada historię rzemieślniczej dbałości.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="kolekcja">
+      <h2>Kolekcja kapsułowa</h2>
+      <div class="grid grid-3">
+        <article>
+          <h3>Soft Tailored</h3>
+          <p>
+            Miękka wełna merynosów w duecie z jedwabiem tworzy marynarki, które otulają i dają pełną swobodę ruchu.
+          </p>
+        </article>
+        <article>
+          <h3>Urban Essentials</h3>
+          <p>
+            Bawełniane topy i spodnie z elastycznym pasem, które odnajdą się zarówno w biurze, jak i podczas weekendowych
+            spotkań.
+          </p>
+        </article>
+        <article>
+          <h3>Evening Glow</h3>
+          <p>
+            Satynowe suknie z geometrycznymi wycięciami i wyważonymi akcentami w kolorze dojrzałej pomarańczy.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="materialy">
+      <h2>Materiały i odpowiedzialność</h2>
+      <div class="grid">
+        <article>
+          <div class="timeline">
+            <div>
+              <span>01 / Włókna naturalne</span>
+              <p>Organiczna bawełna, merynos i wełna alpaki pozyskiwane bez okrucieństwa.</p>
+            </div>
+            <div>
+              <span>02 / Tkaniny innowacyjne</span>
+              <p>Lyocell i wiskoza Ecovero®, które zapewniają lekkość i oddychalność.</p>
+            </div>
+            <div>
+              <span>03 / Długowieczność</span>
+              <p>Każdy model testujemy pod kątem odporności na pranie, tarcie i utratę formy.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="kontakt">
+      <h2>Kontakt</h2>
+      <div class="grid">
+        <article>
+          <h3>Salon Anette</h3>
+          <p>ul. Mokotowska 22, Warszawa</p>
+          <p>Wtorek – Sobota, 11:00–19:00</p>
+        </article>
+        <article>
+          <h3>Skontaktuj się</h3>
+          <p><strong>Telefon:</strong> +48 500 600 700</p>
+          <p><strong>E-mail:</strong> boutique@anette.pl</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2024 Anette. Wszystkie prawa zastrzeżone.
+  </footer>
+</body>
+</html>
