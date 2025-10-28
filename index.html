@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Anette | Strona domowa</title>
-  <meta name="description" content="Elegancka strona prezentujaca uslugi i portfolio Anette.">
+  <title>Anette Beauty Studio | Gabinet kosmetyczny</title>
+  <meta name="description" content="Gabinet kosmetyczny Anette Beauty Studio. Holistyczne zabiegi na twarz i cialo, zaawansowana technologia i rytualy spa w sercu miasta.">
   <meta name="theme-color" content="#fdeceb">
   <style>
     :root {
       color-scheme: light;
-      --bg: #fdf9f8;
-      --accent: #f48fb1;
-      --accent-dark: #c2185b;
+      --bg: #fef9f7;
+      --accent: #f7a1b5;
+      --accent-dark: #c75d8a;
       --text: #352c33;
       --muted: #6f6270;
-      --surface: rgba(255, 255, 255, 0.8);
+      --surface: rgba(255, 255, 255, 0.85);
       --shadow: 0 16px 40px rgba(53, 44, 51, 0.12);
       scroll-behavior: smooth;
     }
@@ -273,6 +273,29 @@
       font-size: 0.85rem;
     }
 
+    .tech-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .tech-card {
+      border-radius: 22px;
+      padding: 2.2rem;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(247, 161, 181, 0.24);
+      box-shadow: 0 18px 38px rgba(53, 44, 51, 0.08);
+    }
+
+    .tech-card h3 {
+      margin-top: 0;
+      font-size: 1.35rem;
+    }
+
+    .tech-card p {
+      margin-bottom: 0;
+      color: var(--muted);
+    }
+
     .portfolio-grid {
       display: grid;
       gap: 1.5rem;
@@ -395,6 +418,10 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
+      .tech-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
       .testimonial-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
@@ -444,17 +471,22 @@
       .testimonial-grid {
         grid-template-columns: 1fr;
       }
+
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
   <nav>
     <div class="nav-content">
-      <div class="brand">Anette</div>
+      <div class="brand">Anette Beauty Studio</div>
       <div class="nav-links">
-        <a href="#o-mnie">O mnie</a>
-        <a href="#oferta">Oferta</a>
-        <a href="#portfolio">Portfolio</a>
+        <a href="#o-gabinecie">O gabinecie</a>
+        <a href="#zabiegi">Zabiegi</a>
+        <a href="#technologia">Technologia</a>
+        <a href="#rezultaty">Rezultaty</a>
         <a href="#opinie">Opinie</a>
         <a href="#kontakt">Kontakt</a>
       </div>
@@ -463,118 +495,150 @@
 
   <header>
     <div class="hero">
-      <h1>Tworze opowiesci o markach, ktore zapadaja w pamiec</h1>
+      <h1>Holistyczne zabiegi beauty stworzone dla Twojej skory</h1>
       <p>
-        Jestem Anette, projektantka doswiadczen i strategia komunikacji wizualnej.
-        Pomagam markom budowac spojnosc, wdziek i wyraziste emocje w kazdym punkcie kontaktu.
+        W Anette Beauty Studio tworzymy rytualy, ktore lacza nowoczesna kosmetologie, aromaterapie
+        i spokoj przestrzeni spa. Dbamy o to, aby kazda wizyta byla osobistym, glebszym doswiadczeniem.
       </p>
       <div class="cta-group">
-        <a class="button primary" href="#kontakt">Umow spotkanie</a>
-        <a class="button secondary" href="#portfolio">Poznaj projekty</a>
+        <a class="button primary" href="#kontakt">Umow konsultacje</a>
+        <a class="button secondary" href="#zabiegi">Poznaj zabiegi</a>
       </div>
     </div>
   </header>
 
   <main>
-    <section id="o-mnie">
-      <h2>O mnie</h2>
+    <section id="o-gabinecie">
+      <h2>O gabinecie</h2>
       <p class="section-lead">
-        Lacze estetyke z empatia, aby marki mogly rozkwitac w oczach swoich odbiorcow.
-        Wspolpracuje z firmami, ktore ceniom autentycznosc i wyglad, ale nade wszystko chca zostawic po sobie historie.
+        W Anette Beauty Studio laczymy pielegnacje twarzy, ciala i ducha.
+        Tworzymy kameralna przestrzen, w ktorej odzyskasz blask, spokoj i pewnosc siebie.
       </p>
       <div class="about-grid">
-        <img src="https://images.unsplash.com/photo-1542228262-3d663b306d4c?auto=format&fit=crop&w=900&q=80" alt="Anette pracuje nad projektem na tablecie">
+        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80" alt="Wnetrze gabinetu kosmetycznego Anette Beauty Studio">
         <div class="about-text">
           <p>
-            Od siedmiu lat wspieram marki w planowaniu wizerunku i tworzeniu tresci,
-            ktore dotykaja emocji. Moj styl laczy minimalistyczna forme z delikatna paleta barw,
-            dzieki czemu kazdy projekt oddycha spokojem i klarownoscia.
+            Od ponad siedmiu lat prowadzimy holistyczny gabinet kosmetyczny,
+            w ktorym kazdy rytual jest projektowany z mysla o indywidualnych potrzebach skory.
+            Nasza filozofia opiera sie na balansie miedzy zaawansowana technologia,
+            naturalnymi skladnikami oraz terapeutycznym doswiadczeniem.
           </p>
           <p>
-            W pracy korzystam z narzedzi strategii, projektowania uzytkowego i storytellingu.
-            <strong>Strategia marki</strong> oraz <strong>identyfikacja wizualna</strong> to obszary,
-            w ktorych czuje sie najlepiej.
+            W naszym zespole znajdziesz kosmetologow, masazystow oraz ekspertow pielegnacji,
+            ktorzy lacza wiedze medyczna z praca na zmyslach.
+            <strong>Diagnostyka skory</strong> oraz <strong>terapie regeneracyjne</strong> sa naszym wyroznikiem.
           </p>
           <p>
-            Po godzinach prowadzam warsztaty kreatywne, fotografuje oraz wspieram inicjatywy,
-            ktore wzmacniaja kobiety w biznesie.
+            Zapraszamy do przestrzeni zaprojektowanej tak, aby zwolnic tempo, odetchnac i zasmakowac
+            luksusu codziennej pielegnacji. Wierzymy, ze piekno to proces, a nie jednorazowy efekt.
           </p>
         </div>
       </div>
     </section>
 
-    <section id="oferta">
-      <h2>Oferta</h2>
+    <section id="zabiegi">
+      <h2>Zabiegi</h2>
       <p class="section-lead">
-        Kazdy projekt zaczynam od rozmowy i wspolnej mapy celow. Dbam o to, aby
-        rezultaty byly mierzalne, a proces przejrzysty i inspirujacy.
+        Rozpoczynamy od konsultacji i mapy pielegnacyjnej, aby dobrac zabiegi,
+        ktore odmlodza skore, wymodeluja sylwetke i przyniosa glebszy relaks.
       </p>
       <div class="service-grid">
         <article class="service-card">
-          <h3>Strategia marki</h3>
+          <h3>Rytualy twarzy</h3>
           <p>
-            Wypracowujemy fundamenty, ton glosu, archetyp oraz wartosci,
-            ktore staja sie drogowskazem dla calej komunikacji.
+            Zaawansowane terapie anti-age, bankietowe glow rituals oraz kuracje kwasami,
+            ktore przywracaja gestosc i promiennosc skory.
           </p>
           <div class="tag-list">
-            <span class="tag">Analiza</span>
-            <span class="tag">Pozycjonowanie</span>
-            <span class="tag">Archetyp</span>
+            <span class="tag">Anti-age</span>
+            <span class="tag">Glow</span>
+            <span class="tag">Peelingi</span>
           </div>
         </article>
         <article class="service-card">
-          <h3>Identyfikacja wizualna</h3>
+          <h3>Modelowanie ciala</h3>
           <p>
-            Projektuje system wizualny: logo, palety barw, typografie, patterny, makiety materialow,
-            oraz wytyczne implementacji.
+            Zabiegi wyszczuplajace, drenaże limfatyczne oraz programy ujedrniajace,
+            wspierane nowoczesna technologia i aromaterapia.
           </p>
           <div class="tag-list">
-            <span class="tag">Logo</span>
-            <span class="tag">Key visual</span>
-            <span class="tag">Brandbook</span>
+            <span class="tag">Endermologia</span>
+            <span class="tag">Liposonic</span>
+            <span class="tag">Aromaterapia</span>
           </div>
         </article>
         <article class="service-card">
-          <h3>Komunikacja digital</h3>
+          <h3>Rytualy spa</h3>
           <p>
-            Tworze strony docelowe, kampanie social media i newslettery,
-            ktore prowadza klienta za reke prosto do dzialania.
+            Autorskie masaze, zabiegi detoksykujece oraz rytualy z elementami mindfulness,
+            ktore przywracaja cialu harmonie.
           </p>
           <div class="tag-list">
-            <span class="tag">UX</span>
-            <span class="tag">Copywriting</span>
-            <span class="tag">Automatyzacje</span>
+            <span class="tag">Mindfulness</span>
+            <span class="tag">Aromaty</span>
+            <span class="tag">Balans</span>
           </div>
         </article>
       </div>
     </section>
 
-    <section id="portfolio">
-      <h2>Portfolio</h2>
+    <section id="technologia">
+      <h2>Technologia</h2>
       <p class="section-lead">
-        Selekcja projektow, ktore pokazuje, jak roznorodne marki znalazly w mojej opiece jednolity,
-        cieply glos i oprawa graficzna dopasowana do ich osobowosci.
+        Inwestujemy w certyfikowane urzadzenia premium, aby kazdy zabieg byl skuteczny,
+        bezpieczny i skrojony na miarę potrzeb skory.
+      </p>
+      <div class="tech-grid">
+        <article class="tech-card">
+          <h3>Diagnostyka skory</h3>
+          <p>
+            Analiza VISIA i mapowanie problemow skornych pozwalaja nam dobrac kuracje,
+            ktore odpowiadaja na realne potrzeby Twojej cery.
+          </p>
+        </article>
+        <article class="tech-card">
+          <h3>Urzadzenia HI-TECH</h3>
+          <p>
+            Pracujemy na laserze diodowym, HIFU oraz linii infuzji tlenowej, dzieki czemu
+            laczymy natychmiastowy efekt z dlugotrwala regeneracja.
+          </p>
+        </article>
+        <article class="tech-card">
+          <h3>Marki premium</h3>
+          <p>
+            W zabiegach wykorzystujemy cosmeceutyki Environ, Biologique Recherche i profesjonalne olejki spa,
+            aby zapewnic pielegnacje klasy premium.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="rezultaty">
+      <h2>Rezultaty</h2>
+      <p class="section-lead">
+        Zobacz fragmenty naszych realizacji, ktore pokazuja jak zmienia sie skora, samopoczucie
+        i energia klientek po autorskich programach Anette Beauty Studio.
       </p>
       <div class="portfolio-grid">
         <article class="project-card">
-          <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80" alt="Projekt opakowania dla marki wellness">
+          <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80" alt="Kosmetolog wykonuje rytual pielegnacji twarzy">
           <div class="project-info">
-            <span>Wellness &amp; Lifestyle</span>
-            <strong>Seria opakowan Bloom &amp; Balance</strong>
+            <span>Glow Therapy</span>
+            <strong>Autorski rytual rozswietlajacy</strong>
           </div>
         </article>
         <article class="project-card">
-          <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80" alt="Interfejs aplikacji mobilnej">
+          <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=900&q=80" alt="Rytual spa z aromatycznymi olejkami">
           <div class="project-info">
-            <span>Technologia</span>
-            <strong>Branding aplikacji Flowtime</strong>
+            <span>Spa &amp; Body</span>
+            <strong>Program harmonii ciala</strong>
           </div>
         </article>
         <article class="project-card">
-          <img src="https://images.unsplash.com/photo-1472752363415-1a7957133011?auto=format&fit=crop&w=900&q=80" alt="Aranzacja wnetrza w butikowym hotelu">
+          <img src="https://images.unsplash.com/photo-1542838686-73e5378c2b95?auto=format&fit=crop&w=900&q=80" alt="Gabinet zabiegowy z nowoczesnym sprzetem">
           <div class="project-info">
-            <span>Hotelarstwo</span>
-            <strong>Identetyfikacja Maison Velvet</strong>
+            <span>Technology</span>
+            <strong>Strefa zaawansowanych zabiegow</strong>
           </div>
         </article>
       </div>
@@ -583,21 +647,21 @@
     <section id="opinie">
       <h2>Opinie</h2>
       <p class="section-lead">
-        Wspolpraca opiera sie na zaufaniu. Klienci doceniaja spokoj, strukture i wrazliwosc,
-        z jaka prowadze kazdy projekt.
+        Zaufanie budujemy kazdego dnia. Klientki doceniaja spersonalizowane podejscie,
+        spokoj oraz otulajaca atmosfere naszego gabinetu.
       </p>
       <div class="testimonial-grid">
         <blockquote>
-          Wreszcie mamy marke, ktora oddaje nasze wartosci. Anette zrozumiala nas od pierwszej rozmowy.
-          <cite>Magda, zalozycielka Bloom &amp; Balance</cite>
+          Po serii zabiegow Glow Therapy moja skora odzyskala blask, a ja przestalam uzywac mocnego makijazu.
+          <cite>Magda, klientka Anette Beauty Studio</cite>
         </blockquote>
         <blockquote>
-          Strategia, ktora otrzymalismy, dala nam miecz i tarcze. Wiemy, co mowic i jak to pokazywac.
-          <cite>Olek, wspolzalozyciel Flowtime</cite>
+          Indywidualny plan pielegnacyjny i wskazowki do domu zrobily ogromna roznice w wygladzie mojej cery.
+          <cite>Ola, klientka terapii anti-age</cite>
         </blockquote>
         <blockquote>
-          Z Anette pracuje sie spokojnie, ale efekty sa spektakularne. Goscie kochaja nowa oprawe hotelu.
-          <cite>Karolina, menedzerka Maison Velvet</cite>
+          Masaże w strefie spa to moja ulubiona forma odpoczynku. Zawsze wychodze rozluzniona i w lepszym nastroju.
+          <cite>Karolina, klientka rytualow spa</cite>
         </blockquote>
       </div>
     </section>
@@ -605,7 +669,8 @@
     <section id="kontakt">
       <h2>Kontakt</h2>
       <p class="section-lead">
-        Napisz kilka slow o swoim projekcie, a przygotuje propozycje dzialan. Odpowiadam w ciagu 48 godzin.
+        Opisz potrzeby swojej skory lub wybrany zabieg. Wrocimy do Ciebie z wstepna rekomendacja
+        i propozycja terminu konsultacji w ciagu 24 godzin.
       </p>
       <form>
         <div>
@@ -618,7 +683,7 @@
         </div>
         <div>
           <label for="message">Wiadomosc</label>
-          <textarea id="message" name="message" placeholder="Opisz krotko, nad czym chcesz pracowac..." required></textarea>
+          <textarea id="message" name="message" placeholder="Opisz potrzeby skory lub interesujacy Cie zabieg..." required></textarea>
         </div>
         <button class="button primary" type="submit">Wyslij wiadomosc</button>
       </form>
@@ -626,7 +691,7 @@
   </main>
 
   <footer>
-    <p>&copy; <span id="year"></span> Anette. Wszystkie prawa zastrzezone.</p>
+    <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzezone.</p>
     <p>
       Obserwuj na
       <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
