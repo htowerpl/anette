@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anette | Strona domowa</title>
+  <meta name="description" content="Elegancka strona prezentujaca uslugi i portfolio Anette.">
+  <meta name="theme-color" content="#fdeceb">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #fdf9f8;
+      --accent: #f48fb1;
+      --accent-dark: #c2185b;
+      --text: #352c33;
+      --muted: #6f6270;
+      --surface: rgba(255, 255, 255, 0.8);
+      --shadow: 0 16px 40px rgba(53, 44, 51, 0.12);
+      scroll-behavior: smooth;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #fff5f7, var(--bg));
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(20px);
+      background-color: rgba(253, 236, 235, 0.85);
+      border-bottom: 1px solid rgba(244, 143, 177, 0.2);
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+    }
+
+    .brand {
+      font-weight: 700;
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      padding: 0.35rem 0;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.1rem;
+      width: 100%;
+      height: 2px;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+      background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+    }
+
+    .nav-links a:focus-visible,
+    .nav-links a:hover {
+      color: var(--accent-dark);
+    }
+
+    .nav-links a:focus-visible::after,
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    header {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 6rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before,
+    header::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(140px);
+      z-index: -1;
+      opacity: 0.8;
+    }
+
+    header::before {
+      width: 420px;
+      height: 420px;
+      top: -140px;
+      left: -80px;
+      background: rgba(244, 143, 177, 0.45);
+    }
+
+    header::after {
+      width: 360px;
+      height: 360px;
+      bottom: -120px;
+      right: -60px;
+      background: rgba(194, 24, 91, 0.35);
+    }
+
+    .hero {
+      max-width: 720px;
+      background: var(--surface);
+      padding: 3rem 2.5rem;
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2.3rem, 5vw, 3.4rem);
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin: 1.5rem 0 2rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .cta-group {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      padding: 0.75rem 1.8rem;
+      border-radius: 999px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #fff;
+      box-shadow: 0 14px 30px rgba(194, 24, 91, 0.25);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--accent-dark);
+      border: 1px solid rgba(244, 143, 177, 0.3);
+    }
+
+    .button:focus-visible,
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 36px rgba(194, 24, 91, 0.28);
+    }
+
+    main {
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    section {
+      max-width: 1100px;
+      margin: 0 auto 5rem;
+      background: var(--surface);
+      border-radius: 28px;
+      padding: 3rem;
+      box-shadow: var(--shadow);
+    }
+
+    section h2 {
+      margin-top: 0;
+      font-size: 2rem;
+      letter-spacing: -0.01em;
+    }
+
+    .section-lead {
+      color: var(--muted);
+      margin-bottom: 2rem;
+      max-width: 560px;
+    }
+
+    .about-grid {
+      display: grid;
+      gap: 2.5rem;
+    }
+
+    .about-grid img {
+      width: 100%;
+      border-radius: 24px;
+      object-fit: cover;
+      height: 320px;
+      box-shadow: 0 18px 36px rgba(53, 44, 51, 0.1);
+    }
+
+    .about-text {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .about-text strong {
+      color: var(--accent-dark);
+    }
+
+    .service-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      border-radius: 22px;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(244, 143, 177, 0.2);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .service-card h3 {
+      margin-top: 0;
+      font-size: 1.4rem;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(194, 24, 91, 0.4);
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.2rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(244, 143, 177, 0.18);
+      color: var(--accent-dark);
+      font-size: 0.85rem;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      min-height: 220px;
+    }
+
+    .project-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.8);
+      transition: transform 0.6s ease;
+    }
+
+    .project-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .project-info {
+      position: absolute;
+      inset: 0;
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      color: #fff;
+      background: linear-gradient(180deg, rgba(53, 44, 51, 0) 10%, rgba(53, 44, 51, 0.8) 100%);
+    }
+
+    .project-info span {
+      font-size: 0.85rem;
+      opacity: 0.75;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      gap: 2rem;
+    }
+
+    blockquote {
+      margin: 0;
+      padding: 2rem;
+      border-radius: 22px;
+      background: rgba(244, 143, 177, 0.12);
+      border-left: 4px solid var(--accent);
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    cite {
+      display: block;
+      margin-top: 1rem;
+      font-style: normal;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    form {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: 16px;
+      border: 1px solid rgba(244, 143, 177, 0.4);
+      background: rgba(255, 255, 255, 0.85);
+      font: inherit;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent-dark);
+      box-shadow: 0 0 0 4px rgba(244, 143, 177, 0.2);
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--accent-dark);
+    }
+
+    @media (min-width: 680px) {
+      .about-grid {
+        grid-template-columns: 1.1fr 1fr;
+        align-items: center;
+      }
+
+      .service-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .portfolio-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .testimonial-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 840px) {
+      nav {
+        position: static;
+      }
+
+      .nav-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      section {
+        padding: 2.5rem 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding-top: 4.5rem;
+      }
+
+      .hero {
+        padding: 2.5rem 1.6rem;
+      }
+
+      section {
+        padding: 2rem 1.4rem;
+      }
+
+      .service-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .testimonial-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-content">
+      <div class="brand">Anette</div>
+      <div class="nav-links">
+        <a href="#o-mnie">O mnie</a>
+        <a href="#oferta">Oferta</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#opinie">Opinie</a>
+        <a href="#kontakt">Kontakt</a>
+      </div>
+    </div>
+  </nav>
+
+  <header>
+    <div class="hero">
+      <h1>Tworze opowiesci o markach, ktore zapadaja w pamiec</h1>
+      <p>
+        Jestem Anette, projektantka doswiadczen i strategia komunikacji wizualnej.
+        Pomagam markom budowac spojnosc, wdziek i wyraziste emocje w kazdym punkcie kontaktu.
+      </p>
+      <div class="cta-group">
+        <a class="button primary" href="#kontakt">Umow spotkanie</a>
+        <a class="button secondary" href="#portfolio">Poznaj projekty</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="o-mnie">
+      <h2>O mnie</h2>
+      <p class="section-lead">
+        Lacze estetyke z empatia, aby marki mogly rozkwitac w oczach swoich odbiorcow.
+        Wspolpracuje z firmami, ktore ceniom autentycznosc i wyglad, ale nade wszystko chca zostawic po sobie historie.
+      </p>
+      <div class="about-grid">
+        <img src="https://images.unsplash.com/photo-1542228262-3d663b306d4c?auto=format&fit=crop&w=900&q=80" alt="Anette pracuje nad projektem na tablecie">
+        <div class="about-text">
+          <p>
+            Od siedmiu lat wspieram marki w planowaniu wizerunku i tworzeniu tresci,
+            ktore dotykaja emocji. Moj styl laczy minimalistyczna forme z delikatna paleta barw,
+            dzieki czemu kazdy projekt oddycha spokojem i klarownoscia.
+          </p>
+          <p>
+            W pracy korzystam z narzedzi strategii, projektowania uzytkowego i storytellingu.
+            <strong>Strategia marki</strong> oraz <strong>identyfikacja wizualna</strong> to obszary,
+            w ktorych czuje sie najlepiej.
+          </p>
+          <p>
+            Po godzinach prowadzam warsztaty kreatywne, fotografuje oraz wspieram inicjatywy,
+            ktore wzmacniaja kobiety w biznesie.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="oferta">
+      <h2>Oferta</h2>
+      <p class="section-lead">
+        Kazdy projekt zaczynam od rozmowy i wspolnej mapy celow. Dbam o to, aby
+        rezultaty byly mierzalne, a proces przejrzysty i inspirujacy.
+      </p>
+      <div class="service-grid">
+        <article class="service-card">
+          <h3>Strategia marki</h3>
+          <p>
+            Wypracowujemy fundamenty, ton glosu, archetyp oraz wartosci,
+            ktore staja sie drogowskazem dla calej komunikacji.
+          </p>
+          <div class="tag-list">
+            <span class="tag">Analiza</span>
+            <span class="tag">Pozycjonowanie</span>
+            <span class="tag">Archetyp</span>
+          </div>
+        </article>
+        <article class="service-card">
+          <h3>Identyfikacja wizualna</h3>
+          <p>
+            Projektuje system wizualny: logo, palety barw, typografie, patterny, makiety materialow,
+            oraz wytyczne implementacji.
+          </p>
+          <div class="tag-list">
+            <span class="tag">Logo</span>
+            <span class="tag">Key visual</span>
+            <span class="tag">Brandbook</span>
+          </div>
+        </article>
+        <article class="service-card">
+          <h3>Komunikacja digital</h3>
+          <p>
+            Tworze strony docelowe, kampanie social media i newslettery,
+            ktore prowadza klienta za reke prosto do dzialania.
+          </p>
+          <div class="tag-list">
+            <span class="tag">UX</span>
+            <span class="tag">Copywriting</span>
+            <span class="tag">Automatyzacje</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="portfolio">
+      <h2>Portfolio</h2>
+      <p class="section-lead">
+        Selekcja projektow, ktore pokazuje, jak roznorodne marki znalazly w mojej opiece jednolity,
+        cieply glos i oprawa graficzna dopasowana do ich osobowosci.
+      </p>
+      <div class="portfolio-grid">
+        <article class="project-card">
+          <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80" alt="Projekt opakowania dla marki wellness">
+          <div class="project-info">
+            <span>Wellness &amp; Lifestyle</span>
+            <strong>Seria opakowan Bloom &amp; Balance</strong>
+          </div>
+        </article>
+        <article class="project-card">
+          <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=900&q=80" alt="Interfejs aplikacji mobilnej">
+          <div class="project-info">
+            <span>Technologia</span>
+            <strong>Branding aplikacji Flowtime</strong>
+          </div>
+        </article>
+        <article class="project-card">
+          <img src="https://images.unsplash.com/photo-1472752363415-1a7957133011?auto=format&fit=crop&w=900&q=80" alt="Aranzacja wnetrza w butikowym hotelu">
+          <div class="project-info">
+            <span>Hotelarstwo</span>
+            <strong>Identetyfikacja Maison Velvet</strong>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="opinie">
+      <h2>Opinie</h2>
+      <p class="section-lead">
+        Wspolpraca opiera sie na zaufaniu. Klienci doceniaja spokoj, strukture i wrazliwosc,
+        z jaka prowadze kazdy projekt.
+      </p>
+      <div class="testimonial-grid">
+        <blockquote>
+          Wreszcie mamy marke, ktora oddaje nasze wartosci. Anette zrozumiala nas od pierwszej rozmowy.
+          <cite>Magda, zalozycielka Bloom &amp; Balance</cite>
+        </blockquote>
+        <blockquote>
+          Strategia, ktora otrzymalismy, dala nam miecz i tarcze. Wiemy, co mowic i jak to pokazywac.
+          <cite>Olek, wspolzalozyciel Flowtime</cite>
+        </blockquote>
+        <blockquote>
+          Z Anette pracuje sie spokojnie, ale efekty sa spektakularne. Goscie kochaja nowa oprawe hotelu.
+          <cite>Karolina, menedzerka Maison Velvet</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <section id="kontakt">
+      <h2>Kontakt</h2>
+      <p class="section-lead">
+        Napisz kilka slow o swoim projekcie, a przygotuje propozycje dzialan. Odpowiadam w ciagu 48 godzin.
+      </p>
+      <form>
+        <div>
+          <label for="name">Imie i nazwisko</label>
+          <input id="name" name="name" type="text" placeholder="np. Anna Nowak" required>
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="np. kontakt@twojafirma.pl" required>
+        </div>
+        <div>
+          <label for="message">Wiadomosc</label>
+          <textarea id="message" name="message" placeholder="Opisz krotko, nad czym chcesz pracowac..." required></textarea>
+        </div>
+        <button class="button primary" type="submit">Wyslij wiadomosc</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Anette. Wszystkie prawa zastrzezone.</p>
+    <p>
+      Obserwuj na
+      <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
+      oraz
+      <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
