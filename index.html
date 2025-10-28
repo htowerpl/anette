@@ -3,480 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Anette Beauty Studio | Gabinet kosmetyczny</title>
-  <meta name="description" content="Gabinet kosmetyczny Anette Beauty Studio. Holistyczne zabiegi na twarz i cialo, zaawansowana technologia i rytualy spa w sercu miasta.">
-  <meta name="theme-color" content="#fdeceb">
-  <style>
-    :root {
-      color-scheme: light;
-      --bg: #fef9f7;
-      --accent: #f7a1b5;
-      --accent-dark: #c75d8a;
-      --text: #352c33;
-      --muted: #6f6270;
-      --surface: rgba(255, 255, 255, 0.85);
-      --shadow: 0 16px 40px rgba(53, 44, 51, 0.12);
-      scroll-behavior: smooth;
-    }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: "Poppins", "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #fff5f7, var(--bg));
-      color: var(--text);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(20px);
-      background-color: rgba(253, 236, 235, 0.85);
-      border-bottom: 1px solid rgba(244, 143, 177, 0.2);
-    }
-
-    .nav-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 1rem 1.5rem;
-    }
-
-    .brand {
-      font-weight: 700;
-      font-size: 1.4rem;
-      letter-spacing: 0.04em;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      font-size: 0.95rem;
-    }
-
-    .nav-links a {
-      padding: 0.35rem 0;
-      position: relative;
-    }
-
-    .nav-links a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -0.1rem;
-      width: 100%;
-      height: 2px;
-      transform: scaleX(0);
-      transform-origin: right;
-      transition: transform 0.3s ease;
-      background: linear-gradient(90deg, var(--accent-dark), var(--accent));
-    }
-
-    .nav-links a:focus-visible,
-    .nav-links a:hover {
-      color: var(--accent-dark);
-    }
-
-    .nav-links a:focus-visible::after,
-    .nav-links a:hover::after {
-      transform: scaleX(1);
-      transform-origin: left;
-    }
-
-    header {
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 6rem 1.5rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    header::before,
-    header::after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(140px);
-      z-index: -1;
-      opacity: 0.8;
-    }
-
-    header::before {
-      width: 420px;
-      height: 420px;
-      top: -140px;
-      left: -80px;
-      background: rgba(244, 143, 177, 0.45);
-    }
-
-    header::after {
-      width: 360px;
-      height: 360px;
-      bottom: -120px;
-      right: -60px;
-      background: rgba(194, 24, 91, 0.35);
-    }
-
-    .hero {
-      max-width: 720px;
-      background: var(--surface);
-      padding: 3rem 2.5rem;
-      border-radius: 32px;
-      box-shadow: var(--shadow);
-    }
-
-    .hero h1 {
-      margin: 0;
-      font-size: clamp(2.3rem, 5vw, 3.4rem);
-      letter-spacing: -0.02em;
-    }
-
-    .hero p {
-      margin: 1.5rem 0 2rem;
-      color: var(--muted);
-      font-size: 1.05rem;
-    }
-
-    .cta-group {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .button {
-      padding: 0.75rem 1.8rem;
-      border-radius: 999px;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .button.primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-      color: #fff;
-      box-shadow: 0 14px 30px rgba(194, 24, 91, 0.25);
-    }
-
-    .button.secondary {
-      background: rgba(255, 255, 255, 0.7);
-      color: var(--accent-dark);
-      border: 1px solid rgba(244, 143, 177, 0.3);
-    }
-
-    .button:focus-visible,
-    .button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 36px rgba(194, 24, 91, 0.28);
-    }
-
-    main {
-      padding: 2rem 1.5rem 4rem;
-    }
-
-    section {
-      max-width: 1100px;
-      margin: 0 auto 5rem;
-      background: var(--surface);
-      border-radius: 28px;
-      padding: 3rem;
-      box-shadow: var(--shadow);
-    }
-
-    section h2 {
-      margin-top: 0;
-      font-size: 2rem;
-      letter-spacing: -0.01em;
-    }
-
-    .section-lead {
-      color: var(--muted);
-      margin-bottom: 2rem;
-      max-width: 560px;
-    }
-
-    .about-grid {
-      display: grid;
-      gap: 2.5rem;
-    }
-
-    .about-grid img {
-      width: 100%;
-      border-radius: 24px;
-      object-fit: cover;
-      height: 320px;
-      box-shadow: 0 18px 36px rgba(53, 44, 51, 0.1);
-    }
-
-    .about-text {
-      display: grid;
-      gap: 1rem;
-    }
-
-    .about-text strong {
-      color: var(--accent-dark);
-    }
-
-    .service-grid {
-      display: grid;
-      gap: 1.5rem;
-    }
-
-    .service-card {
-      border-radius: 22px;
-      padding: 2rem;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(244, 143, 177, 0.2);
-      transition: transform 0.3s ease, border-color 0.3s ease;
-    }
-
-    .service-card h3 {
-      margin-top: 0;
-      font-size: 1.4rem;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(194, 24, 91, 0.4);
-    }
-
-    .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-      margin-top: 1.2rem;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.35rem 0.9rem;
-      border-radius: 999px;
-      background: rgba(244, 143, 177, 0.18);
-      color: var(--accent-dark);
-      font-size: 0.85rem;
-    }
-
-    .tech-grid {
-      display: grid;
-      gap: 1.5rem;
-    }
-
-    .tech-card {
-      border-radius: 22px;
-      padding: 2.2rem;
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid rgba(247, 161, 181, 0.24);
-      box-shadow: 0 18px 38px rgba(53, 44, 51, 0.08);
-    }
-
-    .tech-card h3 {
-      margin-top: 0;
-      font-size: 1.35rem;
-    }
-
-    .tech-card p {
-      margin-bottom: 0;
-      color: var(--muted);
-    }
-
-    .portfolio-grid {
-      display: grid;
-      gap: 1.5rem;
-    }
-
-    .project-card {
-      position: relative;
-      overflow: hidden;
-      border-radius: 24px;
-      min-height: 220px;
-    }
-
-    .project-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: brightness(0.8);
-      transition: transform 0.6s ease;
-    }
-
-    .project-card:hover img {
-      transform: scale(1.05);
-    }
-
-    .project-info {
-      position: absolute;
-      inset: 0;
-      padding: 1.8rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      color: #fff;
-      background: linear-gradient(180deg, rgba(53, 44, 51, 0) 10%, rgba(53, 44, 51, 0.8) 100%);
-    }
-
-    .project-info span {
-      font-size: 0.85rem;
-      opacity: 0.75;
-    }
-
-    .testimonial-grid {
-      display: grid;
-      gap: 2rem;
-    }
-
-    blockquote {
-      margin: 0;
-      padding: 2rem;
-      border-radius: 22px;
-      background: rgba(244, 143, 177, 0.12);
-      border-left: 4px solid var(--accent);
-      font-style: italic;
-      color: var(--muted);
-    }
-
-    cite {
-      display: block;
-      margin-top: 1rem;
-      font-style: normal;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    form {
-      display: grid;
-      gap: 1.2rem;
-    }
-
-    label {
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 0.85rem 1rem;
-      border-radius: 16px;
-      border: 1px solid rgba(244, 143, 177, 0.4);
-      background: rgba(255, 255, 255, 0.85);
-      font: inherit;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    input:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--accent-dark);
-      box-shadow: 0 0 0 4px rgba(244, 143, 177, 0.2);
-    }
-
-    textarea {
-      min-height: 150px;
-      resize: vertical;
-    }
-
-    footer {
-      text-align: center;
-      padding: 3rem 1.5rem;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    footer a {
-      color: var(--accent-dark);
-    }
-
-    @media (min-width: 680px) {
-      .about-grid {
-        grid-template-columns: 1.1fr 1fr;
-        align-items: center;
-      }
-
-      .service-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .portfolio-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .tech-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .testimonial-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 840px) {
-      nav {
-        position: static;
-      }
-
-      .nav-content {
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      section {
-        padding: 2.5rem 2rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      header {
-        padding-top: 4.5rem;
-      }
-
-      .hero {
-        padding: 2.5rem 1.6rem;
-      }
-
-      section {
-        padding: 2rem 1.4rem;
-      }
-
-      .service-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .portfolio-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .testimonial-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .tech-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  <title>Anette Beauty Studio | Ekskluzywny gabinet kosmetyczny</title>
+  <meta name="description" content="Anette Beauty Studio to ekskluzywny gabinet kosmetyczny, w ktorym odkryjesz autorskie rytualy pielegnacyjne, zaawansowana technologie i luksusowa atmosfere.">
+  <meta name="theme-color" content="#d67c2d">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <nav>
@@ -495,10 +25,10 @@
 
   <header>
     <div class="hero">
-      <h1>Holistyczne zabiegi beauty stworzone dla Twojej skory</h1>
+      <h1>Ekskluzywne rytualy piekna w odcieniach zachodu slonca</h1>
       <p>
-        W Anette Beauty Studio tworzymy rytualy, ktore lacza nowoczesna kosmetologie, aromaterapie
-        i spokoj przestrzeni spa. Dbamy o to, aby kazda wizyta byla osobistym, glebszym doswiadczeniem.
+        W Anette Beauty Studio tworzymy sygnaturowe rytualy, laczac klasyczna kosmetologie z najwyzszej klasy
+        technologia i aromaterapia premium. Kazda wizyta to celebracja, ktora koi zmysly i wydobywa naturalny blask.
       </p>
       <div class="cta-group">
         <a class="button primary" href="#kontakt">Umow konsultacje</a>
@@ -510,27 +40,29 @@
   <main>
     <section id="o-gabinecie">
       <h2>O gabinecie</h2>
-      <p class="section-lead">
+        <p class="section-lead">
         W Anette Beauty Studio laczymy pielegnacje twarzy, ciala i ducha.
-        Tworzymy kameralna przestrzen, w ktorej odzyskasz blask, spokoj i pewnosc siebie.
+        Nasz butikowy gabinet w odcieniach bursztynu otula spokojem,
+        pozwalajac odzyskac blask, harmonie i pewnosc siebie.
       </p>
       <div class="about-grid">
         <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80" alt="Wnetrze gabinetu kosmetycznego Anette Beauty Studio">
         <div class="about-text">
           <p>
             Od ponad siedmiu lat prowadzimy holistyczny gabinet kosmetyczny,
-            w ktorym kazdy rytual jest projektowany z mysla o indywidualnych potrzebach skory.
-            Nasza filozofia opiera sie na balansie miedzy zaawansowana technologia,
-            naturalnymi skladnikami oraz terapeutycznym doswiadczeniem.
+            w ktorym kazdy rytual powstaje na bazie autorskiej konsultacji.
+            Nasza filozofia opiera sie na harmonii pomiedzy klasycznymi technikami spa,
+            naturalnymi eliksirami oraz nowoczesnymi protokolami regeneracji.
           </p>
           <p>
-            W naszym zespole znajdziesz kosmetologow, masazystow oraz ekspertow pielegnacji,
-            ktorzy lacza wiedze medyczna z praca na zmyslach.
-            <strong>Diagnostyka skory</strong> oraz <strong>terapie regeneracyjne</strong> sa naszym wyroznikiem.
+            W naszym zespole znajdziesz kosmetologow, masazystow i ekspertow wellbeing,
+            ktorzy lacza wiedze medyczna z intuicyjna praca na zmyslach.
+            <strong>Diagnostyka skory</strong> i <strong>terapie regeneracyjne</strong> to nasz znak jakosci.
           </p>
           <p>
-            Zapraszamy do przestrzeni zaprojektowanej tak, aby zwolnic tempo, odetchnac i zasmakowac
-            luksusu codziennej pielegnacji. Wierzymy, ze piekno to proces, a nie jednorazowy efekt.
+            Zapraszamy do przestrzeni, w ktorej zwalnia czas. Miekki blask swiec,
+            tonacje pomaranczu i wyselekcjonowana muzyka prowadza przez rytual,
+            po ktorym skora i ducha pozostaja w idealnej rownowadze.
           </p>
         </div>
       </div>
@@ -539,27 +71,27 @@
     <section id="zabiegi">
       <h2>Zabiegi</h2>
       <p class="section-lead">
-        Rozpoczynamy od konsultacji i mapy pielegnacyjnej, aby dobrac zabiegi,
-        ktore odmlodza skore, wymodeluja sylwetke i przyniosa glebszy relaks.
+        Podczas konsultacji tworzymy mape pielegnacyjna, aby dobrac rytualy, ktore
+        odmlodza skore, wymodeluja sylwetke i przywroca poczucie wyjatkowosci.
       </p>
       <div class="service-grid">
         <article class="service-card">
           <h3>Rytualy twarzy</h3>
           <p>
-            Zaawansowane terapie anti-age, bankietowe glow rituals oraz kuracje kwasami,
-            ktore przywracaja gestosc i promiennosc skory.
+            Zaawansowane terapie anti-age, glow infusions i sygnaturowe masaze,
+            ktore przywracaja gestosc, jednolity koloryt i swietlistosc cery.
           </p>
           <div class="tag-list">
             <span class="tag">Anti-age</span>
-            <span class="tag">Glow</span>
-            <span class="tag">Peelingi</span>
+            <span class="tag">Infuzja</span>
+            <span class="tag">Kobido</span>
           </div>
         </article>
         <article class="service-card">
           <h3>Modelowanie ciala</h3>
           <p>
-            Zabiegi wyszczuplajace, drenaże limfatyczne oraz programy ujedrniajace,
-            wspierane nowoczesna technologia i aromaterapia.
+            Programy wysmuklajace, drenaże couture i modelowanie manualne,
+            wspierane aromaterapia couture oraz technologia hi-tech.
           </p>
           <div class="tag-list">
             <span class="tag">Endermologia</span>
@@ -570,13 +102,13 @@
         <article class="service-card">
           <h3>Rytualy spa</h3>
           <p>
-            Autorskie masaze, zabiegi detoksykujece oraz rytualy z elementami mindfulness,
-            ktore przywracaja cialu harmonie.
+            Autorskie rytualy spa, ceremonie detoksykujace i elementy mindfulness,
+            ktore przywracaja cialu harmonie i ukojenie.
           </p>
           <div class="tag-list">
             <span class="tag">Mindfulness</span>
-            <span class="tag">Aromaty</span>
             <span class="tag">Balans</span>
+            <span class="tag">Aromaty</span>
           </div>
         </article>
       </div>
@@ -585,29 +117,29 @@
     <section id="technologia">
       <h2>Technologia</h2>
       <p class="section-lead">
-        Inwestujemy w certyfikowane urzadzenia premium, aby kazdy zabieg byl skuteczny,
-        bezpieczny i skrojony na miarę potrzeb skory.
+        Pracujemy na wyselekcjonowanych technologiach premium, aby kazdy rytual
+        byl skuteczny, bezpieczny i perfekcyjnie dopasowany do potrzeb skory.
       </p>
       <div class="tech-grid">
         <article class="tech-card">
           <h3>Diagnostyka skory</h3>
           <p>
-            Analiza VISIA i mapowanie problemow skornych pozwalaja nam dobrac kuracje,
-            ktore odpowiadaja na realne potrzeby Twojej cery.
+            Analiza VISIA i mapowanie problemow skornych pozwalaja nam tworzyc kuracje,
+            ktore odpowiadaja na unikalne potrzeby Twojej cery.
           </p>
         </article>
         <article class="tech-card">
           <h3>Urzadzenia HI-TECH</h3>
           <p>
-            Pracujemy na laserze diodowym, HIFU oraz linii infuzji tlenowej, dzieki czemu
-            laczymy natychmiastowy efekt z dlugotrwala regeneracja.
+            Laser diodowy, HIFU, infuzja tlenowa i radiofrekwencja frakcyjna
+            lacza natychmiastowy efekt z dlugotrwala regeneracja.
           </p>
         </article>
         <article class="tech-card">
           <h3>Marki premium</h3>
           <p>
-            W zabiegach wykorzystujemy cosmeceutyki Environ, Biologique Recherche i profesjonalne olejki spa,
-            aby zapewnic pielegnacje klasy premium.
+            W zabiegach siegamy po kosmeceutyki Environ, Biologique Recherche
+            oraz autorskie mieszanki olejkow spa klasy couture.
           </p>
         </article>
       </div>
@@ -616,7 +148,7 @@
     <section id="rezultaty">
       <h2>Rezultaty</h2>
       <p class="section-lead">
-        Zobacz fragmenty naszych realizacji, ktore pokazuja jak zmienia sie skora, samopoczucie
+        Wybrane kadry z naszych realizacji pokazuja, jak zmienia sie skora, samopoczucie
         i energia klientek po autorskich programach Anette Beauty Studio.
       </p>
       <div class="portfolio-grid">
