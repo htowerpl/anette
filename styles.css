@@ -201,13 +201,13 @@ header::after {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem 4.5rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
   gap: 2.5rem;
-  align-items: flex-start;
+  align-items: start;
 }
 
 main {
-  flex: 1 1 0;
   padding-top: 2.5rem;
 }
 
@@ -229,10 +229,10 @@ section h2 {
 }
 
 .sidebar {
-  flex: 0 0 340px;
+  width: 100%;
   position: sticky;
   top: 6rem;
-  align-self: stretch;
+  align-self: start;
 }
 
 .sidebar-panel {
@@ -526,15 +526,14 @@ footer a {
   }
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .page-body {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     padding: 0 1.5rem 3.5rem;
   }
 
   .sidebar {
     position: static;
-    width: 100%;
   }
 }
 
