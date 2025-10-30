@@ -1,4 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Serif+Pro:wght@300;400;600&display=swap");
+@import url("https://fonts.cdnfonts.com/css/iwona");
+@import url("https://fonts.cdnfonts.com/css/antykwa-poltawskiego");
 
 :root {
   color-scheme: light;
@@ -21,7 +22,7 @@
 
 body {
   margin: 0;
-  font-family: "Source Serif Pro", "Times New Roman", serif;
+  font-family: "Iwona", sans-serif;
   background: radial-gradient(circle at top left, #fff2e4, var(--bg));
   color: var(--text);
   line-height: 1.65;
@@ -58,7 +59,7 @@ nav {
 }
 
 .brand {
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: "Antykwa Poltawskiego", "Iwona", serif;
   font-weight: 600;
   font-size: 1.45rem;
   letter-spacing: 0.05em;
@@ -77,6 +78,7 @@ nav {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-size: 0.8rem;
+  font-family: "Iwona", sans-serif;
 }
 
 .nav-links a::after {
@@ -114,7 +116,7 @@ nav {
 
 .intro-title {
   margin: 0;
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: "Antykwa Poltawskiego", "Iwona", serif;
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   letter-spacing: 0.04em;
   color: var(--accent-dark);
@@ -203,7 +205,7 @@ header::after {
 
 .hero .hero-title {
   margin: 0;
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: "Antykwa Poltawskiego", "Iwona", serif;
   font-size: clamp(2.6rem, 6vw, 3.6rem);
   letter-spacing: -0.02em;
 }
@@ -277,7 +279,7 @@ section {
 
 section h2 {
   margin-top: 0;
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: "Antykwa Poltawskiego", "Iwona", serif;
   font-size: 2.2rem;
   letter-spacing: 0.01em;
 }
@@ -301,7 +303,7 @@ section h2 {
 
 .sidebar-panel h2 {
   margin: 0;
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: "Antykwa Poltawskiego", "Iwona", serif;
   font-size: 2rem;
   letter-spacing: 0.01em;
 }
@@ -364,7 +366,7 @@ section h2 {
 
 .service-card h3 {
   margin-top: 0;
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: "Antykwa Poltawskiego", "Iwona", serif;
   font-size: 1.6rem;
 }
 
@@ -408,7 +410,7 @@ section h2 {
 
 .tech-card h3 {
   margin-top: 0;
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: "Antykwa Poltawskiego", "Iwona", serif;
   font-size: 1.45rem;
 }
 
@@ -503,7 +505,7 @@ form {
 }
 
 label {
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: "Antykwa Poltawskiego", "Iwona", serif;
   font-weight: 600;
   font-size: 1.05rem;
   letter-spacing: 0.04em;
@@ -639,7 +641,7 @@ footer a {
 
 .news-hero h1 {
   margin: 0 0 1rem;
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: "Antykwa Poltawskiego", "Iwona", serif;
   font-size: clamp(2.4rem, 6vw, 3.2rem);
 }
 
@@ -663,7 +665,7 @@ footer a {
 
 .news-card h2 {
   margin-top: 0;
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: "Antykwa Poltawskiego", "Iwona", serif;
   font-size: 1.6rem;
 }
 
