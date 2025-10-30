@@ -364,6 +364,16 @@ section h2 {
   gap: 2.1rem;
 }
 
+.review-widget {
+  margin-top: 2.4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.review-widget > div {
+  width: 100%;
+}
+
 blockquote {
   margin: 0;
   padding: 2.3rem;
