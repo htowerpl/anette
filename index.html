@@ -18,14 +18,33 @@
         <a href="#technologia">Technologia</a>
         <a href="#rezultaty">Rezultaty</a>
         <a href="#opinie">Opinie</a>
+        <a href="aktualnosci.html">Aktualnosci</a>
         <a href="#kontakt">Kontakt</a>
       </div>
     </div>
   </nav>
 
+  <section class="intro-banner" aria-labelledby="intro-title">
+    <div class="intro-container">
+      <h1 id="intro-title" class="intro-title">Gabinet Kosmetyczny "Anette"</h1>
+      <div class="video-frame">
+        <iframe
+          id="intro-player"
+          src="https://www.youtube.com/embed/nQw3lIjjaJg?enablejsapi=1"
+          title="Usługi kosmetyczne Gliwice Anette"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <a class="button secondary skip-button" href="aktualnosci.html">Pomin</a>
+    </div>
+  </section>
+
   <header>
     <div class="hero">
-      <h1>Ekskluzywne rytualy piekna w odcieniach zachodu slonca</h1>
+      <h2 class="hero-title">Ekskluzywne rytualy piekna w odcieniach zachodu slonca</h2>
       <p>
         W Anette Beauty Studio tworzymy sygnaturowe rytualy, laczac klasyczna kosmetologie z najwyzszej klasy
         technologia i aromaterapia premium. Kazda wizyta to celebracja, ktora koi zmysly i wydobywa naturalny blask.
@@ -42,30 +61,30 @@
       <section id="o-gabinecie">
         <h2>O gabinecie</h2>
         <p class="section-lead">
-        W Anette Beauty Studio laczymy pielegnacje twarzy, ciala i ducha.
-        Nasz butikowy gabinet w odcieniach bursztynu otula spokojem,
-        pozwalajac odzyskac blask, harmonie i pewnosc siebie.
-      </p>
+          W Anette Beauty Studio laczymy pielegnacje twarzy, ciala i ducha.
+          Nasz butikowy gabinet w odcieniach bursztynu otula spokojem,
+          pozwalajac odzyskac blask, harmonie i pewnosc siebie.
+        </p>
         <div class="about-grid">
-        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80" alt="Wnetrze gabinetu kosmetycznego Anette Beauty Studio">
-        <div class="about-text">
-          <p>
-            Od ponad siedmiu lat prowadzimy holistyczny gabinet kosmetyczny,
-            w ktorym kazdy rytual powstaje na bazie autorskiej konsultacji.
-            Nasza filozofia opiera sie na harmonii pomiedzy klasycznymi technikami spa,
-            naturalnymi eliksirami oraz nowoczesnymi protokolami regeneracji.
-          </p>
-          <p>
-            W naszym zespole znajdziesz kosmetologow, masazystow i ekspertow wellbeing,
-            ktorzy lacza wiedze medyczna z intuicyjna praca na zmyslach.
-            <strong>Diagnostyka skory</strong> i <strong>terapie regeneracyjne</strong> to nasz znak jakosci.
-          </p>
-          <p>
-            Zapraszamy do przestrzeni, w ktorej zwalnia czas. Miekki blask swiec,
-            tonacje pomaranczu i wyselekcjonowana muzyka prowadza przez rytual,
-            po ktorym skora i ducha pozostaja w idealnej rownowadze.
-          </p>
-        </div>
+          <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80" alt="Wnetrze gabinetu kosmetycznego Anette Beauty Studio">
+          <div class="about-text">
+            <p>
+              Od ponad siedmiu lat prowadzimy holistyczny gabinet kosmetyczny,
+              w ktorym kazdy rytual powstaje na bazie autorskiej konsultacji.
+              Nasza filozofia opiera sie na harmonii pomiedzy klasycznymi technikami spa,
+              naturalnymi eliksirami oraz nowoczesnymi protokolami regeneracji.
+            </p>
+            <p>
+              W naszym zespole znajdziesz kosmetologow, masazystow i ekspertow wellbeing,
+              ktorzy lacza wiedze medyczna z intuicyjna praca na zmyslach.
+              <strong>Diagnostyka skory</strong> i <strong>terapie regeneracyjne</strong> to nasz znak jakosci.
+            </p>
+            <p>
+              Zapraszamy do przestrzeni, w ktorej zwalnia czas. Miekki blask swiec,
+              tonacje pomaranczu i wyselekcjonowana muzyka prowadza przez rytual,
+              po ktorym skora i ducha pozostaja w idealnej rownowadze.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -227,6 +246,26 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    let introPlayer;
+    function onYouTubeIframeAPIReady() {
+      const playerElement = document.getElementById("intro-player");
+      if (!playerElement) {
+        return;
+      }
+      introPlayer = new YT.Player("intro-player", {
+        events: {
+          onStateChange: handleIntroStateChange
+        }
+      });
+    }
+
+    function handleIntroStateChange(event) {
+      if (event.data === YT.PlayerState.ENDED) {
+        window.location.href = "aktualnosci.html";
+      }
+    }
   </script>
+  <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>

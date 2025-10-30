@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aktualnosci | Anette Beauty Studio</title>
+  <meta name="description" content="Aktualnosci Anette Beauty Studio – zapoznaj sie z nowymi zabiegami, promocjami i wydarzeniami w gabinecie.">
+  <meta name="theme-color" content="#d67c2d">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-content">
+      <div class="brand">Anette Beauty Studio</div>
+      <div class="nav-links">
+        <a href="index.html#o-gabinecie">O gabinecie</a>
+        <a href="index.html#zabiegi">Zabiegi</a>
+        <a href="index.html#technologia">Technologia</a>
+        <a href="index.html#rezultaty">Rezultaty</a>
+        <a href="index.html#opinie">Opinie</a>
+        <a href="aktualnosci.html">Aktualnosci</a>
+        <a href="index.html#kontakt">Kontakt</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="news-page">
+    <section class="news-hero">
+      <h1>Aktualnosci</h1>
+      <p>
+        Poznaj najnowsze wydarzenia, sezonowe rytualy oraz oferty specjalne przygotowane przez Anette Beauty Studio.
+      </p>
+    </section>
+
+    <section class="news-list">
+      <article class="news-card">
+        <h2>Nowa seria zabiegow Glow Therapy</h2>
+        <time datetime="2024-11-12">12 listopada 2024</time>
+        <p>
+          Wprowadzilismy rozswietlajace rytualy Glow Therapy z infuzja witamin C+E oraz masazem Kobido,
+          aby przygotowac skóre na sezon swiateczny.
+        </p>
+      </article>
+      <article class="news-card">
+        <h2>Weekend z aromaterapia couture</h2>
+        <time datetime="2024-10-28">28 pazdziernika 2024</time>
+        <p>
+          Zapraszamy na specjalne sesje spa z mieszankami olejkow dobranych intuicyjnie przez Anette.
+          Liczba miejsc limitowana – rezerwacje telefoniczne.
+        </p>
+      </article>
+      <article class="news-card">
+        <h2>Konsultacje kosmetologiczne online</h2>
+        <time datetime="2024-09-15">15 wrzesnia 2024</time>
+        <p>
+          Jesli nie mozesz odwiedzic gabinetu osobiscie, umow konsultacje online i otrzymaj plan pielegnacji
+          z dopasowanymi produktami home care.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzezone.</p>
+    <p>
+      Obserwuj na
+      <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
+      oraz
+      <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
