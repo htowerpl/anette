@@ -1,5 +1,26 @@
-@import url("https://fonts.cdnfonts.com/css/iwona");
-@import url("https://fonts.cdnfonts.com/css/antykwa-poltawskiego");
+@font-face {
+  font-family: "Iwona";
+  src: url("assets/fonts/iwona/Iwona-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Iwona";
+  src: url("assets/fonts/iwona/Iwona-Italic.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Iwona";
+  src: url("assets/fonts/iwona/Iwona-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   color-scheme: light;
@@ -59,8 +80,8 @@ nav {
 }
 
 .brand {
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
-  font-weight: 600;
+  font-family: "Iwona", sans-serif;
+  font-weight: 700;
   font-size: 1.45rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -116,7 +137,8 @@ nav {
 
 .intro-title {
   margin: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
+  font-family: "Iwona", sans-serif;
+  font-weight: 700;
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   letter-spacing: 0.04em;
   color: var(--accent-dark);
@@ -205,7 +227,8 @@ header::after {
 
 .hero .hero-title {
   margin: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
+  font-family: "Iwona", sans-serif;
+  font-weight: 700;
   font-size: clamp(2.6rem, 6vw, 3.6rem);
   letter-spacing: -0.02em;
 }
@@ -279,7 +302,8 @@ section {
 
 section h2 {
   margin-top: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
+  font-family: "Iwona", sans-serif;
+  font-weight: 700;
   font-size: 2.2rem;
   letter-spacing: 0.01em;
 }
@@ -303,7 +327,8 @@ section h2 {
 
 .sidebar-panel h2 {
   margin: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
+  font-family: "Iwona", sans-serif;
+  font-weight: 700;
   font-size: 2rem;
   letter-spacing: 0.01em;
 }
@@ -366,7 +391,8 @@ section h2 {
 
 .service-card h3 {
   margin-top: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
+  font-family: "Iwona", sans-serif;
+  font-weight: 700;
   font-size: 1.6rem;
 }
 
@@ -410,7 +436,8 @@ section h2 {
 
 .tech-card h3 {
   margin-top: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
+  font-family: "Iwona", sans-serif;
+  font-weight: 700;
   font-size: 1.45rem;
 }
 
@@ -505,8 +532,8 @@ form {
 }
 
 label {
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
-  font-weight: 600;
+  font-family: "Iwona", sans-serif;
+  font-weight: 700;
   font-size: 1.05rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -641,7 +668,8 @@ footer a {
 
 .news-hero h1 {
   margin: 0 0 1rem;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
+  font-family: "Iwona", sans-serif;
+  font-weight: 700;
   font-size: clamp(2.4rem, 6vw, 3.2rem);
 }
 
@@ -665,7 +693,8 @@ footer a {
 
 .news-card h2 {
   margin-top: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
+  font-family: "Iwona", sans-serif;
+  font-weight: 700;
   font-size: 1.6rem;
 }
 
