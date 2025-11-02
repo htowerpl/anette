@@ -63,8 +63,15 @@
       var expandedLabel = label.dataset.expanded || "Zwiń";
       var collapsedLabel = label.dataset.collapsed || label.textContent;
 
+      if (details.open) {
+        label.textContent = expandedLabel;
+        details.classList.add("is-open");
+      }
+
       details.addEventListener("toggle", function() {
-        label.textContent = details.open ? expandedLabel : collapsedLabel;
+        var open = details.open;
+        label.textContent = open ? expandedLabel : collapsedLabel;
+        details.classList.toggle("is-open", open);
       });
     });
   </script>

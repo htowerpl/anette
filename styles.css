@@ -747,9 +747,8 @@ footer a {
 }
 
 .inline-details {
-  display: inline-block;
+  display: inline;
   margin-left: 0.35rem;
-  vertical-align: baseline;
 }
 
 .inline-details summary {
@@ -767,7 +766,11 @@ footer a {
 }
 
 .inline-details .details-body {
+  display: none;
   margin-top: 1rem;
+}
+
+.inline-details.is-open .details-body {
   display: block;
 }
 
