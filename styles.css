@@ -765,12 +765,28 @@ footer a {
   content: "";
 }
 
+.inline-details .summary-text {
+  display: inline;
+}
+
+.inline-details .summary-text--open {
+  display: none;
+}
+
+.inline-details[open] .summary-text--closed {
+  display: none;
+}
+
+.inline-details[open] .summary-text--open {
+  display: inline;
+}
+
 .inline-details .details-body {
   display: none;
   margin-top: 1rem;
 }
 
-.inline-details.is-open .details-body {
+.inline-details[open] .details-body {
   display: block;
 }
 
