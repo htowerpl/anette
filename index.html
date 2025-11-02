@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Anette Beauty Studio | Ekskluzywny gabinet kosmetyczny</title>
+  <title>Anette Beauty Studio | Gabinet kosmetyczny</title>
   <meta name="description" content="Anette Beauty Studio to ekskluzywny gabinet kosmetyczny, w którym odkryjesz autorskie rytuały pielęgnacyjne, zaawansowaną technologię i luksusową atmosferę.">
   <meta name="theme-color" content="#d67c2d">
   <link rel="stylesheet" href="styles.css">
@@ -11,229 +11,39 @@
 <body>
   <nav>
     <div class="nav-content">
-      <div class="brand">Anette Beauty Studio</div>
+      <a class="brand" href="index.html">Anette Beauty Studio</a>
       <div class="nav-links">
-        <a href="#o-gabinecie">O gabinecie</a>
-        <a href="#zabiegi">Zabiegi</a>
-        <a href="#technologia">Technologia</a>
-        <a href="#rezultaty">Rezultaty</a>
-        <a href="#opinie">Opinie</a>
-        <a href="aktualnosci.html">Aktualności</a>
-        <a href="tescik.html">Teścik</a>
-        <a href="#kontakt">Kontakt</a>
+        <a href="pages/o-gabinecie/">O gabinecie</a>
+        <a href="pages/zabiegi/">Zabiegi</a>
+        <a href="pages/technologia/">Technologia</a>
+        <a href="pages/rezultaty/">Rezultaty</a>
+        <a href="pages/opinie/">Opinie</a>
+        <a href="pages/aktualnosci/">Aktualności</a>
+        <a href="pages/tescik/">Teścik</a>
+        <a href="pages/kontakt/">Kontakt</a>
       </div>
     </div>
   </nav>
 
-  <section class="intro-banner" aria-labelledby="intro-title">
-    <div class="intro-container">
-      <h1 id="intro-title" class="intro-title">Gabinet Kosmetyczny „Anette”</h1>
-      <div class="video-frame">
-        <iframe
-          id="intro-player"
-          src="https://www.youtube.com/embed/nQw3lIjjaJg?enablejsapi=1"
-          title="Usługi kosmetyczne Gliwice Anette"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen>
-        </iframe>
-      </div>
-      <a class="button secondary skip-button" href="aktualnosci.html">Pomiń</a>
-    </div>
-  </section>
-
-  <header>
-    <div class="hero">
-      <h2 class="hero-title">Ekskluzywne rytuały piękna w odcieniach zachodu słońca</h2>
-      <p>
-        W Anette Beauty Studio tworzymy sygnaturowe rytuały, łącząc klasyczną kosmetologię z najwyższej klasy
-        technologią i aromaterapią premium. Każda wizyta to celebracja, która koi zmysły i wydobywa naturalny blask.
-      </p>
-      <div class="cta-group">
-        <a class="button primary" href="#kontakt">Umów konsultację</a>
-        <a class="button secondary" href="#zabiegi">Poznaj zabiegi</a>
-      </div>
-    </div>
-  </header>
-
-  <div class="page-body">
-    <main>
-      <section id="o-gabinecie">
-        <h2>O gabinecie</h2>
-        <p class="section-lead">
-          W Anette Beauty Studio łączymy pielęgnację twarzy, ciała i ducha.
-          Nasz butikowy gabinet w odcieniach bursztynu otula spokojem,
-          pozwalając odzyskać blask, harmonię i pewność siebie.
-        </p>
-        <div class="about-grid">
-          <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80" alt="Wnętrze gabinetu kosmetycznego Anette Beauty Studio">
-          <div class="about-text">
-            <p>
-              Od ponad siedmiu lat prowadzimy holistyczny gabinet kosmetyczny,
-              w którym każdy rytuał powstaje na bazie autorskiej konsultacji.
-              Nasza filozofia opiera się na harmonii pomiędzy klasycznymi technikami spa,
-              naturalnymi eliksirami oraz nowoczesnymi protokołami regeneracji.
-            </p>
-            <p>
-              W naszym zespole znajdziesz kosmetologów, masażystów i ekspertów wellbeing,
-              którzy łączą wiedzę medyczną z intuicyjną pracą na zmysłach.
-              <strong>Diagnostyka skóry</strong> i <strong>terapie regeneracyjne</strong> to nasz znak jakości.
-            </p>
-            <p>
-              Zapraszamy do przestrzeni, w której zwalnia czas. Miękki blask świec,
-              tonacje pomarańczu i wyselekcjonowana muzyka prowadzą przez rytuał,
-              po którym skóra i duch pozostają w idealnej równowadze.
-            </p>
-          </div>
+  <main>
+    <section class="intro-banner" aria-labelledby="intro-title">
+      <div class="intro-container">
+        <h1 id="intro-title" class="intro-title">Gabinet Kosmetyczny „Anette”</h1>
+        <div class="video-frame">
+          <iframe
+            id="intro-player"
+            src="https://www.youtube.com/embed/nQw3lIjjaJg?autoplay=1&mute=1&enablejsapi=1&playsinline=1"
+            title="Usługi kosmetyczne Gliwice Anette"
+            frameborder="0"
+            allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+          </iframe>
         </div>
-      </section>
-
-    <section id="zabiegi">
-      <h2>Zabiegi</h2>
-      <p class="section-lead">
-        Podczas konsultacji tworzymy mapę pielęgnacyjną, aby dobrać rytuały, które
-        odmłodzą skórę, wymodelują sylwetkę i przywrócą poczucie wyjątkowości.
-      </p>
-      <div class="service-grid">
-        <article class="service-card">
-          <h3>Rytuały twarzy</h3>
-          <p>
-            Zaawansowane terapie anti-age, glow infusions i sygnaturowe masaże,
-            które przywracają gęstość, jednolity koloryt i świetlistość cery.
-          </p>
-          <div class="tag-list">
-            <span class="tag">Anti-age</span>
-            <span class="tag">Infuzja</span>
-            <span class="tag">Kobido</span>
-          </div>
-        </article>
-        <article class="service-card">
-          <h3>Modelowanie ciała</h3>
-          <p>
-            Programy wysmuklające, drenaże couture i modelowanie manualne,
-            wspierane aromaterapią couture oraz technologią hi-tech.
-          </p>
-          <div class="tag-list">
-            <span class="tag">Endermologia</span>
-            <span class="tag">Liposonic</span>
-            <span class="tag">Aromaterapia</span>
-          </div>
-        </article>
-        <article class="service-card">
-          <h3>Rytuały spa</h3>
-          <p>
-            Autorskie rytuały spa, ceremonie detoksykujące i elementy mindfulness,
-            które przywracają ciału harmonię i ukojenie.
-          </p>
-          <div class="tag-list">
-            <span class="tag">Mindfulness</span>
-            <span class="tag">Balans</span>
-            <span class="tag">Aromaty</span>
-          </div>
-        </article>
+        <a class="button secondary skip-button" href="pages/o-gabinecie/">Pomiń</a>
       </div>
     </section>
-
-    <section id="technologia">
-      <h2>Technologia</h2>
-      <p class="section-lead">
-        Pracujemy na wyselekcjonowanych technologiach premium, aby każdy rytuał
-        był skuteczny, bezpieczny i perfekcyjnie dopasowany do potrzeb skóry.
-      </p>
-      <div class="tech-grid">
-        <article class="tech-card">
-          <h3>Diagnostyka skóry</h3>
-          <p>
-            Analiza VISIA i mapowanie problemów skórnych pozwalają nam tworzyć kuracje,
-            które odpowiadają na unikalne potrzeby Twojej cery.
-          </p>
-        </article>
-        <article class="tech-card">
-          <h3>Urządzenia HI-TECH</h3>
-          <p>
-            Laser diodowy, HIFU, infuzja tlenowa i radiofrekwencja frakcyjna
-            łączą natychmiastowy efekt z długotrwałą regeneracją.
-          </p>
-        </article>
-        <article class="tech-card">
-          <h3>Marki premium</h3>
-          <p>
-            W zabiegach sięgamy po kosmeceutyki Environ, Biologique Recherche
-            oraz autorskie mieszanki olejków spa klasy couture.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="rezultaty">
-      <h2>Rezultaty</h2>
-      <p class="section-lead">
-        Wybrane kadry z naszych realizacji pokazują, jak zmienia się skóra, samopoczucie
-        i energia klientek po autorskich programach Anette Beauty Studio.
-      </p>
-      <div class="portfolio-grid">
-        <article class="project-card">
-          <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80" alt="Kosmetolog wykonuje rytuał pielęgnacji twarzy">
-          <div class="project-info">
-            <span>Glow Therapy</span>
-            <strong>Autorski rytuał rozświetlający</strong>
-          </div>
-        </article>
-        <article class="project-card">
-          <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=900&q=80" alt="Rytuał spa z aromatycznymi olejkami">
-          <div class="project-info">
-            <span>Spa &amp; Body</span>
-            <strong>Program harmonii ciała</strong>
-          </div>
-        </article>
-        <article class="project-card">
-          <img src="https://images.unsplash.com/photo-1542838686-73e5378c2b95?auto=format&fit=crop&w=900&q=80" alt="Gabinet zabiegowy z nowoczesnym sprzętem">
-          <div class="project-info">
-            <span>Technology</span>
-            <strong>Strefa zaawansowanych zabiegów</strong>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="kontakt">
-      <h2>Kontakt</h2>
-      <p class="section-lead">
-        Opisz potrzeby swojej skóry lub wybrany zabieg. Wrócimy do Ciebie z wstępną rekomendacją
-        i propozycją terminu konsultacji w ciągu 24 godzin.
-      </p>
-      <form>
-        <div>
-          <label for="name">Imię i nazwisko</label>
-          <input id="name" name="name" type="text" placeholder="np. Anna Nowak" required>
-        </div>
-        <div>
-          <label for="email">E-mail</label>
-          <input id="email" name="email" type="email" placeholder="np. kontakt@twojafirma.pl" required>
-        </div>
-        <div>
-          <label for="message">Wiadomość</label>
-          <textarea id="message" name="message" placeholder="Opisz potrzeby skóry lub interesujący Cię zabieg..." required></textarea>
-        </div>
-        <button class="button primary" type="submit">Wyślij wiadomość</button>
-      </form>
-      </section>
-    </main>
-    <aside id="opinie" class="sidebar" aria-label="Opinie klientek">
-      <section class="sidebar-panel">
-        <h2>Opinie</h2>
-        <p>
-          Autentyczne recenzje z profilu Google pokazujące, jak klientki doceniają doświadczenia w Anette Beauty Studio.
-        </p>
-        <div class="review-widget">
-          <!-- Elfsight Google Reviews | Untitled Google Reviews -->
-          <script src="https://static.elfsight.com/platform/platform.js" async></script>
-          <div class="elfsight-app-b78f7488-7c01-4de2-85cb-d464e604d002" data-elfsight-app-lazy></div>
-        </div>
-      </section>
-    </aside>
-  </div>
+  </main>
 
   <footer>
     <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
@@ -245,28 +55,48 @@
     </p>
   </footer>
 
+  <script src="https://www.youtube.com/iframe_api" async></script>
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+    const yearElement = document.getElementById("year");
+    if (yearElement) {
+      yearElement.textContent = new Date().getFullYear();
+    }
 
-    let introPlayer;
-    function onYouTubeIframeAPIReady() {
-      const playerElement = document.getElementById("intro-player");
-      if (!playerElement) {
+    let hasRedirected = false;
+
+    function redirectToNews() {
+      if (hasRedirected) {
         return;
       }
-      introPlayer = new YT.Player("intro-player", {
+      hasRedirected = true;
+      window.location.href = "pages/aktualnosci/";
+    }
+
+    function onYouTubeIframeAPIReady() {
+      if (!window.YT || typeof window.YT.Player !== "function") {
+        return;
+      }
+
+      new window.YT.Player("intro-player", {
         events: {
-          onStateChange: handleIntroStateChange
+          onReady: function (event) {
+            try {
+              event.target.mute();
+            } catch (error) {
+              // ignore if mute is not available
+            }
+            event.target.playVideo();
+          },
+          onStateChange: function (event) {
+            if (event.data === window.YT.PlayerState.ENDED) {
+              redirectToNews();
+            }
+          }
         }
       });
     }
 
-    function handleIntroStateChange(event) {
-      if (event.data === YT.PlayerState.ENDED) {
-        window.location.href = "aktualnosci.html";
-      }
-    }
+    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
   </script>
-  <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kontakt | Anette Beauty Studio</title>
+  <meta name="theme-color" content="#d67c2d">
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-content">
+      <a class="brand" href="../../index.html">Anette Beauty Studio</a>
+      <div class="nav-links">
+        <a href="../o-gabinecie/">O gabinecie</a>
+        <a href="../zabiegi/">Zabiegi</a>
+        <a href="../technologia/">Technologia</a>
+        <a href="../rezultaty/">Rezultaty</a>
+        <a href="../opinie/">Opinie</a>
+        <a href="../aktualnosci/">Aktualności</a>
+        <a href="../tescik/">Teścik</a>
+        <a href="../kontakt/">Kontakt</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="standalone">
+    <section id="kontakt">
+      <h2>Kontakt</h2>
+      <p class="section-lead">
+        Opisz potrzeby swojej skóry lub wybrany zabieg. Wrócimy do Ciebie z wstępną rekomendacją
+        i propozycją terminu konsultacji w ciągu 24 godzin.
+      </p>
+      <form>
+        <div>
+          <label for="name">Imię i nazwisko</label>
+          <input id="name" name="name" type="text" placeholder="np. Anna Nowak" required>
+        </div>
+        <div>
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" placeholder="np. kontakt@twojafirma.pl" required>
+        </div>
+        <div>
+          <label for="message">Wiadomość</label>
+          <textarea id="message" name="message" placeholder="Opisz potrzeby skóry lub interesujący Cię zabieg..." required></textarea>
+        </div>
+        <button class="button primary" type="submit">Wyślij wiadomość</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
+    <p>
+      Obserwuj na
+      <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
+      oraz
+      <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
