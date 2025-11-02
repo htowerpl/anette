@@ -34,7 +34,7 @@
         <p class="inline-teaser">
           <span class="inline-teaser-text">Był sobie fragment tekstu.</span>
           <details class="inline-details">
-            <summary>Czytaj dalej</summary>
+            <summary><span class="summary-label" data-expanded="Zwiń">Czytaj dalej</span></summary>
             <div class="details-body">
               <p>I teraz tekst, który pojawia się po kliknięciu w napis „czytaj dalej”.</p>
             </div>
@@ -56,6 +56,17 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    document.querySelectorAll(".inline-details").forEach(function(details) {
+      var label = details.querySelector(".summary-label");
+      if (!label) return;
+      var expandedLabel = label.dataset.expanded || "Zwiń";
+      var collapsedLabel = label.dataset.collapsed || label.textContent;
+
+      details.addEventListener("toggle", function() {
+        label.textContent = details.open ? expandedLabel : collapsedLabel;
+      });
+    });
   </script>
 </body>
 </html>
