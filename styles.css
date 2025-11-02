@@ -746,10 +746,11 @@ footer a {
 }
 
 .inline-details summary {
-  display: inline;
+  display: inline-block;
   font-style: italic;
   cursor: pointer;
   color: var(--accent-dark);
+  vertical-align: baseline;
 }
 
 .inline-details summary::-webkit-details-marker,
