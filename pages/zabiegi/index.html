@@ -8,79 +8,91 @@
   <link rel="stylesheet" href="../../styles.css">
 </head>
 <body>
-  <nav>
-    <div class="nav-content">
+  <div class="layout">
+    <aside class="site-sidebar" aria-label="Menu główne i opinie">
       <a class="brand" href="../../index.html">Anette Beauty Studio</a>
-      <div class="nav-links">
+      <nav class="site-nav" aria-label="Główne sekcje serwisu">
         <a href="../o-gabinecie/">O gabinecie</a>
         <a href="../zabiegi/">Zabiegi</a>
         <a href="../technologia/">Technologia</a>
         <a href="../rezultaty/">Rezultaty</a>
-        <a href="../opinie/">Opinie</a>
         <a href="../aktualnosci/">Aktualności</a>
         <a href="../tescik/">Teścik</a>
         <a href="../kontakt/">Kontakt</a>
+      </nav>
+      <div class="sidebar-panel">
+        <h2>Opinie Google</h2>
+        <p>Zobacz najnowsze recenzje prosto z profilu Gabinetu „Anette”.</p>
+        <div class="review-widget">
+          <!-- Elfsight Google Reviews | Untitled Google Reviews -->
+          <script src="https://static.elfsight.com/platform/platform.js" async></script>
+          <div class="elfsight-app-b78f7488-7c01-4de2-85cb-d464e604d002" data-elfsight-app-lazy></div>
+        </div>
       </div>
+    </aside>
+
+    <div class="content-area">
+      <main class="content-main">
+        <div class="standalone">
+          <section id="zabiegi">
+            <h2>Zabiegi</h2>
+            <p class="section-lead">
+              Podczas konsultacji tworzymy mapę pielęgnacyjną, aby dobrać rytuały, które
+              odmłodzą skórę, wymodelują sylwetkę i przywrócą poczucie wyjątkowości.
+            </p>
+            <div class="service-grid">
+              <article class="service-card">
+                <h3>Rytuały twarzy</h3>
+                <p>
+                  Zaawansowane terapie anti-age, glow infusions i sygnaturowe masaże,
+                  które przywracają gęstość, jednolity koloryt i świetlistość cery.
+                </p>
+                <div class="tag-list">
+                  <span class="tag">Anti-age</span>
+                  <span class="tag">Infuzja</span>
+                  <span class="tag">Kobido</span>
+                </div>
+              </article>
+              <article class="service-card">
+                <h3>Modelowanie ciała</h3>
+                <p>
+                  Programy wysmuklające, drenaże couture i modelowanie manualne,
+                  wspierane aromaterapią couture oraz technologią hi-tech.
+                </p>
+                <div class="tag-list">
+                  <span class="tag">Endermologia</span>
+                  <span class="tag">Liposonic</span>
+                  <span class="tag">Aromaterapia</span>
+                </div>
+              </article>
+              <article class="service-card">
+                <h3>Rytuały spa</h3>
+                <p>
+                  Autorskie rytuały spa, ceremonie detoksykujące i elementy mindfulness,
+                  które przywracają ciału harmonię i ukojenie.
+                </p>
+                <div class="tag-list">
+                  <span class="tag">Mindfulness</span>
+                  <span class="tag">Balans</span>
+                  <span class="tag">Aromaty</span>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer>
+        <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
+        <p>
+          Obserwuj na
+          <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
+          oraz
+          <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
+        </p>
+      </footer>
     </div>
-  </nav>
-
-  <main class="standalone">
-    <section id="zabiegi">
-      <h2>Zabiegi</h2>
-      <p class="section-lead">
-        Podczas konsultacji tworzymy mapę pielęgnacyjną, aby dobrać rytuały, które
-        odmłodzą skórę, wymodelują sylwetkę i przywrócą poczucie wyjątkowości.
-      </p>
-      <div class="service-grid">
-        <article class="service-card">
-          <h3>Rytuały twarzy</h3>
-          <p>
-            Zaawansowane terapie anti-age, glow infusions i sygnaturowe masaże,
-            które przywracają gęstość, jednolity koloryt i świetlistość cery.
-          </p>
-          <div class="tag-list">
-            <span class="tag">Anti-age</span>
-            <span class="tag">Infuzja</span>
-            <span class="tag">Kobido</span>
-          </div>
-        </article>
-        <article class="service-card">
-          <h3>Modelowanie ciała</h3>
-          <p>
-            Programy wysmuklające, drenaże couture i modelowanie manualne,
-            wspierane aromaterapią couture oraz technologią hi-tech.
-          </p>
-          <div class="tag-list">
-            <span class="tag">Endermologia</span>
-            <span class="tag">Liposonic</span>
-            <span class="tag">Aromaterapia</span>
-          </div>
-        </article>
-        <article class="service-card">
-          <h3>Rytuały spa</h3>
-          <p>
-            Autorskie rytuały spa, ceremonie detoksykujące i elementy mindfulness,
-            które przywracają ciału harmonię i ukojenie.
-          </p>
-          <div class="tag-list">
-            <span class="tag">Mindfulness</span>
-            <span class="tag">Balans</span>
-            <span class="tag">Aromaty</span>
-          </div>
-        </article>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
-    <p>
-      Obserwuj na
-      <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
-      oraz
-      <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
-    </p>
-  </footer>
+  </div>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();

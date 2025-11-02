@@ -9,51 +9,61 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <nav>
-    <div class="nav-content">
+  <div class="layout">
+    <aside class="site-sidebar" aria-label="Menu główne i opinie">
       <a class="brand" href="index.html">Anette Beauty Studio</a>
-      <div class="nav-links">
+      <nav class="site-nav" aria-label="Główne sekcje serwisu">
         <a href="pages/o-gabinecie/">O gabinecie</a>
         <a href="pages/zabiegi/">Zabiegi</a>
         <a href="pages/technologia/">Technologia</a>
         <a href="pages/rezultaty/">Rezultaty</a>
-        <a href="pages/opinie/">Opinie</a>
         <a href="pages/aktualnosci/">Aktualności</a>
         <a href="pages/tescik/">Teścik</a>
         <a href="pages/kontakt/">Kontakt</a>
-      </div>
-    </div>
-  </nav>
-
-  <main>
-    <section class="intro-banner" aria-labelledby="intro-title">
-      <div class="intro-container">
-        <h1 id="intro-title" class="intro-title">Gabinet Kosmetyczny „Anette”</h1>
-        <div class="video-frame">
-          <iframe
-            id="intro-player"
-            src="https://www.youtube.com/embed/nQw3lIjjaJg?autoplay=1&mute=1&enablejsapi=1&playsinline=1"
-            title="Usługi kosmetyczne Gliwice Anette"
-            frameborder="0"
-            allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen>
-          </iframe>
+      </nav>
+      <div class="sidebar-panel">
+        <h2>Opinie Google</h2>
+        <p>Zobacz najnowsze recenzje prosto z profilu Gabinetu „Anette”.</p>
+        <div class="review-widget">
+          <!-- Elfsight Google Reviews | Untitled Google Reviews -->
+          <script src="https://static.elfsight.com/platform/platform.js" async></script>
+          <div class="elfsight-app-b78f7488-7c01-4de2-85cb-d464e604d002" data-elfsight-app-lazy></div>
         </div>
-        <a class="button secondary skip-button" href="pages/o-gabinecie/">Pomiń</a>
       </div>
-    </section>
-  </main>
+    </aside>
 
-  <footer>
-    <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
-    <p>
-      Obserwuj na
-      <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
-      oraz
-      <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
-    </p>
-  </footer>
+    <div class="content-area">
+      <main class="content-main">
+        <section class="intro-banner" aria-labelledby="intro-title">
+          <div class="intro-container">
+            <h1 id="intro-title" class="intro-title">Gabinet Kosmetyczny „Anette”</h1>
+            <div class="video-frame">
+              <iframe
+                id="intro-player"
+                src="https://www.youtube.com/embed/nQw3lIjjaJg?autoplay=1&mute=1&enablejsapi=1&playsinline=1"
+                title="Usługi kosmetyczne Gliwice Anette"
+                frameborder="0"
+                allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <a class="button secondary skip-button" href="pages/o-gabinecie/">Pomiń</a>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
+        <p>
+          Obserwuj na
+          <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
+          oraz
+          <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
+        </p>
+      </footer>
+    </div>
+  </div>
 
   <script src="https://www.youtube.com/iframe_api" async></script>
   <script>

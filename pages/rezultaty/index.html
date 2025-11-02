@@ -8,64 +8,76 @@
   <link rel="stylesheet" href="../../styles.css">
 </head>
 <body>
-  <nav>
-    <div class="nav-content">
+  <div class="layout">
+    <aside class="site-sidebar" aria-label="Menu główne i opinie">
       <a class="brand" href="../../index.html">Anette Beauty Studio</a>
-      <div class="nav-links">
+      <nav class="site-nav" aria-label="Główne sekcje serwisu">
         <a href="../o-gabinecie/">O gabinecie</a>
         <a href="../zabiegi/">Zabiegi</a>
         <a href="../technologia/">Technologia</a>
         <a href="../rezultaty/">Rezultaty</a>
-        <a href="../opinie/">Opinie</a>
         <a href="../aktualnosci/">Aktualności</a>
         <a href="../tescik/">Teścik</a>
         <a href="../kontakt/">Kontakt</a>
+      </nav>
+      <div class="sidebar-panel">
+        <h2>Opinie Google</h2>
+        <p>Zobacz najnowsze recenzje prosto z profilu Gabinetu „Anette”.</p>
+        <div class="review-widget">
+          <!-- Elfsight Google Reviews | Untitled Google Reviews -->
+          <script src="https://static.elfsight.com/platform/platform.js" async></script>
+          <div class="elfsight-app-b78f7488-7c01-4de2-85cb-d464e604d002" data-elfsight-app-lazy></div>
+        </div>
       </div>
+    </aside>
+
+    <div class="content-area">
+      <main class="content-main">
+        <div class="standalone">
+          <section id="rezultaty">
+            <h2>Rezultaty</h2>
+            <p class="section-lead">
+              Wybrane kadry z naszych realizacji pokazują, jak zmienia się skóra, samopoczucie
+              i energia klientek po autorskich programach Anette Beauty Studio.
+            </p>
+            <div class="portfolio-grid">
+              <article class="project-card">
+                <img src="media/glow-therapy.svg" alt="Stylizowana ilustracja rytuału pielęgnacji twarzy">
+                <div class="project-info">
+                  <span>Glow Therapy</span>
+                  <strong>Autorski rytuał rozświetlający</strong>
+                </div>
+              </article>
+              <article class="project-card">
+                <img src="media/spa-body.svg" alt="Stylizowana ilustracja rytuału spa z aromatycznymi olejkami">
+                <div class="project-info">
+                  <span>Spa &amp; Body</span>
+                  <strong>Program harmonii ciała</strong>
+                </div>
+              </article>
+              <article class="project-card">
+                <img src="media/technology.svg" alt="Stylizowana ilustracja strefy zaawansowanych zabiegów">
+                <div class="project-info">
+                  <span>Technology</span>
+                  <strong>Strefa zaawansowanych zabiegów</strong>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer>
+        <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
+        <p>
+          Obserwuj na
+          <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
+          oraz
+          <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
+        </p>
+      </footer>
     </div>
-  </nav>
-
-  <main class="standalone">
-    <section id="rezultaty">
-      <h2>Rezultaty</h2>
-      <p class="section-lead">
-        Wybrane kadry z naszych realizacji pokazują, jak zmienia się skóra, samopoczucie
-        i energia klientek po autorskich programach Anette Beauty Studio.
-      </p>
-      <div class="portfolio-grid">
-        <article class="project-card">
-          <img src="media/glow-therapy.svg" alt="Stylizowana ilustracja rytuału pielęgnacji twarzy">
-          <div class="project-info">
-            <span>Glow Therapy</span>
-            <strong>Autorski rytuał rozświetlający</strong>
-          </div>
-        </article>
-        <article class="project-card">
-          <img src="media/spa-body.svg" alt="Stylizowana ilustracja rytuału spa z aromatycznymi olejkami">
-          <div class="project-info">
-            <span>Spa &amp; Body</span>
-            <strong>Program harmonii ciała</strong>
-          </div>
-        </article>
-        <article class="project-card">
-          <img src="media/technology.svg" alt="Stylizowana ilustracja strefy zaawansowanych zabiegów">
-          <div class="project-info">
-            <span>Technology</span>
-            <strong>Strefa zaawansowanych zabiegów</strong>
-          </div>
-        </article>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
-    <p>
-      Obserwuj na
-      <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
-      oraz
-      <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
-    </p>
-  </footer>
+  </div>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
