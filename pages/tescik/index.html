@@ -8,62 +8,50 @@
   <link rel="stylesheet" href="../../styles.css">
 </head>
 <body>
-  <div class="layout">
-    <aside class="site-sidebar" aria-label="Menu główne i opinie">
+  <nav>
+    <div class="nav-content">
       <a class="brand" href="../../index.html">Anette Beauty Studio</a>
-      <nav class="site-nav" aria-label="Główne sekcje serwisu">
+      <div class="nav-links">
         <a href="../o-gabinecie/">O gabinecie</a>
         <a href="../zabiegi/">Zabiegi</a>
         <a href="../technologia/">Technologia</a>
         <a href="../rezultaty/">Rezultaty</a>
+        <a href="../opinie/">Opinie</a>
         <a href="../aktualnosci/">Aktualności</a>
         <a href="../tescik/">Teścik</a>
         <a href="../kontakt/">Kontakt</a>
-      </nav>
-      <div class="sidebar-panel">
-        <h2>Opinie Google</h2>
-        <p>Zobacz najnowsze recenzje prosto z profilu Gabinetu „Anette”.</p>
-        <div class="review-widget">
-          <!-- Elfsight Google Reviews | Untitled Google Reviews -->
-          <script src="https://static.elfsight.com/platform/platform.js" async></script>
-          <div class="elfsight-app-b78f7488-7c01-4de2-85cb-d464e604d002" data-elfsight-app-lazy></div>
-        </div>
       </div>
-    </aside>
-
-    <div class="content-area">
-      <main class="content-main">
-        <div class="standalone">
-          <section>
-            <h2>Teścik</h2>
-            <p class="section-lead">Prosty przykład bloku tekstu z detalami rozwijanymi.</p>
-            <p class="inline-teaser">
-              <span class="inline-teaser-text">Był sobie fragment tekstu.</span>
-              <details class="inline-details">
-                <summary>
-                  <span class="summary-text summary-text--closed">Czytaj dalej</span>
-                  <span class="summary-text summary-text--open">Zwiń</span>
-                </summary>
-                <div class="details-body">
-                  <p>I teraz tekst, który pojawia się po kliknięciu w napis „czytaj dalej”.</p>
-                </div>
-              </details>
-            </p>
-          </section>
-        </div>
-      </main>
-
-      <footer>
-        <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
-        <p>
-          Obserwuj na
-          <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
-          oraz
-          <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
-        </p>
-      </footer>
     </div>
-  </div>
+  </nav>
+
+  <main class="standalone">
+    <section>
+      <h2>Teścik</h2>
+      <p class="section-lead">Prosty przykład bloku tekstu z detalami rozwijanymi.</p>
+      <p class="inline-teaser">
+        <span class="inline-teaser-text">Był sobie fragment tekstu.</span>
+        <details class="inline-details">
+          <summary>
+            <span class="summary-text summary-text--closed">Czytaj dalej</span>
+            <span class="summary-text summary-text--open">Zwiń</span>
+          </summary>
+          <div class="details-body">
+            <p>I teraz tekst, który pojawia się po kliknięciu w napis „czytaj dalej”.</p>
+          </div>
+        </details>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
+    <p>
+      Obserwuj na
+      <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
+      oraz
+      <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
+    </p>
+  </footer>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();

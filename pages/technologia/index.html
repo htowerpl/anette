@@ -8,76 +8,64 @@
   <link rel="stylesheet" href="../../styles.css">
 </head>
 <body>
-  <div class="layout">
-    <aside class="site-sidebar" aria-label="Menu główne i opinie">
+  <nav>
+    <div class="nav-content">
       <a class="brand" href="../../index.html">Anette Beauty Studio</a>
-      <nav class="site-nav" aria-label="Główne sekcje serwisu">
+      <div class="nav-links">
         <a href="../o-gabinecie/">O gabinecie</a>
         <a href="../zabiegi/">Zabiegi</a>
         <a href="../technologia/">Technologia</a>
         <a href="../rezultaty/">Rezultaty</a>
+        <a href="../opinie/">Opinie</a>
         <a href="../aktualnosci/">Aktualności</a>
         <a href="../tescik/">Teścik</a>
         <a href="../kontakt/">Kontakt</a>
-      </nav>
-      <div class="sidebar-panel">
-        <h2>Opinie Google</h2>
-        <p>Zobacz najnowsze recenzje prosto z profilu Gabinetu „Anette”.</p>
-        <div class="review-widget">
-          <!-- Elfsight Google Reviews | Untitled Google Reviews -->
-          <script src="https://static.elfsight.com/platform/platform.js" async></script>
-          <div class="elfsight-app-b78f7488-7c01-4de2-85cb-d464e604d002" data-elfsight-app-lazy></div>
-        </div>
       </div>
-    </aside>
-
-    <div class="content-area">
-      <main class="content-main">
-        <div class="standalone">
-          <section id="technologia">
-            <h2>Technologia</h2>
-            <p class="section-lead">
-              Pracujemy na wyselekcjonowanych technologiach premium, aby każdy rytuał
-              był skuteczny, bezpieczny i perfekcyjnie dopasowany do potrzeb skóry.
-            </p>
-            <div class="tech-grid">
-              <article class="tech-card">
-                <h3>Diagnostyka skóry</h3>
-                <p>
-                  Analiza VISIA i mapowanie problemów skórnych pozwalają nam tworzyć kuracje,
-                  które odpowiadają na unikalne potrzeby Twojej cery.
-                </p>
-              </article>
-              <article class="tech-card">
-                <h3>Urządzenia HI-TECH</h3>
-                <p>
-                  Laser diodowy, HIFU, infuzja tlenowa i radiofrekwencja frakcyjna
-                  łączą natychmiastowy efekt z długotrwałą regeneracją.
-                </p>
-              </article>
-              <article class="tech-card">
-                <h3>Marki premium</h3>
-                <p>
-                  W zabiegach sięgamy po kosmeceutyki Environ, Biologique Recherche
-                  oraz autorskie mieszanki olejków spa klasy couture.
-                </p>
-              </article>
-            </div>
-          </section>
-        </div>
-      </main>
-
-      <footer>
-        <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
-        <p>
-          Obserwuj na
-          <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
-          oraz
-          <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
-        </p>
-      </footer>
     </div>
-  </div>
+  </nav>
+
+  <main class="standalone">
+    <section id="technologia">
+      <h2>Technologia</h2>
+      <p class="section-lead">
+        Pracujemy na wyselekcjonowanych technologiach premium, aby każdy rytuał
+        był skuteczny, bezpieczny i perfekcyjnie dopasowany do potrzeb skóry.
+      </p>
+      <div class="tech-grid">
+        <article class="tech-card">
+          <h3>Diagnostyka skóry</h3>
+          <p>
+            Analiza VISIA i mapowanie problemów skórnych pozwalają nam tworzyć kuracje,
+            które odpowiadają na unikalne potrzeby Twojej cery.
+          </p>
+        </article>
+        <article class="tech-card">
+          <h3>Urządzenia HI-TECH</h3>
+          <p>
+            Laser diodowy, HIFU, infuzja tlenowa i radiofrekwencja frakcyjna
+            łączą natychmiastowy efekt z długotrwałą regeneracją.
+          </p>
+        </article>
+        <article class="tech-card">
+          <h3>Marki premium</h3>
+          <p>
+            W zabiegach sięgamy po kosmeceutyki Environ, Biologique Recherche
+            oraz autorskie mieszanki olejków spa klasy couture.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="year"></span> Anette Beauty Studio. Wszystkie prawa zastrzeżone.</p>
+    <p>
+      Obserwuj na
+      <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
+      oraz
+      <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
+    </p>
+  </footer>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
