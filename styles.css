@@ -334,6 +334,26 @@ section h2 {
   letter-spacing: 0.01em;
 }
 
+.page-hero {
+  margin: 0 0 2.8rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.page-hero img {
+  width: 100%;
+  border-radius: 26px;
+  box-shadow: 0 22px 40px rgba(54, 38, 26, 0.12);
+  display: block;
+}
+
+.page-hero figcaption {
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
 .sidebar {
   width: 100%;
   position: sticky;
