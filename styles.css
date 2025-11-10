@@ -48,10 +48,10 @@
 
 :root {
   color-scheme: light;
-  --bg: #f6faf8;
-  --surface: rgba(255, 255, 255, 0.94);
+  --bg: #fff8f2;
+  --surface: rgba(255, 255, 255, 0.95);
   --surface-solid: #ffffff;
-  --text: #2f2339;
+  --text: #3b2414;
   --deep: #2f2339;
   --accent: #ff8400;
   --accent-dark: #dc4467;
@@ -61,8 +61,8 @@
   --neutral: #9a9a9a;
   --success: #7ea23f;
   --danger: #f44336;
-  --border: rgba(126, 142, 162, 0.35);
-  --shadow: 0 28px 48px rgba(47, 35, 57, 0.16);
+  --border: rgba(255, 132, 0, 0.25);
+  --shadow: 0 28px 48px rgba(255, 132, 0, 0.12);
   scroll-behavior: smooth;
 }
 
@@ -73,7 +73,7 @@
 body {
   margin: 0;
   font-family: "Iwona", sans-serif;
-  background: linear-gradient(145deg, rgba(47, 35, 57, 0.98) 0%, rgba(47, 35, 57, 0.85) 18%, rgba(246, 250, 248, 0.96) 70%, var(--bg) 100%);
+  background: radial-gradient(circle at top left, rgba(255, 132, 0, 0.15), rgba(255, 132, 0, 0.05) 35%, #fff8f2 65%);
   color: var(--text);
   line-height: 1.65;
   min-height: 100vh;
@@ -94,10 +94,10 @@ nav {
   position: sticky;
   top: 0;
   z-index: 10;
-  backdrop-filter: blur(22px);
-  background-color: rgba(47, 35, 57, 0.92);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 12px 24px rgba(17, 10, 24, 0.35);
+  backdrop-filter: blur(18px);
+  background-color: rgba(255, 132, 0, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 18px 32px rgba(191, 84, 0, 0.35);
 }
 
 .nav-content {
@@ -116,7 +116,7 @@ nav {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #f6faf8;
+  color: #fff6eb;
 }
 
 .nav-links {
@@ -132,8 +132,10 @@ nav {
   text-transform: uppercase;
   font-size: 0.8rem;
   font-family: "Iwona", sans-serif;
-  color: rgba(246, 250, 248, 0.85);
+  color: rgba(255, 255, 255, 0.88);
 }
+
+
 
 .nav-links a::after {
   content: "";
@@ -150,7 +152,7 @@ nav {
 
 .nav-links a:focus-visible,
 .nav-links a:hover {
-  color: #ffffff;
+  color: #fffdf9;
 }
 
 .nav-links a:focus-visible::after,
@@ -174,7 +176,7 @@ nav {
   font-weight: 700;
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   letter-spacing: 0.04em;
-  color: #f6faf8;
+  color: #ff8400;
 }
 
 .video-frame {
@@ -268,7 +270,7 @@ header::after {
 
 .hero p {
   margin: 1.6rem 0 2.4rem;
-  color: var(--muted);
+  color: #7a5a3a;
   font-size: 1.1rem;
 }
 
@@ -355,7 +357,7 @@ section h2 {
 
 .page-hero figcaption {
   text-align: center;
-  color: var(--muted);
+  color: #7a5a3a;
   font-style: italic;
   font-size: 0.95rem;
 }
@@ -379,6 +381,7 @@ section h2 {
   align-items: center;
   border-radius: 28px;
   scroll-margin-top: 120px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 132, 0, 0.15));
 }
 
 .treatment-summary::-webkit-details-marker,
@@ -393,7 +396,7 @@ section h2 {
 
 .treatment-summary-text p {
   margin: 0;
-  color: var(--muted);
+  color: #7a5a3a;
 }
 
 .summary-cta {
@@ -452,16 +455,16 @@ section h2 {
 }
 
 .treatment-panel {
-  border: 1px solid rgba(126, 142, 162, 0.3);
+  border: 1px solid var(--border);
   border-radius: 20px;
   padding: 0.6rem 1rem;
   display: grid;
   gap: 0.3rem;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .treatment-detail {
-  border-bottom: 1px solid rgba(126, 142, 162, 0.3);
+  border-bottom: 1px solid rgba(255, 132, 0, 0.35);
   padding-bottom: 0.4rem;
 }
 
@@ -513,7 +516,7 @@ section h2 {
   margin-top: 0.45rem;
   display: grid;
   gap: 0.35rem;
-  color: var(--muted);
+  color: #5c3b28;
 }
 
 .treatment-section {
@@ -532,7 +535,7 @@ section h2 {
   padding-left: 1.2rem;
   display: grid;
   gap: 0.25rem;
-  color: var(--muted);
+  color: #5c3b28;
   line-height: 1.4;
 }
 
@@ -556,6 +559,7 @@ section h2 {
   font-size: 1.05rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  color: var(--accent);
 }
 
 .info-card ul {
@@ -563,7 +567,7 @@ section h2 {
   padding-left: 1.2rem;
   display: grid;
   gap: 0.2rem;
-  color: var(--muted);
+  color: #5c3b28;
 }
 
 .info-card.warning {
@@ -594,15 +598,16 @@ section h2 {
   font-weight: 700;
   font-size: 2rem;
   letter-spacing: 0.01em;
+  color: #ff8400;
 }
 
 .sidebar-panel p {
-  color: var(--muted);
+  color: #5c3b28;
   margin: 0;
 }
 
 .section-lead {
-  color: var(--muted);
+  color: #7a5a3a;
   margin-bottom: 2.3rem;
   max-width: 600px;
 }
@@ -635,7 +640,7 @@ section h2 {
 }
 
 .about-text strong {
-  color: var(--accent);
+  color: #ff8400;
   font-weight: 600;
 }
 
@@ -647,8 +652,8 @@ section h2 {
 .service-card {
   border-radius: 26px;
   padding: 2.1rem;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(126, 142, 162, 0.12));
-  border: 1px solid rgba(126, 142, 162, 0.25);
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.98), rgba(255, 132, 0, 0.12));
+  border: 1px solid rgba(255, 132, 0, 0.28);
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -692,9 +697,9 @@ section h2 {
 .tech-card {
   border-radius: 26px;
   padding: 2.1rem;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid rgba(126, 142, 162, 0.25);
-  box-shadow: 0 18px 36px rgba(20, 9, 31, 0.12);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.97), rgba(255, 132, 0, 0.1));
+  border: 1px solid rgba(255, 132, 0, 0.2);
+  box-shadow: 0 18px 36px rgba(191, 84, 0, 0.16);
 }
 
 .tech-card h3 {
@@ -719,7 +724,7 @@ section h2 {
   overflow: hidden;
   border-radius: 26px;
   min-height: 220px;
-  border: 1px solid rgba(126, 142, 162, 0.25);
+  border: 1px solid rgba(255, 132, 0, 0.25);
 }
 
 .project-card img {
@@ -743,7 +748,7 @@ section h2 {
   flex-direction: column;
   justify-content: flex-end;
   color: #fff;
-  background: linear-gradient(180deg, rgba(47, 35, 57, 0) 0%, rgba(47, 35, 57, 0.92) 100%);
+  background: linear-gradient(180deg, rgba(59, 36, 20, 0) 0%, rgba(59, 36, 20, 0.92) 100%);
 }
 
 .project-info span {
@@ -972,9 +977,9 @@ footer a {
 .news-card {
   padding: 2.4rem;
   border-radius: 26px;
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.96), rgba(126, 142, 162, 0.12));
-  border: 1px solid rgba(126, 142, 162, 0.28);
-  box-shadow: 0 18px 36px rgba(32, 19, 45, 0.15);
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.98), rgba(255, 132, 0, 0.12));
+  border: 1px solid rgba(255, 132, 0, 0.25);
+  box-shadow: 0 18px 36px rgba(191, 84, 0, 0.16);
 }
 
 .news-card h2 {
@@ -995,7 +1000,7 @@ footer a {
 
 .news-card p {
   margin: 0;
-  color: var(--muted);
+  color: #5c3b28;
 }
 
 .standalone {
@@ -1038,10 +1043,10 @@ footer a {
 
 .teaser-body {
   margin-top: 1rem;
-  color: var(--muted);
+  color: #5c3b28;
 }
 
 .inline-details .details-body p {
   margin: 0;
-  color: var(--muted);
+  color: #5c3b28;
 }
