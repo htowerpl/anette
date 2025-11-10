@@ -32,7 +32,7 @@
         i zagłębić się w szczegółowe wytyczne.
       </p>
 
-      <details id="makijaz-permanentny" class="treatment-block">
+      <details id="makijaz-permanentny" class="treatment-block" data-detail-group="zabiegi">
         <summary class="treatment-summary">
           <div class="treatment-summary-text">
             <h3>Makijaż permanentny</h3>
@@ -53,7 +53,7 @@
           <div class="treatment-layout">
             <div class="treatment-content">
               <div class="treatment-panel">
-                <details class="treatment-detail">
+                <details class="treatment-detail" data-detail-group="makijaz">
                   <summary>
                     <span>1. Cel i szczegółowy opis zabiegu</span>
                     <span class="detail-cta">
@@ -82,7 +82,7 @@
                   </div>
                 </details>
 
-                <details class="treatment-detail">
+                <details class="treatment-detail" data-detail-group="makijaz">
                   <summary>
                     <span>3. Możliwe powikłania</span>
                     <span class="detail-cta">
@@ -101,7 +101,7 @@
                   </div>
                 </details>
 
-                <details class="treatment-detail">
+                <details class="treatment-detail" data-detail-group="makijaz">
                   <summary>
                     <span>4. Wytyczne przed zabiegiem</span>
                     <span class="detail-cta">
@@ -119,7 +119,7 @@
                   </div>
                 </details>
 
-                <details class="treatment-detail">
+                <details class="treatment-detail" data-detail-group="makijaz">
                   <summary>
                     <span>5. Wytyczne po zabiegu</span>
                     <span class="detail-cta">
@@ -137,7 +137,7 @@
                   </div>
                 </details>
 
-                <details class="treatment-detail">
+                <details class="treatment-detail" data-detail-group="makijaz">
                   <summary>
                     <span>6. Efekty zabiegu</span>
                     <span class="detail-cta">
@@ -182,7 +182,7 @@
         </div>
       </details>
 
-      <details id="lipoliza-iniekcyjna" class="treatment-block">
+      <details id="lipoliza-iniekcyjna" class="treatment-block" data-detail-group="zabiegi">
         <summary class="treatment-summary">
           <div class="treatment-summary-text">
             <h3>Lipoliza iniekcyjna</h3>
@@ -203,7 +203,7 @@
           <div class="treatment-layout">
             <div class="treatment-content">
               <div class="treatment-panel">
-                <details class="treatment-detail">
+                <details class="treatment-detail" data-detail-group="lipoliza">
                   <summary>
                     <span>1. Cel i opis zabiegu</span>
                     <span class="detail-cta">
@@ -225,7 +225,7 @@
                   </div>
                 </details>
 
-                <details class="treatment-detail">
+                <details class="treatment-detail" data-detail-group="lipoliza">
                   <summary>
                     <span>3. Możliwe powikłania</span>
                     <span class="detail-cta">
@@ -244,7 +244,7 @@
                   </div>
                 </details>
 
-                <details class="treatment-detail">
+                <details class="treatment-detail" data-detail-group="lipoliza">
                   <summary>
                     <span>4. Zalecenia przed zabiegiem</span>
                     <span class="detail-cta">
@@ -260,7 +260,7 @@
                   </div>
                 </details>
 
-                <details class="treatment-detail">
+                <details class="treatment-detail" data-detail-group="lipoliza">
                   <summary>
                     <span>5. Zalecenia po zabiegu</span>
                     <span class="detail-cta">
@@ -277,7 +277,7 @@
                   </div>
                 </details>
 
-                <details class="treatment-detail">
+                <details class="treatment-detail" data-detail-group="lipoliza">
                   <summary>
                     <span>6. Efekty</span>
                     <span class="detail-cta">
@@ -332,6 +332,27 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    function setupAccordion(attribute) {
+      const groups = document.querySelectorAll(`[${attribute}]`);
+      groups.forEach((group) => {
+        group.addEventListener("toggle", () => {
+          if (!group.open) {
+            return;
+          }
+          const groupName = group.getAttribute(attribute);
+          document
+            .querySelectorAll(`[${attribute}=\"${groupName}\"]`)
+            .forEach((panel) => {
+              if (panel !== group) {
+                panel.open = false;
+              }
+            });
+        });
+      });
+    }
+
+    setupAccordion("data-detail-group");
   </script>
 </body>
 </html>
