@@ -48,21 +48,21 @@
 
 :root {
   color-scheme: light;
-  --bg: #fff4ea;
-  --surface: rgba(255, 255, 255, 0.96);
+  --bg: #fff8f2;
+  --surface: rgba(255, 255, 255, 0.95);
   --surface-solid: #ffffff;
-  --text: #3d2416;
+  --text: #3b2414;
   --deep: #2f2339;
-  --accent: #f79a32;
-  --accent-dark: #d5695d;
-  --accent-soft: rgba(247, 154, 50, 0.18);
+  --accent: #ff8400;
+  --accent-dark: #dc4467;
+  --accent-soft: rgba(255, 132, 0, 0.18);
   --highlight: #dc4467;
   --muted: #7e8ea2;
   --neutral: #9a9a9a;
   --success: #7ea23f;
   --danger: #f44336;
-  --border: rgba(247, 154, 50, 0.28);
-  --shadow: 0 26px 44px rgba(211, 105, 93, 0.16);
+  --border: rgba(255, 132, 0, 0.25);
+  --shadow: 0 28px 48px rgba(255, 132, 0, 0.12);
   scroll-behavior: smooth;
 }
 
@@ -73,7 +73,7 @@
 body {
   margin: 0;
   font-family: "Iwona", sans-serif;
-  background: radial-gradient(circle at top left, rgba(247, 154, 50, 0.22), rgba(255, 244, 234, 0.95) 55%, #fff4ea 80%);
+  background: radial-gradient(circle at top left, rgba(255, 132, 0, 0.15), rgba(255, 132, 0, 0.05) 35%, #fff8f2 65%);
   color: var(--text);
   line-height: 1.65;
   min-height: 100vh;
@@ -94,10 +94,10 @@ nav {
   position: sticky;
   top: 0;
   z-index: 10;
-  backdrop-filter: blur(16px);
-  background: linear-gradient(90deg, rgba(247, 154, 50, 0.95), rgba(255, 180, 80, 0.92));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 18px 32px rgba(143, 73, 22, 0.25);
+  backdrop-filter: blur(18px);
+  background-color: rgba(255, 132, 0, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 18px 32px rgba(191, 84, 0, 0.35);
 }
 
 .nav-content {
@@ -116,7 +116,7 @@ nav {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #fff9f2;
+  color: #fff6eb;
 }
 
 .nav-links {
@@ -132,8 +132,7 @@ nav {
   text-transform: uppercase;
   font-size: 0.8rem;
   font-family: "Iwona", sans-serif;
-  color: rgba(61, 36, 22, 0.9);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 
@@ -153,7 +152,7 @@ nav {
 
 .nav-links a:focus-visible,
 .nav-links a:hover {
-  color: #2f2339;
+  color: #fffdf9;
 }
 
 .nav-links a:focus-visible::after,
