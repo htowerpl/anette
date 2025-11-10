@@ -443,6 +443,70 @@ section h2 {
   gap: 1.8rem;
 }
 
+.treatment-panel {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1rem 1.2rem;
+  display: grid;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.treatment-detail {
+  border-bottom: 1px solid rgba(214, 124, 45, 0.15);
+  padding-bottom: 0.4rem;
+}
+
+.treatment-detail:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.treatment-detail summary {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  cursor: pointer;
+  gap: 0.8rem;
+  color: var(--text);
+}
+
+.treatment-detail summary::-webkit-details-marker,
+.treatment-detail summary::marker {
+  display: none;
+}
+
+.detail-cta {
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent-dark);
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.detail-cta .cta-close {
+  display: none;
+}
+
+.treatment-detail[open] .detail-cta .cta-open {
+  display: none;
+}
+
+.treatment-detail[open] .detail-cta .cta-close {
+  display: inline;
+}
+
+.detail-body {
+  margin-top: 0.45rem;
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+}
+
 .treatment-section {
   display: grid;
   gap: 0.65rem;
