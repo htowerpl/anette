@@ -333,13 +333,23 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
+    function scrollToSummary(detailsEl) {
+      const summary = detailsEl.querySelector(":scope > summary");
+      if (!summary) {
+        return;
+      }
+      requestAnimationFrame(() => {
+        summary.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+
     function setupAccordion(attribute) {
-      const groups = document.querySelectorAll(`[${attribute}]`);
-      groups.forEach((group) => {
+      document.querySelectorAll(`[${attribute}]`).forEach((group) => {
         group.addEventListener("toggle", () => {
           if (!group.open) {
             return;
           }
+
           const groupName = group.getAttribute(attribute);
           document
             .querySelectorAll(`[${attribute}=\"${groupName}\"]`)
@@ -348,6 +358,8 @@
                 panel.open = false;
               }
             });
+
+          scrollToSummary(group);
         });
       });
     }
