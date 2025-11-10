@@ -371,6 +371,7 @@ section h2 {
   gap: 1.4rem;
   align-items: center;
   border-radius: 28px;
+  scroll-margin-top: 120px;
 }
 
 .treatment-summary::-webkit-details-marker,
@@ -471,6 +472,7 @@ section h2 {
   cursor: pointer;
   gap: 0.8rem;
   color: var(--text);
+  scroll-margin-top: 120px;
 }
 
 .treatment-detail summary::-webkit-details-marker,
