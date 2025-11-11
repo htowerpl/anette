@@ -1186,6 +1186,29 @@ footer a {
   gap: 1.6rem;
 }
 
+.news-widget {
+  padding: 2.6rem;
+  border-radius: 28px;
+  background: linear-gradient(160deg, rgba(248, 244, 236, 0.94), rgba(255, 132, 0, 0.08));
+  border: 1px solid rgba(242, 149, 61, 0.35);
+  box-shadow: 0 18px 36px rgba(191, 84, 0, 0.2);
+}
+
+.news-widget__frame {
+  margin-top: 1.3rem;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff8f1;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.news-widget iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+  min-height: 900px;
+}
+
 .news-card {
   padding: 2.4rem;
   border-radius: 26px;
