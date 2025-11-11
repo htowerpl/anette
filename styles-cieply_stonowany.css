@@ -232,6 +232,7 @@ nav {
   }
 }
 
+.button.secondary.skip-button,
 .skip-button {
   width: fit-content;
   margin: 0.5rem auto 0;
@@ -248,6 +249,7 @@ nav {
   overflow: hidden;
 }
 
+.button.secondary.skip-button::after,
 .skip-button::after {
   content: "";
   position: absolute;
@@ -258,6 +260,8 @@ nav {
   transition: opacity 0.3s ease;
 }
 
+.button.secondary.skip-button:hover::after,
+.button.secondary.skip-button:focus-visible::after,
 .skip-button:hover::after,
 .skip-button:focus-visible::after {
   opacity: 1;
