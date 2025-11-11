@@ -117,6 +117,27 @@ nav {
   text-transform: uppercase;
   text-decoration: none;
   color: #fff9f2;
+  display: flex;
+  align-items: center;
+}
+
+.brand-mark {
+  height: 54px;
+  width: auto;
+  display: block;
+}
+
+.inline-logo {
+  display: inline-flex;
+  align-items: flex-end;
+  margin-left: 0.3rem;
+}
+
+.inline-logo img {
+  height: 56px;
+  width: auto;
+  transform: translateY(10px);
+  display: inline-block;
 }
 
 .nav-links {
@@ -932,6 +953,15 @@ footer a {
 
   .treatment-summary-text h3 {
     font-size: 1.35rem;
+  }
+
+  .brand-mark {
+    height: 40px;
+  }
+
+  .inline-logo img {
+    height: 46px;
+    transform: translateY(6px);
   }
 
   .service-grid,
