@@ -232,7 +232,6 @@ nav {
   }
 }
 
-.button.secondary.skip-button,
 .skip-button {
   width: fit-content;
   margin: 0.5rem auto 0;
@@ -240,16 +239,19 @@ nav {
   border-radius: 999px;
   border: 1px solid rgba(255, 214, 176, 0.35);
   color: #fff4e8;
-  background: linear-gradient(145deg, #7ea23f, #5c7a2f);
+  background: linear-gradient(145deg, #a85620, #703410);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   position: relative;
   overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
-.button.secondary.skip-button::after,
 .skip-button::after {
   content: "";
   position: absolute;
@@ -260,8 +262,6 @@ nav {
   transition: opacity 0.3s ease;
 }
 
-.button.secondary.skip-button:hover::after,
-.button.secondary.skip-button:focus-visible::after,
 .skip-button:hover::after,
 .skip-button:focus-visible::after {
   opacity: 1;
