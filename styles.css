@@ -236,6 +236,11 @@ nav {
   width: fit-content;
   margin: 0.5rem auto 0;
   padding-inline: 2.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 214, 176, 0.5);
+  color: #ffe5cb;
+  background: rgba(36, 22, 15, 0.65);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
 header {
