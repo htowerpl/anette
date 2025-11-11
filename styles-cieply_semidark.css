@@ -236,6 +236,31 @@ nav {
   width: fit-content;
   margin: 0.5rem auto 0;
   padding-inline: 2.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 214, 176, 0.5);
+  color: #1a0f09;
+  background: linear-gradient(120deg, #ffb45a, #f8973c);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.skip-button::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.15);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.skip-button:hover::after,
+.skip-button:focus-visible::after {
+  opacity: 1;
 }
 
 header {
