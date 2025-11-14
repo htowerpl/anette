@@ -893,6 +893,84 @@ section h2 {
   color: var(--muted);
 }
 
+.tech-grid.devices {
+  grid-template-columns: 1fr;
+}
+
+.device-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.device-tag {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.device-highlights {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+  color: #f2d5c4;
+}
+
+.device-highlights li {
+  padding-left: 1.4rem;
+  position: relative;
+}
+
+.device-highlights li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+.device-modules details {
+  border: 1px solid rgba(255, 132, 0, 0.25);
+  border-radius: 16px;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.device-modules details + details {
+  margin-top: 0.8rem;
+}
+
+.device-modules summary {
+  font-weight: 600;
+  cursor: pointer;
+  color: #ffe1c4;
+}
+
+.device-modules p {
+  margin: 0.6rem 0 0;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.device-sublist {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 18px;
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(255, 132, 0, 0.2);
+}
+
+.device-sublist + .device-sublist {
+  margin-top: 0.8rem;
+}
+
+.device-sublist h4 {
+  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+  color: #ffe5cb;
+}
+
 .portfolio-grid {
   display: grid;
   gap: 1.7rem;
@@ -1040,6 +1118,10 @@ footer a {
 
   .tech-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .tech-grid.devices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .testimonial-grid {
