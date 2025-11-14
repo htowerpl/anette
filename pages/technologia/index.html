@@ -55,21 +55,21 @@
           <li>Oprogramowanie Lapio Professional® wspiera powtarzalność zabiegów.</li>
         </ul>
         <div class="device-modules">
-          <details>
+          <details data-detail-group="kombajn-moduly">
             <summary>Skin Analyzer</summary>
             <p>
               Analizer skóry mierzy poziom nawilżenia przed i po zabiegu, dzięki czemu dobieram
               idealną kurację, monitoruję postępy i dokumentuję zmiany dla każdej klientki.
             </p>
           </details>
-          <details>
+          <details data-detail-group="kombajn-moduly">
             <summary>Ultradźwięki</summary>
             <p>
               Fala ultradźwiękowa wprowadza w głąb skóry substancje aktywne, rozluźnia mięśnie,
               poprawia metabolizm komórek i zapewnia niezwykle odprężający masaż termiczny.
             </p>
           </details>
-          <details>
+          <details data-detail-group="kombajn-moduly">
             <summary>Galwan i jonoforeza</summary>
             <p>
               Prąd galwaniczny pobudza produkcję kolagenu, dotlenia tkanki i pomaga w redukcji
@@ -77,11 +77,59 @@
               wtłaczać w głąb skóry odpowiednio dobrane jony cynku, miedzi czy wapnia.
             </p>
           </details>
-          <details>
+          <details data-detail-group="kombajn-moduly">
             <summary>Mezoterapia bezigłowa</summary>
             <p>
               Elektroporacja połączona z ultradźwiękami transportuje skoncentrowane koktajle w głąb skóry.
               Zabieg jest bezbolesny, a efekty porównywalne do klasycznej mezoterapii igłowej.
+            </p>
+          </details>
+          <details data-detail-group="kombajn-moduly">
+            <summary>Oksybrazja</summary>
+            <p>
+              Strumień mikrokropelek soli fizjologicznej pod ciśnieniem tlenu delikatnie złuszcza naskórek.
+              Mogę regulować siłę podciśnienia, dlatego zabieg sprawdza się zarówno przy cerach wrażliwych,
+              jak i grubych wymagających intensywnej mikrodermabrazji wodno-tlenowej.
+            </p>
+          </details>
+          <details data-detail-group="kombajn-moduly">
+            <summary>Face smoothing &amp; Vacuum&amp;Tens</summary>
+            <p>
+              Połączenie masażu próżniowego z elektrostymulacją TENS usprawnia mikrokrążenie, drenaż limfy
+              i ćwiczy mięśnie mimiczne. Po sesji owal twarzy jest napięty, skóra rozświetlona i widocznie
+              gładsza już po pierwszym spotkaniu.
+            </p>
+          </details>
+          <details data-detail-group="kombajn-moduly">
+            <summary>Fale radiowe bipolarne &amp; Derma RF</summary>
+            <p>
+              Bipolarne RF z laserem biostymulującym ogrzewa skórę właściwą, pobudza fibroblasty i szybko
+              napina włókna kolagenowe. Wykorzystuję je do liftingu twarzy, redukcji zmarszczek, cellulitu
+              oraz modelowania ciała – efekty przebudowy skóry utrzymują się nawet do pół roku.
+            </p>
+          </details>
+          <details data-detail-group="kombajn-moduly">
+            <summary>Liposukcja kawitacyjna + Infrared</summary>
+            <p>
+              Ultradźwięki o niskiej częstotliwości rozbijają komórki tłuszczowe, a podczerwień wstępnie
+              ogrzewa tkanki, by przyspieszyć upłynnianie lipidów. To komfortowa metoda wyszczuplania brzucha,
+              ud, ramion czy pośladków bez okresu rekonwalescencji.
+            </p>
+          </details>
+          <details data-detail-group="kombajn-moduly">
+            <summary>Dermomasaż endogenny</summary>
+            <p>
+              Masaż podciśnieniowy pięcioma głowicami modeluje sylwetkę, rozbija zraziki tłuszczowe,
+              poprawia ukrwienie i wspomaga drenaż limfatyczny. Stosuję go także na twarz, szyję i dekolt
+              w celu silnej regeneracji tkanek.
+            </p>
+          </details>
+          <details data-detail-group="kombajn-moduly">
+            <summary>Lipolaser z laserem biostymulującym</summary>
+            <p>
+              Emituje zimne światło 650&nbsp;nm, które redukuje zawartość komórek tłuszczowych bez uszkadzania
+              otaczających tkanek. Sprawdza się przy modelowaniu brzucha, ramion, ud, pośladków i podbródka,
+              a pierwsze centymetry znikają już po jednej sesji.
             </p>
           </details>
         </div>
@@ -155,6 +203,39 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    function scrollToSummary(detailsEl) {
+      const summary = detailsEl.querySelector(":scope > summary");
+      if (!summary) {
+        return;
+      }
+      requestAnimationFrame(() => {
+        summary.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+
+    function setupAccordion(attribute) {
+      document.querySelectorAll(`[${attribute}]`).forEach((group) => {
+        group.addEventListener("toggle", () => {
+          if (!group.open) {
+            return;
+          }
+
+          const groupName = group.getAttribute(attribute);
+          document
+            .querySelectorAll(`[${attribute}=\"${groupName}\"]`)
+            .forEach((panel) => {
+              if (panel !== group) {
+                panel.open = false;
+              }
+            });
+
+          scrollToSummary(group);
+        });
+      });
+    }
+
+    setupAccordion("data-detail-group");
   </script>
 </body>
 </html>
