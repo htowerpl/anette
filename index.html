@@ -10,6 +10,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="assets/brand/favicon-16.png">
   <link rel="stylesheet" href="styles.css">
   <script src="assets/js/typography.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
 </head>
 <body>
   <nav>
@@ -65,47 +66,5 @@
   </footer>
 
   <script src="https://www.youtube.com/iframe_api" async></script>
-  <script>
-    const yearElement = document.getElementById("year");
-    if (yearElement) {
-      yearElement.textContent = new Date().getFullYear();
-    }
-
-    let hasRedirected = false;
-
-    function redirectToNews() {
-      if (hasRedirected) {
-        return;
-      }
-      hasRedirected = true;
-      window.location.href = "pages/aktualnosci/";
-    }
-
-    function onYouTubeIframeAPIReady() {
-      if (!window.YT || typeof window.YT.Player !== "function") {
-        return;
-      }
-
-      new window.YT.Player("intro-player", {
-        events: {
-          onReady: function (event) {
-            try {
-              event.target.mute();
-            } catch (error) {
-              // ignore if mute is not available
-            }
-            event.target.playVideo();
-          },
-          onStateChange: function (event) {
-            if (event.data === window.YT.PlayerState.ENDED) {
-              redirectToNews();
-            }
-          }
-        }
-      });
-    }
-
-    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
-  </script>
 </body>
 </html>

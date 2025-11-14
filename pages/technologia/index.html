@@ -10,6 +10,7 @@
 
   <link rel="stylesheet" href="../../styles.css">
   <script src="../../assets/js/typography.js" defer></script>
+  <script src="../../assets/js/app.js" defer></script>
 </head>
 <body>
   <nav>
@@ -200,42 +201,5 @@
       <a href="https://www.behance.net" target="_blank" rel="noreferrer noopener">Behance</a>.
     </p>
   </footer>
-
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    function scrollToSummary(detailsEl) {
-      const summary = detailsEl.querySelector(":scope > summary");
-      if (!summary) {
-        return;
-      }
-      requestAnimationFrame(() => {
-        summary.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    }
-
-    function setupAccordion(attribute) {
-      document.querySelectorAll(`[${attribute}]`).forEach((group) => {
-        group.addEventListener("toggle", () => {
-          if (!group.open) {
-            return;
-          }
-
-          const groupName = group.getAttribute(attribute);
-          document
-            .querySelectorAll(`[${attribute}=\"${groupName}\"]`)
-            .forEach((panel) => {
-              if (panel !== group) {
-                panel.open = false;
-              }
-            });
-
-          scrollToSummary(group);
-        });
-      });
-    }
-
-    setupAccordion("data-detail-group");
-  </script>
 </body>
 </html>
