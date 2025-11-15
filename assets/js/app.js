@@ -8,13 +8,16 @@
 
   function scrollToSummary(detailsEl) {
     var summary = detailsEl.querySelector(":scope > summary");
-    if (!summary) {
+    var anchorSelector = detailsEl.getAttribute("data-scroll-anchor");
+    var anchor = anchorSelector ? document.querySelector(anchorSelector) : null;
+    var targetElement = anchor || summary;
+    if (!targetElement) {
       return;
     }
     requestAnimationFrame(function () {
       var nav = document.querySelector("nav");
       var offset = nav ? nav.offsetHeight + 16 : 16;
-      var target = summary.getBoundingClientRect().top + window.pageYOffset - offset;
+      var target = targetElement.getBoundingClientRect().top + window.pageYOffset - offset;
       window.scrollTo({ top: target, behavior: "smooth" });
     });
   }
