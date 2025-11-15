@@ -12,7 +12,10 @@
       return;
     }
     requestAnimationFrame(function () {
-      summary.scrollIntoView({ behavior: "smooth", block: "start" });
+      var nav = document.querySelector("nav");
+      var offset = nav ? nav.offsetHeight + 16 : 16;
+      var target = summary.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top: target, behavior: "smooth" });
     });
   }
 
