@@ -589,10 +589,20 @@ section h2 {
 }
 
 .detail-body {
-  margin-top: 0.45rem;
   display: grid;
   gap: 0.35rem;
   color: #f2d5c4;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.3s ease;
+  margin-top: 0;
+}
+
+.treatment-detail[open] .detail-body {
+  max-height: 2000px;
+  opacity: 1;
+  margin-top: 0.45rem;
 }
 
 .treatment-section {
