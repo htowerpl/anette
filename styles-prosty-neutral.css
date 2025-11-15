@@ -48,21 +48,21 @@
 
 :root {
   color-scheme: light;
-  --bg: #fff5ed;
-  --surface: #fff8f1;
-  --surface-alt: #ffe7d0;
+  --bg: #f6faf8;
+  --surface: #ffffff;
+  --surface-alt: #edf1f5;
   --text: #2f2339;
   --deep: #2f2339;
   --accent: #ff8400;
   --accent-dark: #dc4467;
-  --accent-soft: rgba(255, 132, 0, 0.15);
+  --accent-soft: rgba(255, 132, 0, 0.08);
   --highlight: #dc4467;
-  --muted: #9a9a9a;
+  --muted: #7e8ea2;
   --neutral: #9a9a9a;
   --success: #7ea23f;
   --danger: #f44336;
-  --border: #f2d9c0;
-  --shadow: 0 18px 40px rgba(255, 132, 0, 0.22);
+  --border: #d5dae3;
+  --shadow: 0 18px 40px rgba(47, 35, 57, 0.08);
   scroll-behavior: smooth;
 }
 
