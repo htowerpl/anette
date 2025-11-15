@@ -296,6 +296,8 @@ header {
   font-size: 0.8rem;
   text-decoration: none;
   cursor: pointer;
+  justify-self: flex-start;
+  width: auto;
   transition: color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
