@@ -48,21 +48,21 @@
 
 :root {
   color-scheme: light;
-  --bg: #fff6f0;
-  --surface: #fff9f5;
-  --surface-alt: #fef0e1;
+  --bg: #fff5ed;
+  --surface: #fff8f1;
+  --surface-alt: #ffe7d0;
   --text: #2f2339;
   --deep: #2f2339;
-  --accent: #7ea23f;
-  --accent-dark: #567829;
-  --accent-soft: rgba(126, 162, 63, 0.15);
+  --accent: #ff8400;
+  --accent-dark: #dc4467;
+  --accent-soft: rgba(255, 132, 0, 0.15);
   --highlight: #dc4467;
   --muted: #9a9a9a;
   --neutral: #9a9a9a;
   --success: #7ea23f;
   --danger: #f44336;
-  --border: #ecd9c7;
-  --shadow: 0 14px 32px rgba(47, 35, 57, 0.08);
+  --border: #f2d9c0;
+  --shadow: 0 18px 40px rgba(255, 132, 0, 0.22);
   scroll-behavior: smooth;
 }
 
@@ -1006,7 +1006,7 @@ footer {
   padding: 3.2rem 1.5rem;
   color: rgba(246, 250, 248, 0.85);
   font-size: 0.95rem;
-  background: var(--deep);
+  background: #2f2339;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
