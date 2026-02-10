@@ -109,8 +109,63 @@
     }, 250);
   }
 
+  // --- Nowy kod do wstrzykiwania komponentów ---
+
+  const navEl = document.getElementById("main-nav");
+  const footerEl = document.getElementById("main-footer");
+
+  // Funkcja do wczytywania i wstawiania HTML
+  const loadComponent = (url, element) => {
+    if (!element) return;
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.text();
+      })
+      .then((data) => {
+        element.innerHTML = data;
+        // Po załadowaniu komponentów, wykonaj odpowiednie akcje
+        if (element.id === "main-nav") {
+          setActiveNavLink();
+        }
+        if (element.id === "main-footer") {
+          // Ponownie wywołaj funkcję do aktualizacji roku w nowo dodanej stopce
+          updateYearStamp(); 
+        }
+      })
+      .catch((error) => {
+        console.error(`Error loading component from ${url}:`, error);
+        element.innerHTML = `<p style="color: red; text-align: center;">Błąd ładowania komponentu.</p>`;
+      });
+  };
+
+  // Funkcja do oznaczania aktywnego linku w nawigacji
+  const setActiveNavLink = () => {
+    const navLinks = document.querySelectorAll("#main-nav .nav-links a");
+    const currentPath = window.location.pathname;
+
+    navLinks.forEach((link) => {
+      const linkPath = link.getAttribute("href");
+      // Sprawdzamy, czy ścieżka linku jest częścią aktualnego URL
+      if (linkPath !== "/" && currentPath.startsWith(linkPath)) {
+        link.setAttribute("aria-current", "page");
+      }
+      // Specjalna obsługa strony głównej
+      else if (linkPath === "/index.html" && (currentPath === "/" || currentPath.endsWith("/index.html"))) {
+        link.setAttribute("aria-current", "page");
+      }
+    });
+  };
+
+  // --- Koniec nowego kodu ---
+  
   document.addEventListener("DOMContentLoaded", function () {
-    updateYearStamp();
+    // Wczytaj nawigację i stopkę
+    loadComponent("/_nav.html", navEl);
+    loadComponent("/_footer.html", footerEl);
+
+    // Inicjalizuj pozostałe skrypty
+    // updateYearStamp(); // Usunięte, bo jest wywoływane po załadowaniu stopki
     setupAccordion("data-detail-group");
     initHomepageVideo();
   });
