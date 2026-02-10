@@ -1,0 +1,18 @@
+:root {
+  color-scheme: light;
+  --bg: #fff6f0;
+  --surface: #fff9f5;
+  --surface-alt: #fef0e1;
+  --text: #2f2339;
+  --deep: #2f2339;
+  --accent: #7ea23f;
+  --accent-dark: #567829;
+  --accent-soft: rgba(126, 162, 63, 0.15);
+  --highlight: #dc4467;
+  --muted: #9a9a9a;
+  --neutral: #9a9a9a;
+  --success: #7ea23f;
+  --danger: #f44336;
+  --border: #ecd9c7;
+  --shadow: 0 14px 32px rgba(47, 35, 57, 0.08);
+}

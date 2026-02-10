@@ -20,24 +20,53 @@
     <section id="kontakt">
       <h2>Kontakt</h2>
       <p class="section-lead">
-        Opisz potrzeby swojej skóry lub wybrany zabieg. Wrócimy do Ciebie z wstępną rekomendacją
-        i propozycją terminu konsultacji w ciągu 24 godzin.
+        Jesteś o krok od chwili dla siebie. Skontaktuj się telefonicznie, napisz wiadomość lub odwiedź nas osobiście w sercu Gliwic.
       </p>
-      <form>
-        <div>
-          <label for="name">Imię i nazwisko</label>
-          <input id="name" name="name" type="text" placeholder="np. Anna Nowak" required>
+
+      <div class="contact-wrapper">
+        <!-- Wizytówka z danymi i zdjęciem -->
+        <div class="contact-card-grid">
+          <div class="contact-details-content">
+            <div>
+              <h3>Gabinet Kosmetyczny Anette</h3>
+              <address>
+                ul. Cichociemnych 18<br>
+                44-100 Gliwice
+              </address>
+            </div>
+            
+            <div class="contact-data">
+              <a href="tel:+48500000000" class="contact-item">
+                <span class="contact-icon">📞</span> +48 500 000 000
+              </a>
+              <a href="mailto:kontakt@anette.pl" class="contact-item">
+                <span class="contact-icon">✉️</span> kontakt@anette.pl
+              </a>
+            </div>
+
+            <div style="margin-top: 0.5rem;"> <!-- Ten margines można zostawić jako wyjątek lub też przenieść do CSS -->
+              <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="button">
+                Gabinet Anette na Facebooku
+              </a>
+            </div>
+          </div>
+          <div class="contact-visual">
+            <img src="../../media/recepcja.jpg" alt="Eleganckie wnętrze recepcji Gabinetu Anette" loading="lazy">
+          </div>
         </div>
-        <div>
-          <label for="email">E-mail</label>
-          <input id="email" name="email" type="email" placeholder="np. kontakt@twojafirma.pl" required>
+
+        <!-- Mapa dojazdu -->
+        <div id="mapa">
+          <h3>Jak dojechać?</h3>
+          <iframe 
+            class="map-frame"
+            src="https://maps.google.com/maps?q=ul.+Cichociemnych+18,+Gliwice&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+            allowfullscreen="" 
+            loading="lazy" 
+            title="Mapa dojazdu do Gabinetu Anette, ul. Cichociemnych 18, Gliwice">
+          </iframe>
         </div>
-        <div>
-          <label for="message">Wiadomość</label>
-          <textarea id="message" name="message" placeholder="Opisz potrzeby skóry lub interesujący Cię zabieg..." required></textarea>
-        </div>
-        <button class="button" type="submit">Wyślij wiadomość</button>
-      </form>
+      </div>
     </section>
   </main>
 
