@@ -68,7 +68,7 @@
         return;
       }
       hasRedirected = true;
-      window.location.href = "pages/aktualnosci/";
+      window.location.href = "pages/aktualnosci/aktualnosci.html";
     }
 
     function createPlayer() {
