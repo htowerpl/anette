@@ -114,6 +114,11 @@
   const navEl = document.getElementById("main-nav");
   const footerEl = document.getElementById("main-footer");
 
+  // Funkcja pomocnicza do ustalania ścieżki bazowej (dla podstron w folderze pages/)
+  const getBasePath = () => {
+    return window.location.pathname.includes("/pages/") ? "../../" : "";
+  };
+
   // Funkcja do wczytywania i wstawiania HTML
   const loadComponent = (url, element) => {
     if (!element) return;
@@ -123,7 +128,12 @@
         return response.text();
       })
       .then((data) => {
-        element.innerHTML = data;
+        // Automatycznie napraw ścieżki relatywne wewnątrz komponentu (dla podstron)
+        // Zamienia href="plik" na href="../../plik" jeśli jesteśmy w podkatalogu
+        const basePath = getBasePath();
+        const adjustedData = data.replace(/(href|src)="(?!(?:https?:\/\/|#|\/|mailto:|tel:))/g, `$1="${basePath}`);
+        element.innerHTML = adjustedData;
+
         // Po załadowaniu komponentów, wykonaj odpowiednie akcje
         if (element.id === "main-nav") {
           setActiveNavLink();
@@ -147,11 +157,11 @@
     navLinks.forEach((link) => {
       const linkPath = link.getAttribute("href");
       // Sprawdzamy, czy ścieżka linku jest częścią aktualnego URL
-      if (linkPath !== "/" && currentPath.startsWith(linkPath)) {
+      if (linkPath !== "index.html" && currentPath.includes(linkPath)) {
         link.setAttribute("aria-current", "page");
       }
       // Specjalna obsługa strony głównej
-      else if (linkPath === "/index.html" && (currentPath === "/" || currentPath.endsWith("/index.html"))) {
+      else if (linkPath === "index.html" && (currentPath.endsWith("/") || currentPath.endsWith("index.html"))) {
         link.setAttribute("aria-current", "page");
       }
     });
@@ -161,8 +171,9 @@
   
   document.addEventListener("DOMContentLoaded", function () {
     // Wczytaj nawigację i stopkę
-    loadComponent("/_nav.html", navEl);
-    loadComponent("/_footer.html", footerEl);
+    const basePath = getBasePath();
+    loadComponent(basePath + "_nav.html", navEl);
+    loadComponent(basePath + "_footer.html", footerEl);
 
     // Inicjalizuj pozostałe skrypty
     // updateYearStamp(); // Usunięte, bo jest wywoływane po załadowaniu stopki
