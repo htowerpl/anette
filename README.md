@@ -1,6 +1,6 @@
 # Gabinet Kosmetyczny Anette
 
-Strona internetowa dla Gabinetu Kosmetycznego Anette.
+Strona internetowa dla Gabinetu Kosmetycznego Anette (anette.beauty).
 
 ## Struktura projektu
 
