@@ -114,9 +114,15 @@
   const navEl = document.getElementById("main-nav");
   const footerEl = document.getElementById("main-footer");
 
-  // Funkcja pomocnicza do ustalania ścieżki bazowej (dla podstron w folderze pages/)
+  // Funkcja pomocnicza do ustalania ścieżki bazowej
   const getBasePath = () => {
-    return window.location.pathname.includes("/pages/") ? "../../" : "";
+    // Dynamicznie pobierz ścieżkę na podstawie lokalizacji skryptu app.js
+    const script = document.querySelector('script[src*="assets/js/app.js"]');
+    if (script) {
+      const src = script.getAttribute('src');
+      return src.replace("assets/js/app.js", "");
+    }
+    return "";
   };
 
   // Funkcja do wczytywania i wstawiania HTML
@@ -152,16 +158,12 @@
   // Funkcja do oznaczania aktywnego linku w nawigacji
   const setActiveNavLink = () => {
     const navLinks = document.querySelectorAll("#main-nav .nav-links a");
-    const currentPath = window.location.pathname;
+    // Normalizacja URL: usuń parametry, index.html i końcowy slash
+    const normalize = (url) => url.split(/[?#]/)[0].replace(/\/index\.html$/, "").replace(/\/$/, "");
+    const currentUrl = normalize(window.location.href);
 
     navLinks.forEach((link) => {
-      const linkPath = link.getAttribute("href");
-      // Sprawdzamy, czy ścieżka linku jest częścią aktualnego URL
-      if (linkPath !== "index.html" && currentPath.includes(linkPath)) {
-        link.setAttribute("aria-current", "page");
-      }
-      // Specjalna obsługa strony głównej
-      else if (linkPath === "index.html" && (currentPath.endsWith("/") || currentPath.endsWith("index.html"))) {
+      if (normalize(link.href) === currentUrl) {
         link.setAttribute("aria-current", "page");
       }
     });
