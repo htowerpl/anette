@@ -110,6 +110,7 @@ nav {
   background: #2f2339;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 12px 30px rgba(15, 10, 22, 0.3);
+  min-height: 92px; /* Rezerwacja miejsca, aby uniknąć skoku treści (CLS) */
 }
 
 .nav-content {
@@ -1008,6 +1009,7 @@ footer {
   font-size: 0.95rem;
   background: var(--deep);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 150px; /* Wstępna rezerwacja miejsca dla stopki */
 }
 
 footer a {

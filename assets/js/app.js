@@ -51,6 +51,7 @@
   function initHomepageVideo() {
     var playerContainer = document.getElementById("intro-player");
     if (!playerContainer) {
+      // Jeśli nie ma playera na stronie (np. podstrony), nie uruchamiaj logiki YouTube
       return;
     }
 
@@ -178,7 +179,6 @@
     loadComponent(basePath + "_footer.html", footerEl);
 
     // Inicjalizuj pozostałe skrypty
-    // updateYearStamp(); // Usunięte, bo jest wywoływane po załadowaniu stopki
     setupAccordion("data-detail-group");
     initHomepageVideo();
   });
