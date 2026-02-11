@@ -1325,15 +1325,18 @@ footer a {
 .contact-visual {
   position: relative;
   min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
 }
 
 .contact-visual img {
-  position: absolute;
-  top: 2.5rem;
-  left: 2.5rem;
-  width: calc(100% - 5rem);
-  height: calc(100% - 5rem);
-  object-fit: cover;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   display: block;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
