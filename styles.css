@@ -1323,8 +1323,11 @@ footer a {
 }
 
 .contact-visual {
-  position: relative;
   min-height: 300px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .contact-visual img {
@@ -1332,6 +1335,8 @@ footer a {
   height: 100%;
   object-fit: cover;
   display: block;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
 .contact-details-content {
