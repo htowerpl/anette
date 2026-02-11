@@ -1329,6 +1329,8 @@ footer a {
   align-items: center;
   justify-content: center;
   padding: 2.5rem;
+  height: 100%;
+  overflow: hidden;
 }
 
 .contact-visual img {
