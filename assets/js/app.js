@@ -110,6 +110,35 @@
     }, 250);
   }
 
+  function initReviewsFallback() {
+    var widgetContainer = document.querySelector('.review-widget div[class*="elfsight-app"]');
+    // Pobieramy elementy statyczne, które chcemy ukryć po załadowaniu widżetu
+    var fallbacks = document.querySelectorAll('.reviews-list, .google-link-container');
+
+    if (!widgetContainer || fallbacks.length === 0) {
+      return;
+    }
+
+    var hideFallbacks = function() {
+      fallbacks.forEach(function(el) { el.style.display = 'none'; });
+    };
+
+    // Jeśli widżet załadował się błyskawicznie (np. z cache)
+    if (widgetContainer.children.length > 0) {
+      hideFallbacks();
+      return;
+    }
+
+    var observer = new MutationObserver(function () {
+      if (widgetContainer.children.length > 0) {
+        hideFallbacks();
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(widgetContainer, { childList: true });
+  }
+
   // --- Nowy kod do wstrzykiwania komponentów ---
 
   const navEl = document.getElementById("main-nav");
@@ -181,5 +210,6 @@
     // Inicjalizuj pozostałe skrypty
     setupAccordion("data-detail-group");
     initHomepageVideo();
+    initReviewsFallback();
   });
 })();
