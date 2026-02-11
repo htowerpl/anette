@@ -1323,22 +1323,14 @@ footer a {
 }
 
 .contact-visual {
-  position: relative;
-  min-height: 300px;
+  padding: 2.5rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 2.5rem;
-  height: 100%;
-  overflow: hidden;
 }
 
 .contact-visual img {
-  width: auto;
+  width: 100%;
   height: auto;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
   display: block;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
