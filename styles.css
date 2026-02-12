@@ -1323,17 +1323,31 @@ footer a {
 }
 
 .contact-visual {
-  padding: 2.5rem;
-  display: flex;
-  align-items: center;
+  position: relative; /* Ustanawia kontekst pozycjonowania dla obrazka */
+  margin: 0; /* Resetuje domyślny margines dla <figure> */
 }
 
 .contact-visual img {
-  width: 100%;
+  /* Wyjmujemy obrazek z przepływu, aby nie wpływał na rozmiar siatki */
+  position: absolute;
+  /* Centrujemy obrazek i ograniczamy jego rozmiar do faktycznej wielkości */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
   height: auto;
-  display: block;
+  max-width: calc(100% - 5rem);
+  max-height: calc(100% - 5rem);
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
+  background: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-visual img:hover {
+  transform: translate(-50%, calc(-50% - 6px));
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15);
+  border-color: var(--accent);
 }
 
 .contact-details-content {
@@ -1370,6 +1384,13 @@ footer a {
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
   filter: grayscale(0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.map-frame:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15);
+  border-color: var(--accent);
 }
 
 .contact-details-content h3 {
