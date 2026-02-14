@@ -139,6 +139,68 @@
     observer.observe(widgetContainer, { childList: true });
   }
 
+  function loadNewsFromApi() {
+    const container = document.getElementById('news-container');
+    if (!container) return;
+
+    // Ustal ścieżkę do API względem obecnej lokalizacji
+    // getBasePath() zwraca np. "../../" dla podstron, więc API będzie szukane w "../../api/news.php"
+    const apiUrl = getBasePath() + "news.php";
+
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) throw new Error("Błąd sieci");
+        return response.json();
+      })
+      .then(data => {
+        if (!data || data.length === 0) {
+          // Brak newsów - zostawiamy fallback lub wyświetlamy komunikat
+          return;
+        }
+
+        let html = '';
+        data.forEach(item => {
+          // Zabezpieczenie przed brakiem obrazka
+          const imageHtml = item.image 
+            ? `<div class="news-card__image"><img src="${item.image}" alt="Zdjęcie aktualności" loading="lazy"></div>` 
+            : '';
+
+          // Formatowanie daty (zakładamy format YYYY-MM-DD)
+          const dateObj = new Date(item.date);
+          const dateStr = dateObj.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' });
+
+          html += `
+            <article class="news-card">
+              <header class="news-card__header">
+                <div class="news-card__brand">
+                  <img src="${getBasePath()}assets/brand/favicon-32.png" alt="Logo" class="news-card__logo">
+                  <div>
+                    <p class="news-card__org">Gabinet Kosmetyczny Anette</p>
+                    <time datetime="${item.date}">${dateStr}</time>
+                  </div>
+                </div>
+                <span class="news-card__menu" aria-hidden="true">•••</span>
+              </header>
+              ${imageHtml}
+              <div class="news-card__body">
+                ${item.title ? `<p class="news-card__tagline">${item.title}</p>` : ''}
+                <p>${item.content}</p>
+                ${item.link ? `<a class="button news-card__cta" href="${item.link}" target="_blank">Więcej</a>` : ''}
+              </div>
+            </article>
+          `;
+        });
+        
+        container.innerHTML = html;
+      })
+      .catch(error => {
+        console.warn("Nie udało się pobrać aktualności:", error);
+        // W razie błędu zostaje widoczny fallback (loading-state)
+        const loadingText = container.querySelector('.loading-state p');
+        if (loadingText) loadingText.textContent = "Przepraszamy, nie udało się załadować aktualności.";
+      });
+  }
+
   // --- Nowy kod do wstrzykiwania komponentów ---
 
   const navEl = document.getElementById("main-nav");
@@ -211,5 +273,6 @@
     setupAccordion("data-detail-group");
     initHomepageVideo();
     initReviewsFallback();
+    loadNewsFromApi();
   });
 })();
