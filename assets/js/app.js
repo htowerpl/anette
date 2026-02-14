@@ -144,7 +144,7 @@
     if (!container) return;
 
     // Ustal ścieżkę do API względem obecnej lokalizacji
-    // getBasePath() zwraca np. "../../" dla podstron, więc API będzie szukane w "../../api/news.php"
+    // getBasePath() zwraca np. "../../" dla podstron, więc API będzie szukane w "../../news.php"
     const apiUrl = getBasePath() + "news.php";
 
     fetch(apiUrl)
