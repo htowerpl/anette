@@ -161,6 +161,10 @@
         return response.json();
       })
       .then(data => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
         if (!data || data.length === 0) {
           const loadingText = container.querySelector('.loading-state p');
           if (loadingText) loadingText.textContent = "Brak aktualności do wyświetlenia.";
