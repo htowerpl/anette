@@ -67,6 +67,65 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Wspólna typografia dla nagłówków szeryfowych */
+h1, h2, h3, .brand, .signature, .intro-title, .hero-title, .about-card__title {
+  font-family: "Antykwa Poltawskiego", "Iwona", serif;
+  font-weight: 700;
+}
+
+/* Wspólne style dla elementów typu karta (tło, obramowanie, cień) */
+.hero,
+section,
+.treatment-block,
+.info-card,
+.sidebar-panel,
+.about-hero,
+.about-hero__gallery figure,
+.tech-card,
+.news-card,
+.contact-card-grid {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* Elementy z tłem surface-alt */
+header,
+.treatment-summary,
+.news-card__header,
+.device-modules details,
+.device-sublist,
+.about-card,
+.tag {
+  background: var(--surface-alt);
+}
+
+/* Elementy z dolną krawędzią */
+header,
+.treatment-summary,
+.news-card__header {
+  border-bottom: 1px solid var(--border);
+}
+
+/* Obrazki z ramką i cieniem */
+.page-hero img,
+.about-grid img,
+.about-portrait img,
+.contact-visual img {
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* Elementy z pełną ramką (uzupełnienie) */
+.device-modules details,
+.device-sublist,
+.about-card,
+.tag,
+.project-card,
+.service-card {
+  border: 1px solid var(--border);
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -109,8 +168,6 @@ nav {
 }
 
 .brand {
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
-  font-weight: 700;
   font-size: 1.3rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -163,7 +220,16 @@ nav {
   transform: scaleX(0);
   transform-origin: right;
   background: var(--accent);
-  transition: transform 0.25s ease;
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.nav-links a[aria-current="page"]::after {
+  background-color: #ff8400;
+}
+
+.nav-links a:hover::after,
+.nav-links a:focus-visible::after {
+  background-color: var(--accent);
 }
 
 .nav-links a:focus-visible,
@@ -190,8 +256,6 @@ nav {
 
 .intro-title {
   margin: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
-  font-weight: 700;
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   letter-spacing: 0.04em;
   color: #ff8400;
@@ -237,22 +301,15 @@ header {
   place-items: center;
   text-align: center;
   padding: 6rem 1.5rem 4rem;
-  background: var(--surface-alt);
-  border-bottom: 1px solid var(--border);
 }
 
 .hero {
   max-width: 720px;
-  background: var(--surface);
   padding: 3rem 2.8rem;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
 }
 
 .hero .hero-title {
   margin: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
-  font-weight: 700;
   font-size: clamp(2.6rem, 6vw, 3.6rem);
   letter-spacing: -0.02em;
 }
@@ -314,16 +371,11 @@ main {
 section {
   width: 100%;
   margin: 0 0 5.5rem;
-  background: var(--surface);
   padding: 3rem;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
 }
 
 section h2 {
   margin-top: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
-  font-weight: 700;
   font-size: 2.2rem;
   letter-spacing: 0.01em;
 }
@@ -336,8 +388,6 @@ section h2 {
 
 .page-hero img {
   width: 100%;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
 }
 
 .page-hero figcaption {
@@ -349,28 +399,26 @@ section h2 {
 
 .treatment-block {
   margin-bottom: 1.8rem;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: var(--shadow);
   padding: 0;
 }
 
-.treatment-summary {
+/* Wspólne style dla summary (ukrywanie markera) */
+summary {
   list-style: none;
   cursor: pointer;
+}
+summary::-webkit-details-marker,
+summary::marker {
+  display: none;
+}
+
+.treatment-summary {
   padding: 1.9rem;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 280px;
   gap: 1.4rem;
   align-items: center;
   scroll-margin-top: 120px;
-  background: var(--surface-alt);
-  border-bottom: 1px solid var(--border);
-}
-
-.treatment-summary::-webkit-details-marker,
-.treatment-summary::marker {
-  display: none;
 }
 
 .treatment-summary-text h3 {
@@ -415,10 +463,6 @@ section h2 {
   box-shadow: 0 14px 26px rgba(32, 19, 45, 0.16);
 }
 
-.treatment-block[open] .treatment-summary {
-  border-bottom: 1px solid var(--border);
-}
-
 .treatment-body {
   padding: 0 1.9rem 2rem;
 }
@@ -454,20 +498,13 @@ section h2 {
 }
 
 .treatment-detail summary {
-  list-style: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: 600;
-  cursor: pointer;
   gap: 0.8rem;
   color: var(--text);
   scroll-margin-top: 120px;
-}
-
-.treatment-detail summary::-webkit-details-marker,
-.treatment-detail summary::marker {
-  display: none;
 }
 
 .detail-cta {
@@ -535,10 +572,7 @@ section h2 {
 }
 
 .info-card {
-  border: 1px solid var(--border);
   padding: 1.5rem;
-  background: var(--surface);
-  box-shadow: var(--shadow);
   display: grid;
   gap: 0.6rem;
 }
@@ -572,18 +606,13 @@ section h2 {
 }
 
 .sidebar-panel {
-  background: var(--surface);
   padding: 3rem 2.4rem;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
   display: grid;
   gap: 1.4rem;
 }
 
 .sidebar-panel h2 {
   margin: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
-  font-weight: 700;
   font-size: 2rem;
   letter-spacing: 0.01em;
   color: #ff8400;
@@ -613,9 +642,6 @@ section h2 {
   text-align: center;
   margin-bottom: 3rem;
   padding: 2.5rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
 }
 
 .about-hero__title {
@@ -654,9 +680,6 @@ section h2 {
 .about-hero__gallery figure {
   margin: 0;
   overflow: hidden;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  background: var(--surface);
 }
 
 .about-hero__gallery img {
@@ -681,8 +704,6 @@ section h2 {
   width: 100%;
   object-fit: cover;
   height: 320px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
 }
 
 .about-text {
@@ -701,21 +722,16 @@ section h2 {
 }
 
 .about-portrait img {
-  box-shadow: var(--shadow);
   height: 420px;
   object-fit: cover;
-  border: 1px solid var(--border);
 }
 
 .about-card {
   padding: 1.5rem;
-  background: var(--surface-alt);
-  border: 1px solid var(--border);
   box-shadow: var(--shadow);
 }
 
 .about-card__title {
-  font-family: "Antykwa Poltawskiego", serif;
   font-size: 1.3rem;
   color: var(--accent);
   margin-top: 0;
@@ -726,7 +742,6 @@ section h2 {
 }
 
 .signature {
-  font-family: "Antykwa Poltawskiego", serif;
   font-size: 1.15rem;
   color: var(--text);
 }
@@ -739,14 +754,11 @@ section h2 {
 .service-card {
   padding: 2rem;
   background: var(--surface);
-  border: 1px solid var(--border);
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .service-card h3 {
   margin-top: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
-  font-weight: 700;
   font-size: 1.6rem;
 }
 
@@ -768,8 +780,6 @@ section h2 {
   align-items: center;
   gap: 0.35rem;
   padding: 0.25rem 0.85rem;
-  border: 1px solid var(--border);
-  background: var(--surface-alt);
   color: var(--accent);
   font-size: 0.8rem;
   letter-spacing: 0.04em;
@@ -782,15 +792,10 @@ section h2 {
 
 .tech-card {
   padding: 2rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
 }
 
 .tech-card h3 {
   margin-top: 0;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
-  font-weight: 700;
   font-size: 1.45rem;
 }
 
@@ -839,9 +844,7 @@ section h2 {
 }
 
 .device-modules details {
-  border: 1px solid var(--border);
   padding: 0.85rem 1rem;
-  background: var(--surface-alt);
 }
 
 .device-modules details + details {
@@ -850,7 +853,6 @@ section h2 {
 
 .device-modules summary {
   font-weight: 600;
-  cursor: pointer;
   color: var(--text);
 }
 
@@ -860,9 +862,7 @@ section h2 {
 }
 
 .device-sublist {
-  background: var(--surface-alt);
   padding: 1rem 1.2rem;
-  border: 1px solid var(--border);
 }
 
 .device-sublist + .device-sublist {
@@ -884,7 +884,6 @@ section h2 {
   position: relative;
   overflow: hidden;
   min-height: 220px;
-  border: 1px solid var(--border);
 }
 
 .project-card img {
@@ -1011,24 +1010,15 @@ footer a {
     align-items: center;
   }
 
-  .service-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .portfolio-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .tech-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .tech-grid.devices {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
+  .service-grid,
+  .portfolio-grid,
+  .tech-grid,
   .testimonial-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  
+  .tech-grid.devices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -1166,8 +1156,6 @@ footer a {
 
 .news-hero h1 {
   margin: 0 0 1rem;
-  font-family: "Antykwa Poltawskiego", "Iwona", serif;
-  font-weight: 700;
   font-size: clamp(2.4rem, 6vw, 3.2rem);
 }
 
@@ -1183,18 +1171,13 @@ footer a {
 
 .news-card {
   overflow: hidden;
-  background: var(--surface);
   color: var(--text);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
 }
 
 .news-card__header {
   display: block;
   text-align: center;
   padding: 1rem 1.6rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface-alt);
 }
 
 .news-card__header time {
@@ -1223,7 +1206,7 @@ footer a {
   margin: 0;
   line-height: 1.7;
   color: var(--text);
-  text-align: justify;
+  text-align: left;
 }
 
 .news-card__tagline {
@@ -1252,15 +1235,8 @@ footer a {
   align-items: center;
   gap: 0.35rem;
   font-style: italic;
-  cursor: pointer;
   color: var(--accent);
-  list-style: none;
   font-family: inherit;
-}
-
-.teaser-details summary::-webkit-details-marker,
-.teaser-details summary::marker {
-  display: none;
 }
 
 .teaser-details summary::after {
@@ -1293,9 +1269,6 @@ footer a {
 
 .contact-card-grid {
   display: grid;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
   overflow: hidden;
 }
 
@@ -1315,8 +1288,6 @@ footer a {
   height: auto;
   max-width: calc(100% - 5rem);
   max-height: calc(100% - 5rem);
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
   background: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -1372,7 +1343,6 @@ footer a {
 
 .contact-details-content h3 {
   margin-top: 0;
-  font-family: "Antykwa Poltawskiego", serif;
   font-size: 1.4rem;
 }
 
@@ -1391,7 +1361,6 @@ footer a {
 }
 
 #mapa h3 {
-  font-family: "Antykwa Poltawskiego", serif;
   font-size: 1.6rem;
   margin-bottom: 1rem;
   margin-top: 0;
@@ -1404,11 +1373,5 @@ footer a {
   
   .contact-visual {
     order: 2;
-  }
-}
-
-@media (max-width: 768px) {
-  .news-card__body p {
-    text-align: left;
   }
 }
