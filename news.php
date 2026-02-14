@@ -1,11 +1,12 @@
 <?php
+ini_set('display_errors', 0);
 header('Content-Type: application/json; charset=utf-8');
 
 // Konfiguracja połączenia z bazą danych
 $configFile = '/home/opxwpceo/domains/google/config_db.php';
 
 if (!file_exists($configFile)) {
-    http_response_code(500);
+    http_response_code(404);
     echo json_encode(['error' => 'Brak pliku konfiguracyjnego bazy danych']);
     exit;
 }
@@ -28,7 +29,7 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    http_response_code(500);
+    http_response_code(503);
     echo json_encode(['error' => 'Błąd połączenia z bazą danych']);
     exit;
 }
@@ -43,7 +44,7 @@ try {
 
     echo json_encode($news);
 } catch (\PDOException $e) {
-    http_response_code(500);
+    http_response_code(400);
     echo json_encode(['error' => 'Błąd pobierania danych: ' . $e->getMessage()]);
 }
 ?>
