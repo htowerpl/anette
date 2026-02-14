@@ -149,12 +149,21 @@
 
     fetch(apiUrl)
       .then(response => {
-        if (!response.ok) throw new Error("Błąd sieci");
+        if (!response.ok) {
+          // Próbujemy odczytać błąd z JSONa (np. z news.php)
+          return response.json().then(err => {
+            throw new Error(err.error || `Błąd HTTP ${response.status}`);
+          }).catch(() => {
+            // Jeśli nie udało się odczytać JSONa (np. błąd krytyczny PHP lub 404 html)
+            throw new Error(`Błąd HTTP ${response.status}`);
+          });
+        }
         return response.json();
       })
       .then(data => {
         if (!data || data.length === 0) {
-          // Brak newsów - zostawiamy fallback lub wyświetlamy komunikat
+          const loadingText = container.querySelector('.loading-state p');
+          if (loadingText) loadingText.textContent = "Brak aktualności do wyświetlenia.";
           return;
         }
 
@@ -195,9 +204,10 @@
       })
       .catch(error => {
         console.warn("Nie udało się pobrać aktualności:", error);
-        // W razie błędu zostaje widoczny fallback (loading-state)
         const loadingText = container.querySelector('.loading-state p');
-        if (loadingText) loadingText.textContent = "Przepraszamy, nie udało się załadować aktualności.";
+        if (loadingText) {
+          loadingText.textContent = `Nie udało się załadować aktualności: ${error.message}`;
+        }
       });
   }
 

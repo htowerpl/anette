@@ -2,7 +2,15 @@
 header('Content-Type: application/json; charset=utf-8');
 
 // Konfiguracja połączenia z bazą danych
-$config = require '/home/opxwpceo/domains/google/config_db.php';
+$configFile = '/home/opxwpceo/domains/google/config_db.php';
+
+if (!file_exists($configFile)) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Brak pliku konfiguracyjnego bazy danych']);
+    exit;
+}
+
+$config = require $configFile;
 
 $host = $config['host'];
 $db   = $config['name'];
