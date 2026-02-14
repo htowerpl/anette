@@ -165,14 +165,22 @@
           throw new Error(data.error);
         }
 
-        if (!data || data.length === 0) {
+        // Zabezpieczenie: upewnij się, że otrzymaliśmy tablicę
+        let items = Array.isArray(data) ? data : [];
+        
+        // Jeśli to obiekt (ale nie null), spróbuj wyciągnąć wartości (fallback dla nietypowych odpowiedzi JSON)
+        if (!Array.isArray(data) && typeof data === 'object' && data !== null) {
+          items = Object.values(data);
+        }
+
+        if (items.length === 0) {
           const loadingText = container.querySelector('.loading-state p');
           if (loadingText) loadingText.textContent = "Brak aktualności do wyświetlenia.";
           return;
         }
 
         let html = '';
-        data.forEach(item => {
+        items.forEach(item => {
           // Zabezpieczenie przed brakiem obrazka
           const imageHtml = item.image 
             ? `<div class="news-card__image"><img src="${item.image}" alt="Zdjęcie aktualności" loading="lazy"></div>` 
