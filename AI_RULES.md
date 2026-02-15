@@ -27,5 +27,15 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 
 ### Optymalizacja Mobile
 - **Decyzja**: Używamy `window.matchMedia("(max-width: 840px)")` w JS do wykrywania urządzeń mobilnych.
-- **Wideo na start**: Na mobile wideo z YouTube (`#intro-player`) nie jest ładowane (oszczędność transferu). Użytkownik przechodzi do serwisu przyciskiem "Pomiń".
+- **Wideo na start**: Wideo z YouTube ładuje się na wszystkich urządzeniach (do czasu wdrożenia dedykowanego pliku wideo dla mobile).
 - **Redirekcja**: Po intro (lub kliknięciu "Pomiń") następuje przekierowanie do sekcji **Aktualności**.
+
+### Strona Główna (Splash Screen)
+- **Decyzja**: Strona główna (`index.html`) pełni funkcję ekranu powitalnego (Intro).
+- **Zmiana**: Usunięto z niej nawigację (`nav`) oraz stopkę (`footer`). Zawiera tylko logo, wideo i przycisk wejścia.
+
+## Planowane Zadania (Backlog)
+- **Lepsze Intro Mobile**: Zastąpienie czarnego ekranu na mobile krótkim, lokalnym wideo (`intro-mobile.mp4`).
+  - Cel: Zachowanie "efektu wow" bez ładowania ciężkiego YouTube.
+  - Działanie: Autoplay (muted), po zakończeniu auto-redirect do Aktualności.
+  - Status: Czekamy na plik wideo od użytkownika.
