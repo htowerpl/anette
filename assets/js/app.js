@@ -190,22 +190,18 @@
           const dateObj = new Date(item.date);
           const dateStr = dateObj.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' });
 
+          // Zamiana znaków nowej linii (\n) na znaczniki HTML <br>
+          const contentHtml = item.content ? item.content.replace(/\r\n|\r|\n/g, '<br>') : '';
+
           html += `
             <article class="news-card">
-              <header class="news-card__header">
-                <div class="news-card__brand">
-                  <img src="${getBasePath()}assets/brand/favicon-32.png" alt="Logo" class="news-card__logo">
-                  <div>
-                    <p class="news-card__org">Gabinet Kosmetyczny Anette</p>
-                    <time datetime="${item.date}">${dateStr}</time>
-                  </div>
-                </div>
-                <span class="news-card__menu" aria-hidden="true">•••</span>
-              </header>
+              <div style="padding: 1rem 1rem 0.5rem; font-weight: bold;">
+                <time datetime="${item.date}">${dateStr}</time>
+              </div>
               ${imageHtml}
               <div class="news-card__body">
                 ${item.title ? `<p class="news-card__tagline">${item.title}</p>` : ''}
-                <p>${item.content}</p>
+                <p>${contentHtml}</p>
                 ${item.link ? `<a class="button news-card__cta" href="${item.link}" target="_blank">Więcej</a>` : ''}
               </div>
             </article>
