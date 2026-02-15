@@ -1,0 +1,31 @@
+# Dokumentacja Projektowa i Zasady Współpracy (Pamięć AI)
+
+Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czytać na początku każdej sesji, aby zrozumieć kontekst, styl i historię zmian.
+
+## Słownik komend
+- **"No i Git!"** -> Oznacza akceptację zmian i prośbę o wygenerowanie komend git:
+  1. `git add .`
+  2. `git commit -m "Opis zmian"`
+  3. `git push`
+
+## Kluczowe Ustalenia Techniczne
+1.  **Struktura One-Page / Multi-Page**: Projekt jest hybrydą. Główne sekcje są na osobnych podstronach (`pages/`), ale nawigacja i stopka są wstrzykiwane dynamicznie (`loadComponent` w `app.js`) z plików `_nav.html` i `_footer.html`.
+2.  **Backend**: Prosty PHP (`news.php`) zwracający JSON. Nie używamy frameworków PHP, tylko czysty PDO.
+3.  **Frontend**: Czysty JS (Vanilla). Brak frameworków typu React/Vue. Style w `styles.css` oparte na zmiennych CSS.
+
+## Historia Decyzji i Zmian (Log)
+
+### Nawigacja
+- **Decyzja**: Menu jest ładowane dynamicznie z `_nav.html`.
+- **Stan obecny**: Kolejność linków: **Aktualności, Zabiegi, Technologia, Opinie, O gabinecie, Kontakt**.
+
+### Aktualności (News)
+- **Problem**: Tekst z bazy nie miał akapitów, a data była mało widoczna.
+- **Rozwiązanie**: Zmodyfikowano `app.js` (funkcja `loadNewsFromApi`).
+  - Data jest teraz **pogrubiona** i znajduje się **nad zdjęciem**.
+  - Znaki nowej linii `\n` z bazy są zamieniane na `<br>` w HTML.
+
+### Optymalizacja Mobile
+- **Decyzja**: Używamy `window.matchMedia("(max-width: 840px)")` w JS do wykrywania urządzeń mobilnych.
+- **Wideo na start**: Na mobile wideo z YouTube (`#intro-player`) nie jest ładowane (oszczędność transferu). Użytkownik przechodzi do serwisu przyciskiem "Pomiń".
+- **Redirekcja**: Po intro (lub kliknięciu "Pomiń") następuje przekierowanie do sekcji **Aktualności**.

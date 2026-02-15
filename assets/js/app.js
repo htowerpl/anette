@@ -55,6 +55,16 @@
       return;
     }
 
+    // --- OPTYMALIZACJA: Detekcja urządzenia (Mobile vs Desktop) ---
+    // Jeśli ekran jest węższy niż 840px (zgodnie z CSS), traktujemy to jako mobile.
+    // Nie ładujemy wtedy wideo, aby przyspieszyć stronę i oszczędzić transfer.
+    if (window.matchMedia("(max-width: 840px)").matches) {
+      // Ukrywamy iframe i usuwamy źródło, aby zatrzymać pobieranie w tle
+      playerContainer.style.display = "none";
+      playerContainer.removeAttribute("src");
+      return; // Przerywamy funkcję - nie inicjalizujemy API YouTube
+    }
+
     var hasRedirected = false;
     var skipButton = document.querySelector(".skip-button");
     if (skipButton) {
