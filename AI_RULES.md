@@ -37,10 +37,19 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 
 ### Zabiegi (Treatments)
 - **Problem Mobile**: Panel boczny (Wskazania) wyświetlał się przed treścią (kwestia `order` w CSS).
-- **Problem Scroll**: Na mobile kliknięcie "Czytaj dalej" przewijało do zdjęcia głównego zamiast do treści.
+- **Problem Scroll**: Na mobile przewijanie było nieprecyzyjne (zbyt duży offset) i nie kierowało do treści zabiegu.
 - **Rozwiązanie**:
   - CSS: Upewniono się, że `.treatment-sidebar` nie ma `order: -1` na mobile (naturalna kolejność DOM).
-  - JS: `scrollToSummary` w `app.js` ignoruje kotwicę (`data-scroll-anchor`) na mobile (< 840px), przewijając do nagłówka. Na desktopie zachowano przewijanie do zdjęcia.
+  - JS: `scrollToSummary` w `app.js`:
+    - Mobile: Offset zmniejszony do 10px (brak sticky nav).
+    - Mobile: Dla głównego bloku zabiegu przewija do pierwszego punktu opisu (`.treatment-detail`).
+    - Desktop: Zachowano przewijanie do zdjęcia (`data-scroll-anchor`) i offset nawigacji.
+  - CSS: Dodano `padding-top` do `.treatment-body`, aby oddzielić treść od nagłówka po rozwinięciu.
+
+### Interakcje (UX)
+- **CTA Buttons**: Przyciski "Umów konsultację" (i analogiczne w panelach bocznych) kierują teraz bezpośrednio do aplikacji telefonu (`tel:`), zamiast na stronę kontaktu.
+- **Social Media**: Na stronie kontaktu pozostawiono tylko Google. Pozostałe linki (YouTube, Panorama Firm, GoWork, Gliwice Dla Was) przeniesiono do stopki jako eleganckie ikony (pobierane dynamicznie).
+- **Styl UI**: Ikony w stopce są monochromatyczne i nabierają kolorów po najechaniu (hover).
 
 ## Planowane Zadania (Backlog)
 - **Lepsze Intro Mobile**: Zastąpienie czarnego ekranu na mobile krótkim, lokalnym wideo (`intro-mobile.mp4`).

@@ -10,17 +10,28 @@
     var summary = detailsEl.querySelector(":scope > summary");
     var anchorSelector = detailsEl.getAttribute("data-scroll-anchor");
     
-    // Na mobile ignorujemy kotwicę (zdjęcie główne) i przewijamy do nagłówka sekcji,
-    // aby uniknąć skakania do góry strony. Na desktopie zachowujemy oryginalne zachowanie.
     var isMobile = window.matchMedia("(max-width: 840px)").matches;
-    var anchor = (anchorSelector && !isMobile) ? document.querySelector(anchorSelector) : null;
-    var targetElement = anchor || summary;
+    var targetElement = summary;
+
+    if (!isMobile && anchorSelector) {
+      targetElement = document.querySelector(anchorSelector) || summary;
+    } else if (isMobile) {
+      // Na mobile dla głównego bloku zabiegu przewijamy do pierwszego punktu opisu
+      if (detailsEl.classList.contains('treatment-block')) {
+        var firstDetail = detailsEl.querySelector('.treatment-detail');
+        if (firstDetail) {
+          targetElement = firstDetail;
+        }
+      }
+    }
+
     if (!targetElement) {
       return;
     }
     requestAnimationFrame(function () {
       var nav = document.querySelector("nav");
-      var offset = nav ? nav.offsetHeight + 16 : 16;
+      // Na mobile nawigacja nie jest sticky, więc nie odejmujemy jej wysokości
+      var offset = (nav && !isMobile) ? nav.offsetHeight + 16 : 10;
       var target = targetElement.getBoundingClientRect().top + window.pageYOffset - offset;
       window.scrollTo({ top: target, behavior: "smooth" });
     });
