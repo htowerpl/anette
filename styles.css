@@ -89,43 +89,6 @@ section,
   box-shadow: var(--shadow);
 }
 
-/* Elementy z tłem surface-alt */
-header,
-.treatment-summary,
-.news-card__header,
-.device-modules details,
-.device-sublist,
-.about-card,
-.tag {
-  background: var(--surface-alt);
-}
-
-/* Elementy z dolną krawędzią */
-header,
-.treatment-summary,
-.news-card__header {
-  border-bottom: 1px solid var(--border);
-}
-
-/* Obrazki z ramką i cieniem */
-.page-hero img,
-.about-grid img,
-.about-portrait img,
-.contact-visual img {
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-}
-
-/* Elementy z pełną ramką (uzupełnienie) */
-.device-modules details,
-.device-sublist,
-.about-card,
-.tag,
-.project-card,
-.service-card {
-  border: 1px solid var(--border);
-}
-
 a {
   color: inherit;
   text-decoration: none;
@@ -245,6 +208,38 @@ nav {
   transform-origin: left;
 }
 
+/* Hamburger Menu Button */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 20;
+}
+
+.hamburger {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #f6faf8;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.hamburger::before, .hamburger::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: inherit;
+  transition: transform 0.3s, top 0.3s, bottom 0.3s;
+}
+
+.hamburger::before { top: -8px; }
+.hamburger::after { bottom: -8px; }
+
 .intro-container {
   max-width: 1280px;
   margin: 0 auto;
@@ -301,6 +296,8 @@ header {
   place-items: center;
   text-align: center;
   padding: 6rem 1.5rem 4rem;
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
 }
 
 .hero {
@@ -388,6 +385,8 @@ section h2 {
 
 .page-hero img {
   width: 100%;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 .page-hero figcaption {
@@ -400,6 +399,8 @@ section h2 {
 .treatment-block {
   margin-bottom: 1.8rem;
   padding: 0;
+  width: 100%;
+  scroll-margin-top: 120px;
 }
 
 /* Wspólne style dla summary (ukrywanie markera) */
@@ -419,6 +420,8 @@ summary::marker {
   gap: 1.4rem;
   align-items: center;
   scroll-margin-top: 120px;
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
 }
 
 .treatment-summary-text h3 {
@@ -463,6 +466,10 @@ summary::marker {
   box-shadow: 0 14px 26px rgba(32, 19, 45, 0.16);
 }
 
+.treatment-block[open] .treatment-summary {
+  border-bottom: 1px solid var(--border);
+}
+
 .treatment-body {
   padding: 0 1.9rem 2rem;
 }
@@ -485,11 +492,13 @@ summary::marker {
   display: grid;
   gap: 0.3rem;
   background: var(--surface);
+  width: 100%;
 }
 
 .treatment-detail {
   border-bottom: 1px solid rgba(255, 132, 0, 0.35);
   padding-bottom: 0.4rem;
+  scroll-margin-top: 120px;
 }
 
 .treatment-detail:last-child {
@@ -704,6 +713,8 @@ summary::marker {
   width: 100%;
   object-fit: cover;
   height: 320px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 .about-text {
@@ -722,12 +733,16 @@ summary::marker {
 }
 
 .about-portrait img {
+  box-shadow: var(--shadow);
   height: 420px;
   object-fit: cover;
+  border: 1px solid var(--border);
 }
 
 .about-card {
   padding: 1.5rem;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow);
 }
 
@@ -754,6 +769,7 @@ summary::marker {
 .service-card {
   padding: 2rem;
   background: var(--surface);
+  border: 1px solid var(--border);
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -780,6 +796,8 @@ summary::marker {
   align-items: center;
   gap: 0.35rem;
   padding: 0.25rem 0.85rem;
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
   color: var(--accent);
   font-size: 0.8rem;
   letter-spacing: 0.04em;
@@ -843,8 +861,15 @@ summary::marker {
   color: var(--accent);
 }
 
+.device-modules {
+  width: 100%;
+}
+
 .device-modules details {
+  border: 1px solid var(--border);
   padding: 0.85rem 1rem;
+  background: var(--surface-alt);
+  scroll-margin-top: 110px;
 }
 
 .device-modules details + details {
@@ -862,7 +887,9 @@ summary::marker {
 }
 
 .device-sublist {
+  background: var(--surface-alt);
   padding: 1rem 1.2rem;
+  border: 1px solid var(--border);
 }
 
 .device-sublist + .device-sublist {
@@ -884,6 +911,7 @@ summary::marker {
   position: relative;
   overflow: hidden;
   min-height: 220px;
+  border: 1px solid var(--border);
 }
 
 .project-card img {
@@ -1040,14 +1068,31 @@ footer a {
   }
 
   .nav-content {
-    flex-direction: column;
-    gap: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .nav-toggle {
+    display: block;
   }
 
   .nav-links {
-    flex-wrap: wrap;
-    justify-content: center;
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 0 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 1rem;
   }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-toggle[aria-expanded="true"] .hamburger { background: transparent; }
+  .nav-toggle[aria-expanded="true"] .hamburger::before { top: 0; transform: rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .hamburger::after { bottom: 0; transform: rotate(-45deg); }
 
   section {
     padding: 2.6rem 2.1rem;
@@ -1060,10 +1105,6 @@ footer a {
 
   .treatment-layout {
     grid-template-columns: 1fr;
-  }
-
-  .treatment-sidebar {
-    order: -1;
   }
 
   .treatment-body {
@@ -1178,6 +1219,8 @@ footer a {
   display: block;
   text-align: center;
   padding: 1rem 1.6rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-alt);
 }
 
 .news-card__header time {
@@ -1288,6 +1331,8 @@ footer a {
   height: auto;
   max-width: calc(100% - 5rem);
   max-height: calc(100% - 5rem);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
   background: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
