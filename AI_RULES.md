@@ -33,6 +33,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 ### Strona Główna (Splash Screen)
 - **Decyzja**: Strona główna (`index.html`) pełni funkcję ekranu powitalnego (Intro).
 - **Zmiana**: Usunięto z niej nawigację (`nav`) oraz stopkę (`footer`). Zawiera tylko logo, wideo i przycisk wejścia.
+- **Wideo**: Start od 2. sekundy, wyciszone (autoplay muted), automatyczne przejście do serwisu na **9 sekund** przed końcem.
 
 ## Planowane Zadania (Backlog)
 - **Lepsze Intro Mobile**: Zastąpienie czarnego ekranu na mobile krótkim, lokalnym wideo (`intro-mobile.mp4`).

@@ -54,6 +54,7 @@
       // Jeśli nie ma playera na stronie (np. podstrony), nie uruchamiaj logiki YouTube
       return;
     }
+    var endTimer = null;
 
     var hasRedirected = false;
     var skipButton = document.querySelector(".skip-button");
@@ -64,6 +65,7 @@
     }
 
     function redirectToNews() {
+      if (endTimer) clearInterval(endTimer);
       if (hasRedirected) {
         return;
       }
@@ -87,6 +89,19 @@
             event.target.playVideo();
           },
           onStateChange: function (event) {
+            // Gdy film gra (PLAYING = 1), uruchom sprawdzanie czasu
+            if (event.data === window.YT.PlayerState.PLAYING && !endTimer) {
+              endTimer = setInterval(function() {
+                try {
+                  var duration = event.target.getDuration();
+                  var currentTime = event.target.getCurrentTime();
+                  // Jeśli do końca zostało mniej niż 9 sekund, przekieruj
+                  if (duration > 0 && currentTime >= (duration - 9)) {
+                    redirectToNews();
+                  }
+                } catch (e) {}
+              }, 500);
+            }
             if (event.data === window.YT.PlayerState.ENDED) {
               redirectToNews();
             }
