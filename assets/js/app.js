@@ -9,7 +9,11 @@
   function scrollToSummary(detailsEl) {
     var summary = detailsEl.querySelector(":scope > summary");
     var anchorSelector = detailsEl.getAttribute("data-scroll-anchor");
-    var anchor = anchorSelector ? document.querySelector(anchorSelector) : null;
+    
+    // Na mobile ignorujemy kotwicę (zdjęcie główne) i przewijamy do nagłówka sekcji,
+    // aby uniknąć skakania do góry strony. Na desktopie zachowujemy oryginalne zachowanie.
+    var isMobile = window.matchMedia("(max-width: 840px)").matches;
+    var anchor = (anchorSelector && !isMobile) ? document.querySelector(anchorSelector) : null;
     var targetElement = anchor || summary;
     if (!targetElement) {
       return;

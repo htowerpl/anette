@@ -35,6 +35,13 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Zmiana**: Usunięto z niej nawigację (`nav`) oraz stopkę (`footer`). Zawiera tylko logo, wideo i przycisk wejścia.
 - **Wideo**: Start od 2. sekundy, wyciszone (autoplay muted), automatyczne przejście do serwisu na **9 sekund** przed końcem.
 
+### Zabiegi (Treatments)
+- **Problem Mobile**: Panel boczny (Wskazania) wyświetlał się przed treścią (`order: -1`).
+- **Problem Scroll**: Na mobile kliknięcie "Czytaj dalej" przewijało do zdjęcia głównego zamiast do treści.
+- **Rozwiązanie**:
+  - CSS: Usunięto `order: -1` dla `.treatment-sidebar` na mobile.
+  - JS: `scrollToSummary` w `app.js` ignoruje kotwicę (`data-scroll-anchor`) na mobile (< 840px), przewijając do nagłówka. Na desktopie zachowano przewijanie do zdjęcia.
+
 ## Planowane Zadania (Backlog)
 - **Lepsze Intro Mobile**: Zastąpienie czarnego ekranu na mobile krótkim, lokalnym wideo (`intro-mobile.mp4`).
   - Cel: Zachowanie "efektu wow" bez ładowania ciężkiego YouTube.
