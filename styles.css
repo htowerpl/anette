@@ -1064,8 +1064,8 @@ footer a {
 /* --- Pricing Page Styles --- */
 
 .pricing-grid {
-  display: grid;
-  gap: 2rem;
+  column-count: 1;
+  column-gap: 2rem;
   margin-bottom: 4rem;
 }
 
@@ -1075,6 +1075,8 @@ footer a {
   box-shadow: var(--shadow);
   padding: 2rem;
   height: fit-content;
+  break-inside: avoid;
+  margin-bottom: 2rem;
 }
 
 .pricing-card h3 {
@@ -1137,6 +1139,14 @@ footer a {
   font-size: 0.85rem;
   color: var(--muted);
   text-align: center;
+}
+
+.disclaimer-top {
+  max-width: 800px;
+  margin: -1rem auto 3rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
 }
 
 @media (min-width: 680px) {
@@ -1437,8 +1447,8 @@ footer a {
 /* --- Pricing Page Styles --- */
 
 .pricing-grid {
-  display: grid;
-  gap: 2rem;
+  column-count: 1;
+  column-gap: 2rem;
   margin-bottom: 4rem;
 }
 
@@ -1448,6 +1458,8 @@ footer a {
   box-shadow: var(--shadow);
   padding: 2rem;
   height: fit-content;
+  break-inside: avoid; /* Zapobiega dzieleniu karty między kolumnami */
+  margin-bottom: 2rem; /* Odstęp pionowy w układzie kolumnowym */
 }
 
 .pricing-card h3 {
@@ -1512,10 +1524,17 @@ footer a {
   text-align: center;
 }
 
+.disclaimer-top {
+  max-width: 800px;
+  margin: -1rem auto 3rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 @media (min-width: 680px) {
   .pricing-grid {
-    grid-template-columns: repeat(2, 1fr);
-    align-items: start;
+    column-count: 2;
   }
 }
 
