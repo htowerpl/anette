@@ -1061,6 +1061,84 @@ footer a {
   font-weight: 600;
 }
 
+/* --- Pricing Page Styles --- */
+
+.pricing-grid {
+  display: grid;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.pricing-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  height: fit-content;
+}
+
+.pricing-card h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--accent);
+  border-bottom: 2px solid rgba(255, 132, 0, 0.2);
+  padding-bottom: 0.8rem;
+  display: inline-block;
+}
+
+.pricing-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0;
+}
+
+.pricing-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background-color 0.2s ease;
+}
+
+.pricing-list li:last-child {
+  border-bottom: none;
+}
+
+.pricing-list li:hover {
+  background: rgba(255, 255, 255, 0.02);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+}
+
+.service-name {
+  font-weight: 500;
+  color: var(--text);
+  padding-right: 1rem;
+}
+
+.service-price {
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* Legal Note Styles */
+.legal-note {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
 @media (min-width: 680px) {
   .about-grid:not(.premium) {
     grid-template-columns: 1.1fr 1fr;
@@ -1354,6 +1432,91 @@ footer a {
 .inline-details .details-body p {
   margin: 0;
   color: var(--text);
+}
+
+/* --- Pricing Page Styles --- */
+
+.pricing-grid {
+  display: grid;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.pricing-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  height: fit-content;
+}
+
+.pricing-card h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: var(--accent);
+  border-bottom: 2px solid rgba(255, 132, 0, 0.2);
+  padding-bottom: 0.8rem;
+  display: inline-block;
+}
+
+.pricing-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0;
+}
+
+.pricing-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background-color 0.2s ease;
+}
+
+.pricing-list li:last-child {
+  border-bottom: none;
+}
+
+.pricing-list li:hover {
+  background: rgba(255, 255, 255, 0.02);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+}
+
+.service-name {
+  font-weight: 500;
+  color: var(--text);
+  padding-right: 1rem;
+}
+
+.service-price {
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* Legal Note Styles */
+.legal-note {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (min-width: 680px) {
+  .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+  }
 }
 
 /* --- Contact Page Redesign --- */
