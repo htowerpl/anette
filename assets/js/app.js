@@ -299,6 +299,7 @@
         // Po załadowaniu komponentów, wykonaj odpowiednie akcje
         if (element.id === "main-nav") {
           setActiveNavLink();
+          initMobileNav(); // Inicjalizacja hamburgera po załadowaniu HTML
         }
         if (element.id === "main-footer") {
           // Ponownie wywołaj funkcję do aktualizacji roku w nowo dodanej stopce
@@ -322,6 +323,30 @@
       if (normalize(link.href) === currentUrl) {
         link.setAttribute("aria-current", "page");
       }
+    });
+  };
+
+  // Funkcja obsługująca mobilne menu (Hamburger)
+  const initMobileNav = () => {
+    const toggleBtn = document.querySelector(".nav-toggle");
+    const navLinks = document.querySelector(".nav-links");
+
+    if (!toggleBtn || !navLinks) return;
+
+    toggleBtn.addEventListener("click", function () {
+      const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+      toggleBtn.setAttribute("aria-expanded", !isExpanded);
+      toggleBtn.classList.toggle("active");
+      navLinks.classList.toggle("active");
+    });
+
+    // Zamknij menu po kliknięciu w link
+    navLinks.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        toggleBtn.setAttribute("aria-expanded", "false");
+        toggleBtn.classList.remove("active");
+        navLinks.classList.remove("active");
+      });
     });
   };
 

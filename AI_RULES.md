@@ -18,6 +18,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 ### Nawigacja
 - **Decyzja**: Menu jest ładowane dynamicznie z `_nav.html`.
 - **Stan obecny**: Kolejność linków: **Aktualności, Zabiegi, Technologia, Opinie, O gabinecie, Kontakt**.
+- **Mobile**: Wprowadzono menu typu "Hamburger". Linki są domyślnie ukryte i rozwijają się po kliknięciu przycisku.
 
 ### Aktualności (News)
 - **Problem**: Tekst z bazy nie miał akapitów, a data była mało widoczna.
