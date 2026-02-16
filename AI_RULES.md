@@ -50,7 +50,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 ### Interakcje (UX)
 - **CTA Buttons**: Przyciski "Umów konsultację" (i analogiczne w panelach bocznych) kierują teraz bezpośrednio do aplikacji telefonu (`tel:`), zamiast na stronę kontaktu.
 - **Social Media**: Na stronie kontaktu pozostawiono tylko Google. Pozostałe linki (YouTube, Panorama Firm, GoWork, Gliwice Dla Was) przeniesiono do stopki jako eleganckie ikony (pobierane dynamicznie).
-- **Styl UI**: Ikony w stopce są monochromatyczne i nabierają kolorów po najechaniu (hover).
+- **Styl UI**: Ikony w stopce są monochromatyczne i nabierają kolorów po najechaniu (hover) na desktopie. Na mobile są od razu kolorowe. Przeniesiono je na sam dół, pod tekst copyright.
 - **Aktualności**: Przycisk "Więcej" automatycznie wykrywa numer telefonu, zmienia etykietę na "Zadzwoń" i dodaje ikonę słuchawki (SVG).
 
 ## Planowane Zadania (Backlog)
@@ -58,3 +58,14 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
   - Cel: Zachowanie "efektu wow" bez ładowania ciężkiego YouTube.
   - Działanie: Autoplay (muted), po zakończeniu auto-redirect do Aktualności.
   - Status: Czekamy na plik wideo od użytkownika.
+- **Optymalizacja Mediów (Wydajność)**:
+  - **Zdjęcia**: Konwersja plików PNG (`recepcja_001`, `makijaz-zabieg`, `lipoliza-zabieg`) na format **WebP** (znaczna redukcja wagi).
+  - **Fonty**: Konwersja fontów z formatu `.otf` na `.woff2` w `styles.css`.
+  - **Status**: Czekamy na przekonwertowane pliki od użytkownika.
+
+## Lista Kontrolna Przed Publikacją (Pre-launch Checklist)
+1.  [x] **Baza Danych**: Zaktualizować ścieżkę `$configFile` w `news.php` do poprawnej lokalizacji na serwerze produkcyjnym.
+2.  [x] **Config DB**: Wgrać plik `config_db.php` poza katalog publiczny (dla bezpieczeństwa) i uzupełnić go danymi nowej bazy.
+3.  [ ] **Media**: Wykonać konwersję zdjęć do WebP i fontów do WOFF2 (zadanie z Backlogu).
+4.  [x] **SEO**: Wygenerować plik `sitemap.xml` (np. online generator) po uruchomieniu strony i wgrać go do katalogu głównego.
+5.  [ ] **SSL**: Wymusić przekierowanie na HTTPS w panelu hostingu.
