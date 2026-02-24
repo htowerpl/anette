@@ -350,6 +350,32 @@
     });
   };
 
+  // Funkcja obsługująca otwieranie sekcji (accordion) na podstawie hasha w URL
+  const handleHashNavigation = () => {
+    if (window.location.hash) {
+      const targetId = window.location.hash.substring(1);
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        // Jeśli element jest wewnątrz <details>, otwórz go
+        const parentDetails = targetElement.closest('details');
+        if (parentDetails) {
+          parentDetails.open = true;
+        }
+        
+        // Przewiń do elementu z uwzględnieniem offsetu nawigacji
+        setTimeout(() => {
+          const nav = document.querySelector("nav");
+          const isMobile = window.matchMedia("(max-width: 840px)").matches;
+          const offset = (nav && !isMobile) ? nav.offsetHeight + 20 : 20;
+          const elementPosition = targetElement.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+          window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        }, 100);
+      }
+    }
+  };
+
   // --- Koniec nowego kodu ---
   
   document.addEventListener("DOMContentLoaded", function () {
@@ -363,5 +389,6 @@
     initHomepageVideo();
     initReviewsFallback();
     loadNewsFromApi();
+    handleHashNavigation();
   });
 })();
