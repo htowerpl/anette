@@ -39,7 +39,7 @@ try {
     // Pobieramy dane mapując je na strukturę oczekiwaną przez frontend.
     // Wybieramy tylko te kolumny, które są wykorzystywane przez JS.
     // Dodajemy backticks również do nazw kolumn (szczególnie `date`).
-    $sql = "SELECT `date`, `title`, `content`, `image`, `link` FROM `Anette_news` ORDER BY `date` DESC LIMIT 20";
+    $sql = "SELECT `date`, `title`, `content`, `image`, `link` FROM `Anette_news_g` ORDER BY `date` DESC LIMIT 20";
     $stmt = $pdo->query($sql);
     $news = $stmt->fetchAll();
 

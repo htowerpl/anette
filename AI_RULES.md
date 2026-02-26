@@ -10,7 +10,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 
 ## Kluczowe Ustalenia Techniczne
 1.  **Struktura One-Page / Multi-Page**: Projekt jest hybrydą. Główne sekcje są na osobnych podstronach (`pages/`), ale nawigacja i stopka są wstrzykiwane dynamicznie (`loadComponent` w `app.js`) z plików `_nav.html` i `_footer.html`.
-2.  **Backend**: Prosty PHP (`news.php`) zwracający JSON. Dane pochodzą z **lokalnej bazy danych MySQL** (tabela `Anette_news`), zasilanej ręcznie/importem. **Nie używamy** bezpośredniego połączenia z API Google w kodzie produkcyjnym.
+2.  **Backend**: Prosty PHP (`news.php`) zwracający JSON. Dane pochodzą z **automatycznej tabeli `Anette_news_g`** (zasilanej przez `api/import_google_news.php`).
 3.  **Frontend**: Czysty JS (Vanilla). Brak frameworków typu React/Vue. Style w `styles.css` oparte na zmiennych CSS.
 4.  **Konfiguracja Serwera**: Pliki z danymi wrażliwymi (DB, OAuth) znajdują się w bezpiecznym katalogu `/home/opxwpceo/domains/google/` i są dołączane przez absolutne ścieżki.
 
@@ -24,6 +24,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Layout Cennika**: Zmieniono układ na kolumnowy (Masonry) i przeniesiono najdłuższą sekcję na początek listy dla lepszego balansu. Nota prawna przeniesiona na górę.
 - **Cleanup**: Usunięto zduplikowany i nieaktualny plik `cennik.html` z katalogu głównego.
 - **Architektura Danych**: Doprecyzowano w dokumentacji, że `news.php` to interfejs do lokalnej bazy danych, a nie proxy do Google API.
+- **Automatyzacja News**: Wdrożono skrypt `api/import_google_news.php` pobierający posty z Google API do tabeli `Anette_news_g`. Przełączono `news.php` na nową tabelę. Skonfigurowano użycie plików serwerowych (`config_oauth.php`).
 
 ### Aktualności (News)
 - **Problem**: Tekst z bazy nie miał akapitów, a data była mało widoczna.
