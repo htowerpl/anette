@@ -3,3 +3,6 @@ Thumbs.db
 *.log
 .vscode/
 node_modules/
+
+# Katalog na lokalne, nieśledzone skrypty i konfiguracje
+/google_restricted/

@@ -25,6 +25,8 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Cleanup**: Usunięto zduplikowany i nieaktualny plik `cennik.html` z katalogu głównego.
 - **Architektura Danych**: Doprecyzowano w dokumentacji, że `news.php` to interfejs do lokalnej bazy danych, a nie proxy do Google API.
 - **Automatyzacja News**: Wdrożono skrypt `api/import_google_news.php` pobierający posty z Google API do tabeli `Anette_news_g`. Przełączono `news.php` na nową tabelę. Skonfigurowano użycie plików serwerowych (`config_oauth.php`).
+- **Problem API**: Błąd `invalid_grant` (wygasły token). Stworzono narzędzie `setup_google_token.php` do generowania nowego `refresh_token`.
+  - **Zalecenie bezpieczeństwa**: Skrypt `setup_google_token.php` jest przechowywany lokalnie w katalogu `google_restricted/` (ignorowanym przez Git). W razie potrzeby należy go wgrać do bezpiecznego katalogu na serwerze (`/home/opxwpceo/domains/google/`). Do jego uruchomienia służy publiczny "loader" `api/run_token_setup.php`, który należy usunąć z serwera po użyciu.
 
 ### Aktualności (News)
 - **Problem**: Tekst z bazy nie miał akapitów, a data była mało widoczna.
