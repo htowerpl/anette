@@ -145,6 +145,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </p>
 </body>
 </html>
-
-</body>
-</html>
