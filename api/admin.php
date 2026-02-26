@@ -5,7 +5,7 @@ session_start();
 // Wylogowanie
 if (isset($_GET['logout'])) {
     session_destroy();
-    header('Location: admin.php');
+    header('Location: /api/admin.php');
     exit;
 }
 

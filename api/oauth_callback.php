@@ -45,7 +45,7 @@ if (isset($_GET['code'])) {
         if (in_array($userEmail, $allowedEmails)) {
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_email'] = $userEmail;
-            header('Location: api/admin.php');
+            header('Location: /api/admin.php');
             exit;
         } else {
             die("Błąd: Brak uprawnień dla adresu: " . htmlspecialchars($userEmail));
@@ -54,5 +54,5 @@ if (isset($_GET['code'])) {
         die("Błąd logowania Google: " . htmlspecialchars(print_r($response, true)));
     }
 } else {
-    header('Location: api/admin.php');
+    header('Location: /api/admin.php');
 }
