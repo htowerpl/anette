@@ -10,8 +10,9 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 
 ## Kluczowe Ustalenia Techniczne
 1.  **Struktura One-Page / Multi-Page**: Projekt jest hybrydą. Główne sekcje są na osobnych podstronach (`pages/`), ale nawigacja i stopka są wstrzykiwane dynamicznie (`loadComponent` w `app.js`) z plików `_nav.html` i `_footer.html`.
-2.  **Backend**: Prosty PHP (`news.php`) zwracający JSON. Nie używamy frameworków PHP, tylko czysty PDO.
+2.  **Backend**: Prosty PHP (`news.php`) zwracający JSON. Dane pochodzą z **lokalnej bazy danych MySQL** (tabela `Anette_news`), zasilanej ręcznie/importem. **Nie używamy** bezpośredniego połączenia z API Google w kodzie produkcyjnym.
 3.  **Frontend**: Czysty JS (Vanilla). Brak frameworków typu React/Vue. Style w `styles.css` oparte na zmiennych CSS.
+4.  **Konfiguracja Serwera**: Pliki z danymi wrażliwymi (DB, OAuth) znajdują się w bezpiecznym katalogu `/home/opxwpceo/domains/google/` i są dołączane przez absolutne ścieżki.
 
 ## Historia Decyzji i Zmian (Log)
 
@@ -22,6 +23,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Cennik**: Dodano nową podstronę `pages/cennik/cennik.html` oraz link w nawigacji (po "Zabiegi").
 - **Layout Cennika**: Zmieniono układ na kolumnowy (Masonry) i przeniesiono najdłuższą sekcję na początek listy dla lepszego balansu. Nota prawna przeniesiona na górę.
 - **Cleanup**: Usunięto zduplikowany i nieaktualny plik `cennik.html` z katalogu głównego.
+- **Architektura Danych**: Doprecyzowano w dokumentacji, że `news.php` to interfejs do lokalnej bazy danych, a nie proxy do Google API.
 
 ### Aktualności (News)
 - **Problem**: Tekst z bazy nie miał akapitów, a data była mało widoczna.
@@ -65,6 +67,10 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
   - **Zdjęcia**: Konwersja plików PNG (`recepcja_001`, `makijaz-zabieg`, `lipoliza-zabieg`) na format **WebP** (znaczna redukcja wagi).
   - **Fonty**: Konwersja fontów z formatu `.otf` na `.woff2` w `styles.css`.
   - **Status**: Czekamy na przekonwertowane pliki od użytkownika.
+
+- **Refaktoryzacja Struktury**:
+  - **Zadanie**: Przeniesienie skryptu `news.php` do dedykowanego katalogu `api/` i aktualizacja ścieżki w `app.js`.
+  - **Status**: Oczekuje na większą aktualizację na serwerze w celu zachowania kompatybilności.
 
 ## Lista Kontrolna Przed Publikacją (Pre-launch Checklist)
 1.  [x] **Baza Danych**: Zaktualizować ścieżkę `$configFile` w `news.php` do poprawnej lokalizacji na serwerze produkcyjnym.
