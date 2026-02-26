@@ -46,26 +46,40 @@ if (!isset($tokenData['access_token'])) {
 $accessToken = $tokenData['access_token'];
 
 // --- Krok 2: Pobranie postów z Google Business Profile API ---
+// UWAGA: Korzystamy z endpointu v4, który oficjalnie jest deprecated, ale wciąż działa dla localPosts
+// przy odpowiednich uprawnieniach.
 if (!isset($googleConfig['account_id']) || !isset($googleConfig['location_id'])) {
     sendResponse(['error' => 'Brak account_id lub location_id w pliku config_oauth.php na serwerze.']);
 }
 
 $accountId = $googleConfig['account_id'];
 $locationId = $googleConfig['location_id'];
-$postsUrl = "https://mybusiness.googleapis.com/v4/accounts/{$accountId}/locations/{$locationId}/localPosts";
+// Dodajemy prefiksy accounts/ i locations/ jeśli ich nie ma w configu (dla pewności)
+$accPrefix = strpos($accountId, 'accounts/') === 0 ? '' : 'accounts/';
+$locPrefix = strpos($locationId, 'locations/') === 0 ? '' : 'locations/';
+
+$postsUrl = "https://mybusiness.googleapis.com/v4/{$accPrefix}{$accountId}/{$locPrefix}{$locationId}/localPosts";
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $postsUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $accessToken]);
+// Opcjonalnie: ignorowanie SSL (jeśli serwer ma stare certyfikaty CA)
+// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 $postsResponse = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
-if ($httpCode !== 200) {
-    sendResponse(['error' => "Błąd podczas pobierania postów z Google API (HTTP {$httpCode}).", 'details' => json_decode($postsResponse, true)]);
-}
 $postsData = json_decode($postsResponse, true);
+
+if ($httpCode !== 200) {
+    $errorMsg = "Błąd podczas pobierania postów z Google API (HTTP {$httpCode}).";
+    // Sprawdzenie czy API jest wyłączone (częsty błąd 403)
+    if (isset($postsData['error']['details'][0]['reason']) && $postsData['error']['details'][0]['reason'] === 'SERVICE_DISABLED') {
+        $errorMsg .= " API 'Google My Business API' jest wyłączone w Google Cloud Console. Musisz je włączyć w Bibliotece API.";
+    }
+    sendResponse(['error' => $errorMsg, 'details' => $postsData]);
+}
 $localPosts = $postsData['localPosts'] ?? [];
 
 if (empty($localPosts)) {
@@ -94,16 +108,39 @@ $insertedCount = 0;
 $updatedCount = 0;
 
 foreach ($localPosts as $post) {
-    $nameParts = explode('/', $post['name']);
-    $postDate = new DateTime($post['createTime']);
+    // Pobieranie danych z nowej struktury JSON (lub starej, zależnie co zwróci API)
+    $googlePostId = $post['name']; // Pełne ID np. accounts/.../localPosts/...
+    
+    $postDate = new DateTime($post['createTime'] ?? 'now');
+    
+    // Tytuł: Google rzadko zwraca tytuł, bierzemy go z eventu lub ucinamy treść
+    $title = null;
+    if (isset($post['topicType']) && $post['topicType'] === 'EVENT' && isset($post['event']['title'])) {
+        $title = $post['event']['title'];
+    }
+    
+    $content = $post['summary'] ?? '';
+    
+    // Zdjęcie: szukamy w media
+    $image = null;
+    if (isset($post['media']) && is_array($post['media'])) {
+        foreach ($post['media'] as $mediaItem) {
+            if (isset($mediaItem['mediaFormat']) && $mediaItem['mediaFormat'] === 'PHOTO') {
+                $image = $mediaItem['googleUrl'];
+                break; 
+            }
+        }
+    }
+
+    $link = $post['callToAction']['url'] ?? null;
 
     $params = [
-        ':google_post_id' => end($nameParts),
+        ':google_post_id' => $googlePostId,
         ':date'           => $postDate->format('Y-m-d'),
-        ':title'          => ($post['topicType'] === 'EVENT') ? ($post['event']['title'] ?? null) : null,
-        ':content'        => $post['summary'] ?? '',
-        ':image'          => $post['media'][0]['googleUrl'] ?? null,
-        ':link'           => $post['callToAction']['url'] ?? null,
+        ':title'          => $title,
+        ':content'        => $content,
+        ':image'          => $image,
+        ':link'           => $link,
     ];
 
     $stmt->execute($params);

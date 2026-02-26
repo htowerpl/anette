@@ -43,6 +43,13 @@ try {
     $stmt = $pdo->query($sql);
     $news = $stmt->fetchAll();
 
+    // Fallback: Jeśli nowa tabela jest pusta, pobierz ze starej
+    if (empty($news)) {
+        $sql = "SELECT `date`, `title`, `content`, `image`, `link` FROM `Anette_news` ORDER BY `date` DESC LIMIT 20";
+        $stmt = $pdo->query($sql);
+        $news = $stmt->fetchAll();
+    }
+
     if (!is_array($news)) {
         $news = [];
     }
