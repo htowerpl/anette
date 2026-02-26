@@ -10,7 +10,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 
 ## Kluczowe Ustalenia Techniczne
 1.  **Struktura One-Page / Multi-Page**: Projekt jest hybrydą. Główne sekcje są na osobnych podstronach (`pages/`), ale nawigacja i stopka są wstrzykiwane dynamicznie (`loadComponent` w `app.js`) z plików `_nav.html` i `_footer.html`.
-2.  **Backend**: Prosty PHP (`news.php`) zwracający JSON. Dane pochodzą z **automatycznej tabeli `Anette_news_g`** (zasilanej przez `api/import_google_news.php`), z fallbackiem do tabeli ręcznej `Anette_news`.
+2.  **Backend**: Prosty PHP (`news.php`) zwracający JSON. Dane pochodzą z **ręcznej tabeli `Anette_news`**. Automatyzacja została wyłączona z powodu blokady API Google.
 3.  **Frontend**: Czysty JS (Vanilla). Brak frameworków typu React/Vue. Style w `styles.css` oparte na zmiennych CSS.
 4.  **Konfiguracja Serwera**: Pliki z danymi wrażliwymi (DB, OAuth) znajdują się w bezpiecznym katalogu `/home/opxwpceo/domains/google/` i są dołączane przez absolutne ścieżki.
 
@@ -37,7 +37,8 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 ### Roadblock: Google API
 - **Problem**: Google całkowicie wycofało i uniemożliwiło włączenie starego `Google My Business API`, które jako jedyne pozwalało na pobieranie postów (`localPosts`). Nowe interfejsy (`Business Information API` etc.) nie posiadają jeszcze tej funkcjonalności.
 - **Eksperyment**: Podjęto próbę użycia endpointu v4 (`https://mybusiness.googleapis.com/v4/.../localPosts`), który mimo deprecjacji może nadal działać przy użyciu odpowiednich prefiksów ID (`accounts/...`, `locations/...`).
-- **Status**: Zaktualizowano `import_google_news.php` o nową logikę URL i parsowania. `news.php` przywrócono do trybu automatycznego z fallbackiem.
+- **Status**: Eksperyment niepowodzony (blokada po stronie Google). `news.php` przywrócono do korzystania wyłącznie z tabeli ręcznej `Anette_news`. Skrypt importujący pozostawiono jako narzędzie diagnostyczne.
+- **Rozwiązanie (CMS)**: Stworzono prosty panel administracyjny (`admin.php`) zabezpieczony logowaniem Google OAuth (`oauth_callback.php`), umożliwiający ręczne dodawanie aktualności do bazy.
 
 ### Aktualności (News)
 - **Problem**: Tekst z bazy nie miał akapitów, a data była mało widoczna.
