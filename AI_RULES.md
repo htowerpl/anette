@@ -38,7 +38,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Problem**: Google całkowicie wycofało i uniemożliwiło włączenie starego `Google My Business API`, które jako jedyne pozwalało na pobieranie postów (`localPosts`). Nowe interfejsy (`Business Information API` etc.) nie posiadają jeszcze tej funkcjonalności.
 - **Eksperyment**: Podjęto próbę użycia endpointu v4 (`https://mybusiness.googleapis.com/v4/.../localPosts`), który mimo deprecjacji może nadal działać przy użyciu odpowiednich prefiksów ID (`accounts/...`, `locations/...`).
 - **Status**: Eksperyment niepowodzony (blokada po stronie Google). `news.php` przywrócono do korzystania wyłącznie z tabeli ręcznej `Anette_news`. Skrypt importujący pozostawiono jako narzędzie diagnostyczne.
-- **Rozwiązanie (CMS)**: Stworzono prosty panel administracyjny (`api/admin.php`) zabezpieczony logowaniem Google OAuth (`api/oauth_callback.php`), umożliwiający ręczne dodawanie aktualności do bazy.
+- **Rozwiązanie (CMS)**: Stworzono panel administracyjny (`api/admin.php`) z prostym logowaniem hasłem. Umożliwia on dodawanie, edycję i usuwanie wpisów z tabeli `Anette_news`. Dodano podgląd miniaturek na liście wpisów.
 
 ### Aktualności (News)
 - **Problem**: Tekst z bazy nie miał akapitów, a data była mało widoczna.
