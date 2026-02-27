@@ -1289,10 +1289,6 @@ footer a {
     gap: 0.8rem;
   }
 
-  .news-card__image img {
-    height: 200px;
-  }
-
   .hero {
     padding: 2.7rem 1.8rem;
   }
@@ -1376,8 +1372,8 @@ footer a {
 .news-card__image img {
   display: block;
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 8.2rem; /* 6x wysokość daty */
+  object-fit: cover; /* Lepsze wypełnienie przy stałej wysokości */
 }
 
 .news-card__body {

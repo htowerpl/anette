@@ -45,6 +45,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Rozwiązanie**: Zmodyfikowano `app.js` (funkcja `loadNewsFromApi`).
   - Data jest teraz **pogrubiona** i znajduje się **nad zdjęciem**.
   - Znaki nowej linii `\n` z bazy są zamieniane na `<br>` w HTML.
+  - Ustalono stałą wysokość zdjęć na `8.2rem` (ok. 6 linii tekstu daty) z `object-fit: cover`, aby zachować spójność wizualną na wszystkich urządzeniach.
 
 ### Optymalizacja Mobile
 - **Decyzja**: Używamy `window.matchMedia("(max-width: 840px)")` w JS do wykrywania urządzeń mobilnych.
