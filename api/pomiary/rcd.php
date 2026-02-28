@@ -1,5 +1,5 @@
 <?php
-// APLIKACJA: Elektroniczny Protokół Pomiarowy - Rezystancja Izolacji
+// APLIKACJA: Elektroniczny Protokół Pomiarowy - Wyłączniki RCD
 // Zgodność: PN-HD 60364-6, Prawo Budowlane (Art. 62), C-KOB.
 
 $is_submitted = $_SERVER['REQUEST_METHOD'] === 'POST';
@@ -8,14 +8,14 @@ if ($is_submitted) {
     // Faza Renderingu Protokołu (Back-end)
     $obiekt_nazwa = htmlspecialchars($_POST['obiekt_nazwa'] ?? '');
     $data_pomiaru = htmlspecialchars($_POST['data_pomiaru'] ?? '');
-    $napiecie_instalacji = htmlspecialchars($_POST['napiecie_instalacji'] ?? '230/400V');
+    $napiecie = htmlspecialchars($_POST['napiecie'] ?? '230 V');
     $pomiary_json = $_POST['pomiary_data'] ?? '[]';
     $pomiary = json_decode($pomiary_json, true);
     if (!is_array($pomiary))
         $pomiary = [];
 
     echo "<!DOCTYPE html><html lang='pl'><head><meta charset='UTF-8'>";
-    echo "<title>Protokół Rezystancji Izolacji - $obiekt_nazwa</title>";
+    echo "<title>Protokół RCD - $obiekt_nazwa</title>";
     echo "<style>
             body { font-family: 'Times New Roman', serif; line-height: 1.6; margin: 40px; color: #333; }
             h1, h2 { text-align: center; }
@@ -32,25 +32,27 @@ if ($is_submitted) {
           </style></head><body>";
 
     echo "<button class='no-print' onclick='window.print()' style='padding: 10px 20px; font-size: 16px; margin-bottom: 20px; cursor:pointer;'>Drukuj Protokół</button>";
-    echo "<a href='rezystancja.php' class='no-print' style='margin-left: 15px; text-decoration: none; padding: 10px 20px; background: #eee; color: #000; border: 1px solid #ccc; font-size: 16px;'>Powrót</a>";
+    echo "<a href='rcd.php' class='no-print' style='margin-left: 15px; text-decoration: none; padding: 10px 20px; background: #eee; color: #000; border: 1px solid #ccc; font-size: 16px;'>Powrót</a>";
 
     echo "<h1>PROTOKÓŁ Z POMIARÓW ELEKTRYCZNYCH</h1>";
-    echo "<h2>Badanie Rezystancji Izolacji Obwodów</h2>";
+    echo "<h2>Badanie Wyłączników Różnicowoprądowych (RCD)</h2>";
     echo "<div class='header-info'>";
     echo "<strong>Obiekt:</strong> $obiekt_nazwa <br>";
-    echo "<strong>Napięcie nominalne instalacji:</strong> $napiecie_instalacji <br>";
+    echo "<strong>Napięcie znamionowe układu:</strong> $napiecie <br>";
     echo "<strong>Data pomiaru:</strong> $data_pomiaru <br>";
-    echo "<strong>Podstawa prawna:</strong> PN-HD 60364-6:2016-07<br>";
-    echo "<strong>Metodologia:</strong> Zabezpieczenia nadprądowe załączone, pomiar między zwartymi przewodami czynnymi (L+N) a przewodem ochronnym (PE).";
+    echo "<strong>Podstawa prawna:</strong> PN-HD 60364-6:2016-07 / PN-EN 61557-6<br>";
+    echo "<strong>Normatywy czasowe:</strong> Wymagane zadziałanie poniżej 300 ms przy nominalnym prądzie zadziałania I&Delta;n.";
     echo "</div>";
 
     echo "<table>";
     echo "<thead><tr>
             <th>Lp.</th>
-            <th>Nazwa Obwodu / Urządzenia</th>
-            <th>Napięcie Probiercze [V DC]</th>
-            <th>Wymagane R<sub>iso</sub> [MΩ]</th>
-            <th>Zmierzono R<sub>iso</sub> L+N do PE [MΩ]</th>
+            <th>Identyfikacja Aparatu RCD</th>
+            <th>Typ</th>
+            <th>I&Delta;n [mA]</th>
+            <th>Prąd zadz. I&Delta; [mA] (zmierzony)</th>
+            <th>Czas zadz. tA [ms] (przy 1x I&Delta;n)</th>
+            <th>Przycisk TEST</th>
             <th>Wynik Oceny</th>
           </tr></thead><tbody>";
 
@@ -65,21 +67,23 @@ if ($is_submitted) {
         echo "<tr>";
         echo "<td>" . $lp++ . "</td>";
         echo "<td>" . htmlspecialchars($row['nazwa']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['napi_prob']) . " V</td>";
-        echo "<td>&ge; " . htmlspecialchars($row['r_min']) . "</td>";
-        echo "<td><strong>" . htmlspecialchars($row['r_zm']) . "</strong></td>";
+        echo "<td>" . htmlspecialchars($row['typ']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['idn']) . "</td>";
+        echo "<td><strong>" . htmlspecialchars($row['id_zm']) . "</strong></td>";
+        echo "<td><strong>" . htmlspecialchars($row['ta_zm']) . "</strong></td>";
+        echo "<td>" . htmlspecialchars($row['test_btn']) . "</td>";
         echo "<td class='$wynik_class'>" . htmlspecialchars($row['wynik']) . "</td>";
         echo "</tr>";
     }
     echo "</tbody></table>";
 
     echo "<div class='orzeczenie'>";
-    echo "ORZECZENIE O STANIE TECHNICZNYM IZOLACJI:<br><br>";
+    echo "ORZECZENIE O STANIE TECHNICZNYM WYŁĄCZNIKÓW RCD:<br><br>";
     if ($wszystkie_pozytywne) {
-        echo "<span class='pozytywny'>Stan izolacji w badanej instalacji JEST W NORMIE. Ryzyko przebić i zwarć zminimalizowane. Instalacja NADAJE SIĘ do eksploatacji.</span>";
+        echo "<span class='pozytywny'>RCD SPRAWNE. Czasy i prody zadziałania wszystkich urządzeń, jak i badanie manualne, zawierają się w tolerancjach wdrożonych z norm PN-EN 61557 i dają gwarancję ochrony dodatkowej porażeniowej.</span>";
     }
     else {
-        echo "<span class='negatywny'>Ostrzeżenie: Rezystancja izolacji NIE SPEŁNIA wartości minimalnych! Możliwe upływności. Instalacja NIE NADAJE SIĘ do bezpiecznej eksploatacji.</span>";
+        echo "<span class='negatywny'>RCD NIESPRAWNE! Detekcja uszkodzeń w parametrach czasu lub prądu upływu. Stanowi to podważenie fundamentów bezpieczeństwa dla urządzeń podłączonych. Elementy wadliwe do wymiany!</span>";
     }
     echo "</div>";
 
@@ -99,7 +103,7 @@ if ($is_submitted) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protokoły - Rezystancja Izolacji</title>
+    <title>Protokoły - Wyłączniki RCD</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -159,6 +163,7 @@ if ($is_submitted) {
 
         input[type="text"],
         input[type="date"],
+        input[type="number"],
         select {
             width: 100%;
             padding: 10px;
@@ -248,62 +253,59 @@ if ($is_submitted) {
     <div class="container">
         <div class="nav-menu">
             <a href="index.php">Moduł 1: SWZ (Pętla Zwarcia)</a>
-            <a href="rezystancja.php" class="active">Moduł 2: Rezystancja Izolacji</a>
+            <a href="rezystancja.php">Moduł 2: Rezystancja Izolacji</a>
             <a href="ogledziny.php">Moduł 3: Oględziny</a>
-            <a href="rcd.php">Moduł 4: Wyłączniki RCD</a>
-        </div>
-    </div>
-
-    <h1>Badanie Rezystancji Izolacji (PN-HD 60364-6)</h1>
-    <form id="protocolForm" method="POST" action="rezystancja.php" onsubmit="prepareDataForSubmit(event)">
-
-        <div class="grid-2">
-            <div class="form-group">
-                <label>Nazwa Obiektu Budowlanego:</label>
-                <input type="text" name="obiekt_nazwa" required placeholder="np. Dom jednorodzinny">
-            </div>
-            <div class="form-group">
-                <label>Data wykonania pomiaru:</label>
-                <input type="date" name="data_pomiaru" required>
-            </div>
-            <div class="form-group">
-                <label>Napięcie robocze instalacji:</label>
-                <input type="text" name="napiecie_instalacji" value="230/400 V" required>
-            </div>
+            <a href="rcd.php" class="active">Moduł 4: Wyłączniki RCD</a>
         </div>
 
-        <h3>Rejestr Pomiarów Rezystancji Izolacji</h3>
-        <p style="font-size:0.9em; color:#7f8c8d;">Algorytm ustala min. dopuszczalne wartości odczytu: <strong>0.5
-                MΩ</strong> (dla obwodów SELV/PELV 250V) lub <strong>1.0 MΩ</strong> (dla obwodów 500V i 1000V).
-            Możesz wprowadzać znaki np. <code>>999</code> lub <code>>200</code> zjawisko to automatycznie kończy się
-            wynikiem POZYTYWNYM.</p>
+        <h1>Badanie Wyłączników RCD (PN-EN 61557-6)</h1>
+        <form id="protocolForm" method="POST" action="rcd.php" onsubmit="prepareDataForSubmit(event)">
 
-        <button type="button" class="btn btn-add" onclick="addRow()">+ Dodaj obwód do pomiaru</button>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Nazwa Obiektu Budowlanego:</label>
+                    <input type="text" name="obiekt_nazwa" required placeholder="np. Dom jednorodzinny">
+                </div>
+                <div class="form-group">
+                    <label>Data wykonania pomiaru:</label>
+                    <input type="date" name="data_pomiaru" required>
+                </div>
+            </div>
 
-        <table id="measurementsTable">
-            <thead>
-                <tr>
-                    <th style="width: 30%">Nazwa Obwodu</th>
-                    <th style="width: 15%">U Probiercze [V]</th>
-                    <th style="width: 15%">Wymagane min. [MΩ]</th>
-                    <th style="width: 20%">Zmierzono R (L+N do PE) [MΩ]</th>
-                    <th style="width: 15%">Wynik Oceny</th>
-                    <th style="width: 5%">Usuń</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+            <h3>Rejestr pomiarowy wyłączników</h3>
+            <p style="font-size:0.9em; color:#7f8c8d;">Algorytm ustala prawidłowość parametrów. Dla typowych aparatów
+                (np. 30mA) bezpieczny próg zadziałania prądowego to <strong>[ 0.5 x IΔn ; 1.0 x IΔn ]</strong>.
+                Jednocześnie czas otwarcia zestyków standardowych urządzeń ma być drastycznie krótszy niż graniczne 300
+                ms.</p>
 
-        <input type="hidden" id="pomiary_data" name="pomiary_data" value="">
+            <button type="button" class="btn btn-add" onclick="addRow()">+ Dodaj nowy aparat RCD do badania</button>
 
-        <br>
-        <hr><br>
-        <div style="text-align: center;">
-            <button type="submit" class="btn" style="font-size: 1.2em; padding: 15px 30px;">Generuj Oficjalny
-                Protokół Izolacji</button>
-        </div>
-    </form>
+            <table id="measurementsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 20%">Identyfikator (nazwa/nr)</th>
+                        <th style="width: 10%">Typ (A/AC/B)</th>
+                        <th style="width: 10%">IΔn [mA]</th>
+                        <th style="width: 15%">Zmierzony prąd zadziałania IΔ [mA]</th>
+                        <th style="width: 15%">Czas tA (zadziałania) [ms]</th>
+                        <th style="width: 10%">Test ręczny</th>
+                        <th style="width: 15%">Wynik Oceny</th>
+                        <th style="width: 5%">Usuń</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+            <input type="hidden" id="pomiary_data" name="pomiary_data" value="">
+
+            <br>
+            <hr><br>
+            <div style="text-align: center;">
+                <button type="submit" class="btn" style="font-size: 1.2em; padding: 15px 30px;">Zatwierdź i Generuj
+                    Protokół RCD</button>
+            </div>
+        </form>
     </div>
 
     <script>
@@ -319,16 +321,31 @@ if ($is_submitted) {
             tr.id = 'row_' + rowId;
 
             tr.innerHTML = `
-            <td><input type="text" class="obw_nazwa" placeholder="np. Oświetlenie parter" required></td>
+            <td><input type="text" class="obw_nazwa" placeholder="RCD-1 Łazienka" required></td>
             <td>
-                <select class="obw_uprob" onchange="calculateRow(${rowId})">
-                    <option value="250">250 V DC</option>
-                    <option value="500" selected>500 V DC</option>
-                    <option value="1000">1000 V DC</option>
+                <select class="obw_typ" onchange="calculateRow(${rowId})">
+                    <option value="AC" selected>AC</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
                 </select>
             </td>
-            <td><input type="text" class="obw_rmin" readonly></td>
-            <td><input type="text" class="obw_rzm" placeholder="np. >999 lub 5.5" oninput="calculateRow(${rowId})" required></td>
+            <td>
+                <select class="obw_idn" onchange="calculateRow(${rowId})">
+                    <option value="10">10 mA</option>
+                    <option value="30" selected>30 mA</option>
+                    <option value="100">100 mA</option>
+                    <option value="300">300 mA</option>
+                    <option value="500">500 mA</option>
+                </select>
+            </td>
+            <td><input type="number" class="obw_idzm" step="0.1" value="0.0" oninput="calculateRow(${rowId})" required></td>
+            <td><input type="number" class="obw_tazm" step="1.0" value="0" oninput="calculateRow(${rowId})" required></td>
+            <td>
+                <select class="obw_test" onchange="calculateRow(${rowId})">
+                    <option value="Sprawny" selected>Tak/OK</option>
+                    <option value="Niesprawny">Zepsuty</option>
+                </select>
+            </td>
             <td><input type="text" class="obw_wynik" readonly style="text-align:center;"></td>
             <td><button type="button" class="btn btn-remove" onclick="removeRow(${rowId})">X</button></td>
         `;
@@ -345,45 +362,31 @@ if ($is_submitted) {
             const row = document.getElementById('row_' + rowId);
             if (!row) return;
 
-            const uProb = parseInt(row.querySelector('.obw_uprob').value);
-            let rMin = 1.0;
+            const idn = parseInt(row.querySelector('.obw_idn').value); // w mA
+            const idZmInput = parseFloat(row.querySelector('.obw_idzm').value); // zmierzony w mA
+            const taZmInput = parseFloat(row.querySelector('.obw_tazm').value); // czas zadzialania w ms
+            const testBtn = row.querySelector('.obw_test').value; // sprawność manualna
 
-            if (uProb === 250) {
-                rMin = 0.5;
-            } else {
-                rMin = 1.0;
-            }
-
-            row.querySelector('.obw_rmin').value = rMin.toFixed(1);
-
-            const rZmInput = row.querySelector('.obw_rzm').value.trim().replace(',', '.');
             const wynikInput = row.querySelector('.obw_wynik');
 
-            if (rZmInput === '') {
+            if (isNaN(idZmInput) || isNaN(taZmInput) || idZmInput <= 0) {
                 wynikInput.value = '';
                 wynikInput.className = 'obw_wynik';
                 return;
             }
 
-            let isOk = false;
-
-            // Jeżeli badacz użył notacji "<" lub ">" np. >199 MOm
-            if (rZmInput.startsWith('>')) {
-                const val = parseFloat(rZmInput.substring(1));
-                // jeśli wpisuje >999, to na pewno przejdzie (bo >1 > 1.0 itd)
-                if (!isNaN(val) && val >= rMin) {
-                    isOk = true;
-                } else if (!isNaN(val)) {
-                    isOk = true; // Zazwyczaj samo wysokie wskazanie jest OK, ale wymuszamy logikę
-                }
-            } else {
-                const val = parseFloat(rZmInput);
-                if (!isNaN(val) && val >= rMin) {
-                    isOk = true;
-                }
+            // Granice parametrow RCD: czas < 300 ms dla domyslnych bezwzlocznych. Półkrotność < I∆ < Jednokrotność
+            let isPrzeplywOk = false;
+            if (idZmInput >= (idn * 0.5) && idZmInput <= idn) {
+                isPrzeplywOk = true;
             }
 
-            if (isOk) {
+            let isCzasOk = false;
+            if (taZmInput > 0 && taZmInput <= 300) {
+                isCzasOk = true;
+            }
+
+            if (isPrzeplywOk && isCzasOk && testBtn === 'Sprawny') {
                 wynikInput.value = "POZYTYWNY";
                 wynikInput.className = "obw_wynik status-ok";
             } else {
@@ -399,9 +402,11 @@ if ($is_submitted) {
             rows.forEach(row => {
                 let rowData = {
                     nazwa: row.querySelector('.obw_nazwa').value,
-                    napi_prob: row.querySelector('.obw_uprob').value,
-                    r_min: row.querySelector('.obw_rmin').value,
-                    r_zm: row.querySelector('.obw_rzm').value,
+                    typ: row.querySelector('.obw_typ').value,
+                    idn: row.querySelector('.obw_idn').value,
+                    id_zm: row.querySelector('.obw_idzm').value,
+                    ta_zm: row.querySelector('.obw_tazm').value,
+                    test_btn: row.querySelector('.obw_test').value,
                     wynik: row.querySelector('.obw_wynik').value
                 };
                 data.push(rowData);
