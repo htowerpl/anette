@@ -7,6 +7,7 @@ $is_submitted = $_SERVER['REQUEST_METHOD'] === 'POST';
 $success_msg = '';
 
 if ($is_submitted) {
+    $edycja_id = (int)($_POST['edycja_id'] ?? 0);
     // Odczyt Danych Nagłówkowych
     $obiekt_nazwa = htmlspecialchars($_POST['obiekt_nazwa'] ?? '');
     $adres = htmlspecialchars($_POST['adres'] ?? '');
@@ -32,17 +33,36 @@ if ($is_submitted) {
     // Transaction begin
     $db->beginTransaction();
     try {
-        $stmt = $db->prepare("
-            INSERT INTO protokoly 
-            (obiekt_nazwa, adres, data_pomiaru, uklad_sieci, napiecie_u0, inzynier_e, uprawnienia_e, inzynier_d, uprawnienia_d, pogoda) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ");
-        $stmt->execute([
-            $obiekt_nazwa, $adres, $data_pomiaru, $uklad_sieci, $napiecie_u0,
-            $inzynier_e, $uprawnienia_e, $inzynier_d, $uprawnienia_d, $pogoda
-        ]);
+        if ($edycja_id > 0) {
+            $stmt = $db->prepare("
+                UPDATE protokoly SET 
+                obiekt_nazwa=?, adres=?, data_pomiaru=?, uklad_sieci=?, napiecie_u0=?, 
+                inzynier_e=?, uprawnienia_e=?, inzynier_d=?, uprawnienia_d=?, pogoda=?
+                WHERE id=?
+            ");
+            $stmt->execute([
+                $obiekt_nazwa, $adres, $data_pomiaru, $uklad_sieci, $napiecie_u0,
+                $inzynier_e, $uprawnienia_e, $inzynier_d, $uprawnienia_d, $pogoda, $edycja_id
+            ]);
+            $protokol_id = $edycja_id;
 
-        $protokol_id = $db->lastInsertId();
+            // Delete old lines
+            $db->prepare("DELETE FROM pomiary_linie WHERE protokol_id = ?")->execute([$protokol_id]);
+            $success_msg = "Pomyślnie zaktualizowano Protokół ID: $protokol_id w bazie danych!";
+        }
+        else {
+            $stmt = $db->prepare("
+                INSERT INTO protokoly 
+                (obiekt_nazwa, adres, data_pomiaru, uklad_sieci, napiecie_u0, inzynier_e, uprawnienia_e, inzynier_d, uprawnienia_d, pogoda) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ");
+            $stmt->execute([
+                $obiekt_nazwa, $adres, $data_pomiaru, $uklad_sieci, $napiecie_u0,
+                $inzynier_e, $uprawnienia_e, $inzynier_d, $uprawnienia_d, $pogoda
+            ]);
+            $protokol_id = $db->lastInsertId();
+            $success_msg = "Pomyślnie utworzono i zapisano Protokół ID: $protokol_id w bazie danych!";
+        }
 
         $insert_linie = $db->prepare("INSERT INTO pomiary_linie (protokol_id, kategoria, dane_json) VALUES (?, ?, ?)");
 
@@ -56,7 +76,6 @@ if ($is_submitted) {
         $insert_linie->execute([$protokol_id, 'RCD', $rcd_json]);
 
         $db->commit();
-        $success_msg = "Pomyślnie utworzono i zapisano Protokół ID: $protokol_id w bazie danych!";
 
         // Render View Mode
         $render_protokol_id = $protokol_id;
@@ -72,6 +91,33 @@ else {
     $render_protokol_id = $_GET['view'] ?? null;
 }
 
+// Sprawdzanie czy wczytujemy dane do edycji
+$edit_protokol_id = $_GET['edit'] ?? null;
+$loaded_data = null;
+
+function getLines($db, $pid, $cat)
+{
+    $s = $db->prepare("SELECT dane_json FROM pomiary_linie WHERE protokol_id = ? AND kategoria = ?");
+    $s->execute([$pid, $cat]);
+    $res = $s->fetch();
+    return $res ? json_decode($res['dane_json'], true) : [];
+}
+
+if ($edit_protokol_id) {
+    $stmt = $db->prepare("SELECT * FROM protokoly WHERE id = ?");
+    $stmt->execute([$edit_protokol_id]);
+    $prot = $stmt->fetch();
+    if ($prot) {
+        $loaded_data = [
+            'naglowek' => $prot,
+            'ogledziny' => getLines($db, $edit_protokol_id, 'OGLEDZINY'),
+            'riso' => getLines($db, $edit_protokol_id, 'RISO'),
+            'swz' => getLines($db, $edit_protokol_id, 'SWZ'),
+            'rcd' => getLines($db, $edit_protokol_id, 'RCD')
+        ];
+    }
+}
+
 // Jeśli wczytujemy podgląd ze świeżego zapisu lub GET, ładujemy z BD z pięknym widokiem
 if ($render_protokol_id) {
     // Renderowanie PDFa (Backend-view)
@@ -80,15 +126,6 @@ if ($render_protokol_id) {
     $protokol = $stmt->fetch();
     if (!$protokol) {
         die("Nie znaleziono protokołu");
-    }
-
-    // Pobranie Linii
-    function getLines($db, $pid, $cat)
-    {
-        $s = $db->prepare("SELECT dane_json FROM pomiary_linie WHERE protokol_id = ? AND kategoria = ?");
-        $s->execute([$pid, $cat]);
-        $res = $s->fetch();
-        return $res ? json_decode($res['dane_json'], true) : [];
     }
 
     $ogledziny_lines = getLines($db, $render_protokol_id, 'OGLEDZINY');
@@ -127,7 +164,7 @@ if ($render_protokol_id) {
         echo "<div class='no-print' style='background: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; font-weight: bold;'>$success_msg</div>";
     }
 
-    // NAGŁÓWEK PROTOKOŁU (Widoczny na pierwszej stronie przed wszystkimi tabelami)
+    // NAGŁÓWEK PROTOKOŁU 
     echo "<h1>PROTOKÓŁ Z POMIARÓW ELEKTRYCZNYCH</h1>";
     echo "<div class='header-info'>";
     echo "<div class='header-grid'>";
@@ -170,12 +207,10 @@ if ($render_protokol_id) {
     // 3. Pętla Zwarcia SWZ
     if (count($swz_lines) > 0) {
         echo "<div class='sekcja'><h2>3. Skuteczność Samoczynnego Wyłączenia Zasilania (SWZ)</h2>";
-        echo "<p>Zastosowano wzory z PN-HD 60364-6 z kryterium temperaturowym dla stanu nagrzanego:<br> 
-              <span class='wzor'>k = wskaźnik_ch-yki (B=5, C=10)</span>, 
-              <span class='wzor'>I<sub>a</sub> = I<sub>n</sub> &times; k</span>, 
+        echo "<p>Zastosowano wzory z PN-HD 60364-6 z kryterium temperaturowym:<br> 
+              <span class='wzor'>k = wskaźnik</span>, <span class='wzor'>I<sub>a</sub> = I<sub>n</sub> &times; k</span>, 
               <span class='wzor'>Z<sub>dop</sub> = U<sub>0</sub> / I<sub>a</sub></span>, 
-              <span class='wzor'>Z<sub>dop_ciepły</sub> = 2/3 &times; Z<sub>dop</sub></span>,
-              <span class='wzor'>Z<sub>s</sub> &le; Z<sub>dop_ciepły</sub></span></p>";
+              <span class='wzor'>Z<sub>dop_ciepły</sub> = 2/3 &times; Z<sub>dop</sub></span></p>";
 
         echo "<table><thead><tr><th>Lp.</th><th>Obwód / Urządzenie</th><th>Typ/In [A]</th><th>Krotność (k)</th><th>I<sub>a</sub> [A]</th><th>Zmierzone Z<sub>s</sub> [Ω]</th><th>Dopuszczalne 2/3 Z<sub>dop</sub> [Ω]</th><th>Wynik</th></tr></thead><tbody>";
         foreach ($swz_lines as $idx => $row) {
@@ -190,9 +225,7 @@ if ($render_protokol_id) {
     // 4. RCD
     if (count($rcd_lines) > 0) {
         echo "<div class='sekcja'><h2>4. Badanie Wyłączników Różnicowoprądowych (RCD)</h2>";
-        echo "<p>Wzory dla pomiarów czasu testowego przy $1\times I_{\Delta n}$ z normy PN-EN 61557-6:<br> 
-              <span class='wzor'>I<sub>&Delta;</sub> &isin; [0.5 &times; I<sub>&Delta;n</sub>, 1.0 &times; I<sub>&Delta;n</sub>]</span>, 
-              <span class='wzor'>t<sub>A</sub> &le; 300 ms (dla bezzwłocznych)</span></p>";
+        echo "<p>Wzory dla pomiarów czasu testowego przy $1\times I_{\Delta n}$ z normy PN-EN 61557-6.</p>";
 
         echo "<table><thead><tr><th>Lp.</th><th>Typ RCD / Oznacz.</th><th>Typ Prądu</th><th>I<sub>&Delta;n</sub> [mA]</th><th>I<sub>&Delta;</sub> Zmierzone [mA]</th><th>t<sub>A</sub> Zmierzone [ms]</th><th>Przycisk TEST</th><th>Wynik</th></tr></thead><tbody>";
         foreach ($rcd_lines as $idx => $row) {
@@ -372,30 +405,45 @@ if ($render_protokol_id) {
         <p style="text-align: center; color: #7f8c8d;">Jedna strona - jeden kompletny protokół do bazy danych.</p>
 
         <div class="section-box" style="background:#eaf2f8; border-color:#b4ccde;">
-            <h2 style="margin-top:0; border-bottom: 2px solid #2980b9; color:#2980b9;">Wcześniej zapisane protokoły (Archiwum)</h2>
+            <h2 style="margin-top:0; border-bottom: 2px solid #2980b9; color:#2980b9;">Wcześniej zapisane protokoły
+                (Archiwum)</h2>
             <?php
-            $stmt_arch = $db->query("SELECT id, obiekt_nazwa, data_pomiaru, inzynier_e, data_utworzenia FROM protokoly ORDER BY id DESC LIMIT 10");
-            $archiwa = $stmt_arch->fetchAll();
-            if (count($archiwa) > 0) {
-                echo "<table><thead><tr><th>ID</th><th>Data Pomiaru</th><th>Obiekt</th><th>Inżynier (E)</th><th>Utworzono</th><th>Akcja</th></tr></thead><tbody>";
-                foreach ($archiwa as $a) {
-                    echo "<tr>
-                            <td>" . htmlspecialchars($a['id']) . "</td>
-                            <td>" . htmlspecialchars($a['data_pomiaru']) . "</td>
-                            <td>" . htmlspecialchars($a['obiekt_nazwa']) . "</td>
-                            <td>" . htmlspecialchars($a['inzynier_e']) . "</td>
-                            <td>" . htmlspecialchars($a['data_utworzenia']) . "</td>
-                            <td><a href='index.php?view=" . htmlspecialchars($a['id']) . "' class='btn' style='background:#f39c12; padding: 5px 10px; font-size:0.8em;'>Pokaż/Drukuj</a></td>
-                          </tr>";
-                }
-                echo "</tbody></table>";
-            } else {
-                echo "<p>Brak zapisanych protokołów w bazie danych.</p>";
-            }
-            ?>
+$stmt_arch = $db->query("SELECT id, obiekt_nazwa, data_pomiaru, inzynier_e, data_utworzenia FROM protokoly ORDER BY id DESC LIMIT 10");
+$archiwa = $stmt_arch->fetchAll();
+if (count($archiwa) > 0) {
+    echo "<table><thead><tr><th>ID</th><th>Data Pomiaru</th><th>Obiekt</th><th>Inżynier (E)</th><th>Utworzono</th><th>Akcja</th></tr></thead><tbody>";
+    foreach ($archiwa as $a) {
+        echo "<tr>
+                        <td>" . htmlspecialchars($a['id']) . "</td>
+                        <td>" . htmlspecialchars($a['data_pomiaru']) . "</td>
+                        <td>" . htmlspecialchars($a['obiekt_nazwa']) . "</td>
+                        <td>" . htmlspecialchars($a['inzynier_e']) . "</td>
+                        <td>" . htmlspecialchars($a['data_utworzenia']) . "</td>
+                        <td>
+                            <a href='index.php?view=" . htmlspecialchars($a['id']) . "' class='btn' style='background:#f39c12; padding: 5px 10px; font-size:0.8em;'>Pokaż/Drukuj</a>
+                            <a href='index.php?edit=" . htmlspecialchars($a['id']) . "' class='btn' style='background:#3498db; padding: 5px 10px; font-size:0.8em; margin-left:5px;'>Edytuj</a>
+                        </td>
+                      </tr>";
+    }
+    echo "</tbody></table>";
+}
+else {
+    echo "<p>Brak zapisanych protokołów w bazie danych.</p>";
+}
+?>
         </div>
 
         <form id="monoForm" method="POST" action="index.php">
+            <?php if ($edit_protokol_id): ?>
+            <input type="hidden" name="edycja_id" value="<?php echo htmlspecialchars($edit_protokol_id); ?>">
+            <div
+                style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 5px; margin-bottom: 20px; font-weight: bold; font-size: 1.1em; border: 1px solid #ffeeba;">
+                Ostrzeżenie: Tryb Edycji Protokołu ID:
+                <?php echo htmlspecialchars($edit_protokol_id); ?>. Zapis nadpisze poprzednie dane dla tego numeru ID!
+                <a href="index.php" style="float:right; color:#856404;">Anuluj Edycję (Nowy)</a>
+            </div>
+            <?php
+endif; ?>
 
             <!-- NAGŁÓWEK DO BAZY (Wspólny do wszystkiego) -->
             <div class="section-box">
@@ -562,157 +610,249 @@ if ($render_protokol_id) {
     </div>
 
     <script>
-        // System przechowywania podręcznego w localStorage na wypadek odświeżenia s        y //
-        document.addEventListener('DOMContentLoad ed', () {
-            const STORAGE_KEY = 'pomiary            lobalny';
-            const inputs = Array.from(document.querySelectorAll('#monoForm input[type="text"], #monoForm input[type="date"], #monoForm input[type="number"],r            '));
-
-            // Zapis tylko głównych inform            łówkowych
-            const header_ids = ['obiekt_nazwa', 'adres', 'data_pomiaru', 'pogoda', 'uklad_sieci', 'napiecie_u0', 'inzynier_e', 'uprawnienia_e', 'inzynier_a            d'];
-
-            funct                e() {
-                ata = {};
-                e(id => {
-                    let el = d                    nt ById(id);
-                    ata[ue;
-                });
-                localStorage.setI            AGE            ON.stringify(data));
-            }
-
-        ed = localSt                m(STOR                          if (saved) {
-            let j = J                                          header_ids.forEach(i                                    let el = document.getEl                                                 if (e            d]) e = j[id];
-        } catch (e) { }
-        header_ids.forEach(id => {
-                             doc        t.get        entById(id);
-            if (el.addEventListener('input            ache);
+    // System przechowywania podręcznego oraz Wczytywanie Danych Edycji //
+    const loadedData =  <?php echo json_encode($loaded_data); ?document.addEventListener('DOMContentLoaded', function() {
+        const STORAGE_KEY = 'pomiary2_stan_globalny';
+        const header_ids = ['obiekt_nazwa', 'adres', 'data_pomiaru', 'pogoda', 'uklad_sieci', 'napiecie_u0', 'inzynier_e', 'uprawnienia_e', 'inzynier_d', 'uprawnienia_d'];
+        
+        function saveCache() {
+            let data = {};
+            header_ids.forEach(id => { 
+                let el = document.getElementById(id); 
+                if(el) data[id] = el.value; 
             });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        if (loadedData && loadedData.naglowek) {
+            // Edytujemy, nadpisujemy formularz starymi danymi
+            header_ids.forEach(id => {
+                let el = document.getElementById(id);
+                if (el && loadedData.naglowek[id] !== undefined) {
+                    el.value = loadedData.naglowek[id];
+                }
+            });
+        } else {
+            // Otwieramy nowy na czysto - ladujemy ewentualnie cache ulatwiajacy prace z localStorage
+            let saved = localStorage.getItem(STORAGE_KEY);
+            if(saved) {
+                try {
+                    let j = JSON.parse(saved);
+                    header_ids.forEach(id => {
+                        let el = document.getElementById(id);
+                        if(el && j[id]) el.value = j[id];
+                    });
+                }catch(e){}
+            }
+        }
+
+        header_ids.forEach(id => {
+            let el = document.getElementById(id);
+            if(el) el.addEventListener('input', saveCache);
         });
 
-        // -------- R            MICS --------
-        function addRisoRow                     const tbody = document.querySelec            l-riso tbody');
-        const tr = document.createElement('tr');
-        tr.className = 'dynamic-row obw-riso-tr';
-        tr.innerHTML = `
-            <td><input type="text" class="riso_nazwa" value="Obwód Gniazd" placeholder="Nazwa"></td>
-            <td><select class="riso_u"><option value="500">230/400V (500V DC probiercze)</option><option value="250">SELV/PELV (250V DC probiercze)</option></select></td>
-            <td><input type="text" class="riso_wymagane" value="1.0" readonly style="bac            #eee"></td>
-                       put type="text" class="riso_zmierzone" va        ">9        oninput="recalcRiso(this)"                   `;
-            tbody            hild(tr);
-        recalcRiso(tr.querySelect            o_u'));
-        }
-
-            function recalcRiso(e                     let tr = el.closest('tr');
-        b = tr.querySelector('.riso_u').value;
-                     et reqEl = tr.querySelector('.riso        agane');
-            re            e = (uProb == '250') ? "0.5" : "1.0";
-            // Wyn            ierdza funkcja submitForms
-        }
-
-        --------SWZ DYNAMICS--------
-            fu            ddSwzRow() {
-            const tbody = document.querySelector('#tbl-swz tbody');
-            const tr = document.createElement('tr');
-            tr.className = 'dynamic-row obw-swz-tr';
-            tr.innerHTML = `
-            <td><input type="text" class="swz_nazwa" value="Obwód oświetlenia" placeholder="Korytarz główny"></td>
-            <td>
-                <select class="swz_char">
-                    <option value="B">B (krotność=5)</option>
-                    <option value="C">C (krotność=10)</option>
-                    <option value="D">D (krotność=20)</option>
-                </sele                    </td>
-                 td>        ut type="number" step="1" class="s        n" value="16" ></td>
-                <td><input type="number" step="0.01" class="swz_zs_zm"            0.45" ></td>
-        `;
-            tbody            hild(tr);
-        }
-
-        // --------             MICS --------
-        function addRcdRow() {
-            const tbody = document.querySelector('#tbl-rcd tbody');
-            const tr = document.createElement('tr');
-            tr.className = 'dynamic-row obw-rcd-tr';
-            tr.innerHTML = `
-            <td><input type="text" class="rcd_nazwa" value="RCD Gniazd Łazienka"></td>
-            <td>
-                <select class="rcd_typ">
-                    <option value="AC">AC</option>
-                    <option value="A">A</option>
-                    <option value="B">B (Prostowniki/PV)</option>
-                </select>
-            </td>
-            <td><select class="rcd_idn"><option value="30">30 mA</option><option value="100">100 mA</option><option value="300">300 mA</option></select></td>
-            <td><input type="number" class="rcd_izm" value="22.5"></t                   <td><input type=        bel        "rcd_tazm" value="120"></td>
-            <td><s        t class="rcd_testbtn"><option value="Sprawny">Sprawny</option><optio        lue="Uszkodzony">Uszkodzony</option></select></td>
-            `;
-            tbody.ap            d(tr);
-        }
-
-        // Na start dodajemy po 1 przykładowym wierszu
-        ndow.onload = () => { Row(); addSwzRow(); addR };
-
-        // -------- KOMPILACJA I WYSYŁKA FORMULARZA --------
-             unction submitForms() {
-            let u0 = parseFloat(document.getEle                piecie_u0').value) || 230;
-
-            // 1. Oględziny JSON
-            let ogledziny_arr = rowsOg = document.querySelectorAll('#tbl-ogledziny tbody tr');
-            rows            ch(tr => {
-                let td = tr.quer            rAll('td');
-                ogledziny_arr.push({ nazwa: td                t, wynik: td[1].querySelector('select').                          });
-                document.getElementById('in_                value = JSON.stringify(ogledziny_arr);
-
-            // 2. RISO JS                   let riso_arr = [];
-            document.querySelectorAll('.o                .forEach(tr => {
-                let zm = document.createElement('div                        let zVal                    tor('.riso_zmierzone').value;
-                                    Float(tr.querySelector('.riso_wymagane').va                          let zmValF                    udes('>') ? 9999                     l);
-                               atus            lFlo            al) ? "POZYTYWNY" : "NEGATYWNY";
-
-            riso_arr.push({
-                nazwa: Selector('.riso_na            lue,
-                    u_prob: tr.querySelector('.riso_                                   wymagane: wVal,
-                               ne: zVal,
-                    wynik: wynikStatus
-                                    });
-            document.getElementById('in_riso')N                iso_arr);
-
-            // 3. SWZ JSON
-            let swz_arr                       document.quel                r').forEach(tr => {
-                      t charak = tr.querySel                char').value;
-            let Float(tr.querySelector('.swz_in').value); m = parseFloat(tr.querySelector('.swz_zs_zm').value);
-
-            let k = (char ? 5 : ((charak                     20);
-            let i_a = i_n * k;
-
-                        ZOR 2 / 3: Z_do                                                  i_a;
-            let z_dop                    2) / 3;
-            dop_format = z_dop_2_3.toFi                             let wynikS                zm <            loat ormat)) ? "POZYTYWNY" : "NEGATYWNY";
-
-            swz_arr.push({
-                na            querySelector('.sw            ).value,
-                    typ: charak,
-                               ,
-                    k: k,
-                    ia: i_a,
-                    zs_zm: z_szm,
-                    zs_dop_skor: z_dop                                 wynik: wynikStatus
-                });
-            ;
-            document.getElementById('in_swz').val                ringify(swz_arr);
-
-            ON
-            let rcd_arr = [];
-            uerySelectorAll('.obw-rcd-tr').forEach(tr => {
-                let zmT = pa                    ySelector('.rcd_tazm').valu = parseFloat(t                    '.rcd_izm').value);
-            let idn = uerySelector('.rcd_idn').value);
-                                .querySelec                    n').value;
-            let wynikSt                    Y";
-            a - czas do 300ms,                 
-                                > 300 || zmI < (0.5 * idn) || zmI > idn || btn === 'Uszkodzony') {
-                tatus = "NEGATYWNY";
+        // ŁADOWANIE WIERSZY Z JSONA LUB PUSTYCH (TRYB NOWY)
+        if (loadedData) {
+            // Oględziny
+            if (loadedData.ogledziny && loadedData.ogledziny.length > 0) {
+                let trs = document.querySelectorAll('#tbl-ogledziny tbody tr');
+                for (let i = 0; i < loadedData.ogledziny.length && i < trs.length; i++) {
+                    let sel = trs[i].querySelector('select');
+                    if (sel) sel.value = loadedData.ogledziny[i].wynik;
+                }
             }
 
-                    .push({
+            // Riso
+            if (loadedData.riso && loadedData.riso.length > 0) {
+                loadedData.riso.forEach(row => addRisoRow(row));
+            } else { addRisoRow(); }
+
+            // Swz
+            if (loadedData.swz && loadedData.swz.length > 0) {
+                loadedData.swz.forEach(row => addSwzRow(row));
+            } else { addSwzRow(); }
+
+            // Rcd
+            if (loadedData.rcd && loadedData.rcd.length > 0) {
+                loadedData.rcd.forEach(row => addRcdRow(row));
+            } else { addRcdRow(); }
+        } else {
+            // Nowy formularz
+            addRisoRow(); 
+            addSwzRow(); 
+            addRcdRow();
+        }
+    });
+
+    // -------- RISO DYNAMICS --------
+    function addRisoRow(data = null) {
+        const tbody = document.querySelector('#tbl-riso tbody');
+        const tr = document.createElement('tr');
+        tr.className = 'dynamic-row obw-riso-tr';
+        
+        let n= data ? data.nazwa : "Obwód niazd";
+        let u = data ? data.u_prob : "500";
+        let w = data ? data.wymagane : "1.0";
+        let z = data ? data.zmierzone : ">999";
+
+        tr.innerHTML = `
+            <td><input type="text" class="riso_nazwa" value="${n}" placeholder="Nazwa"></td>
+            <td><select class="riso_u">
+              lue="500" ${u=='500'?'selected':''}>230/400V (500V DC probiercze)</option>
+                <option value="250" ${u=='250'?'selected':''}>SELV/PELV (250V DC probiercze)</option></select></td>
+            <td><input type="text" class="riso_wymagane" value="${w}" readonly style="background:#eee"></td>
+            <td><input type="text" class="riso_zmierzone" value="${z}" oninput="recalcRiso(this)"></td>
+        `;
+          tbody . appendChil d (tr);
+        recalcRiso(tr.querySelector('.riso_u'));
+    }
+
+    function recalcRiso( el ) {
+          let  t r = el.closest('tr');
+        let uProb = tr.querySelector('.riso_u').value;
+        let reqEl = tr.querySelector('.riso_wymagane');
+        reqEl.value = (uProb == '250') ? "0.5" : "1.0";
+        // Wyniki zatwierdza funkcja submitForms
+    }
+
+    // -------- SWZ DYNAMICS --------
+    function addSwzRow(data = null) {
+        const tbody = document.querySelector('#tbl-swz tbody');
+        const tr = document.createElement('tr');
+        tr.className = 'dynamic-row obw-swz-tr';
+
+        let n = data ? data.nazwa : "Obwód oświetlenia";
+        let c = data ? data.typ : "B";
+        let in_val = data ? data.in : "16";
+        let zszm = data ? data.zs_zm : "0.45";
+
+        tr.innerHTML = `
+            <td><input type="text" class="swz_nazwa" value="${n}" placeholder="Korytarz główny"></td>
+            <td>
+                <select class="swz_char">
+                    <option value="B" ${c=='B'?'selected':''}>B (krotność=5)</option>
+                    <option value="C" ${c=='C'?'selected':''}>C (krotność=10)</option>
+                    <option value="D" ${c=='D'?'selected':''}>D (krotność=20)</option>
+                </select>
+            </td>
+            <td><input type="number" step="1" class="swz_in" value="${in_val}" ></td>
+            <td><input type="number" step="0.01" class="swz_zs_zm" value="${zszm}" ></td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+      / /  --------  R CD DYNAMICS --------
+    function addRcdRow(data = null) {
+        const  tb ody   = document . querySelector('#tbl-rcd tbody');
+        const tr = document.createElement (' tr' ) ;
+         t r.className = 'dynamic-row obw-rcd-tr';
+
+        let n = data ? data.nazwa : "RCD Gniazd Łazienka";
+        let typ = data ? data.typ_rcd : "AC";
+        let idn = data ? data.i_dn : "30";
+        let izm = data ? data.i_zm : "22.5";
+        let tazm = data ? data.ta_zm : "120";
+        let btn = data ? data.test_btn : "Sprawny";
+
+        tr.innerHTML = `
+            <td><input type="text" class="rcd_nazwa" value="${n}"></td>
+            <td>
+                <select class="rcd_typ">
+                    <option value="AC" ${typ=='AC'?'selected':''}>AC</option>
+                    <option value="A" ${typ=='A'?'selected':''}>A</option>
+                    <option value="B" ${typ=='B'?'selected':''}>B (Prostowniki/PV)</option>
+                </select>
+            </td>
+            <td><select class="rcd_idn">
+                <option value="30" ${idn=='30'?'selected':''}>30 mA</option>
+                <option value="100" ${idn=='100'?'selected':''}>100 mA</option>
+                <option value="300" ${idn=='300'?'selected':''}>300 mA</option></select></td>
+            <td><input type="number" class="rcd_i zm " va l ue="${izm} " ></td>
+            <td><input type="number" class="rcd_tazm" va lu e=" $ {tazm}"></ t d>
+            <td><select class="rcd_testbtn">
+                  <op t ion value= " Sprawny" ${btn=='Sprawny'?'selected':''}>Sprawny</option>
+                <option value="Uszkodzony" ${btn=='Uszkodzony'?'selected':''}>Uszkodzony</option></select></td>
+          ` ; 
+        t b ody.appendChild(tr);
+    }
+
+    // -------- KOMPILACJA I WYSYŁKA  F ORMUL A RZA ------ - -
+    function submitForms() {
+        let u0 = parseFloat(docume nt .getE l ementById( ' napiecie_u0').value) || 230;
+
+        // 1. Oględziny JSON
+        let ogledziny_arr = [];
+        let rowsOg = document.querySelectorAll('#tbl-ogledziny tbody tr');
+        rowsOg.forEach(tr => {
+            let td = tr.querySelectorAll('td');
+            ogledziny_arr.push({ nazwa: td[0].innerText, wynik:  td [1].query S elector('s e lect').value });
+        });
+        document.getElementById('in_ogledz in y').value =  J SON.string i fy(ogledziny_arr);
+
+        // 2. RISO JSON
+        let riso_arr = [];
+        document.querySelectorAll('.obw-riso-tr').forEach(tr => {
+            let zm = document.createElement('div');
+            let zVal = tr.querySelector('.riso_zmierzone').value;
+            let wVal = parseFloat(tr.querySelector('.riso_wymagane').value);
+            let zmValFloat = zVal.includes('>') ? 9999 : parseFloat(zVal);
+            let wynikStatus = (zmValFloat >= wVal) ? "POZYTYWNY" : "NEGATYWNY";
+
+            riso_arr.push({
+                nazwa: tr.querySelector('.riso_nazwa').value,
+                u_prob: tr.querySelector('.riso_u').value,
+                wymagane: wVal,
+                zmierzone: zVal,
+                wynik: wynikStatus
+            });
+        });
+        document.getElementById('in_riso').value = JSON.stringify(riso_arr);
+
+        // 3. SWZ JSON
+        let swz_arr = [];
+        document.querySelectorAll('.obw-swz-tr').forEach(tr => {
+            let charak = tr.querySelector('.swz_char').value;
+            let i_n = parseFloat(tr.querySelector('.swz_in').value);
+            let z_szm = parseFloat(tr.querySelector('.swz_zs_zm').value);
+            
+            let k = (charak === 'B') ? 5 : ((charak === 'C') ? 10 : 20);
+            let i_a = i_n * k;
+            
+            // WZOR 2/3: Z_dop * 0.66
+            let z_dop = u0 / i_a;
+            let z_dop_2_3 = (z_dop * 2) / 3;
+            let z_dop_format = z_dop_2_3.toFixed(2);
+            
+            let wynikStatus = (z_szm <= parseFloat(z_dop_format)) ? "POZYTYWNY" : "NEGATYWNY";
+
+            swz_arr.push({
+                nazwa: tr.querySelector('.swz_nazwa').value,
+                typ: charak,
+                in: i_n,
+                k: k,
+                ia: i_a,
+                zs_zm: z_szm,
+                zs_dop_skor: z_dop_format,
+                wynik: wynikStatus
+            });
+        });
+        document.getElementById('in_swz').value = JSON.stringify(swz_arr);
+
+        // 4. RCD JSON
+        let rcd_arr = [];
+        document.querySelectorAll('.obw-rcd-tr').forEach(tr => {
+            let zmT = parseFloat(tr.querySelector('.rcd_tazm').value);
+            let zmI = parseFloat(tr.querySelector('.rcd_izm').value);
+            let idn = parseFloat(tr.querySelector('.rcd_idn').value);
+            let btn = tr.querySelector('.rcd_testbtn').value;
+
+            let wynikStatus = "POZYTYWNY";
+            // Walidacja - czas do 300ms, prad 0.5-1.0
+            if (zmT > 300 || zmI < (0.5 * idn) || zmI > idn || btn === 'Uszkodzony') {
+                wynikStatus = "NEGATYWNY";
+            }
+
+            rcd_arr.push({
                 nazwa: tr.querySelector('.rcd_nazwa').value,
                 typ_rcd: tr.querySelector('.rcd_typ').value,
                 i_dn: idn,
@@ -726,7 +866,7 @@ if ($render_protokol_id) {
 
         // Wyslij
         document.getElementById('monoForm').submit();
-        }
+    }
     </script>
 
 </body>
