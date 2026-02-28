@@ -610,263 +610,263 @@ endif; ?>
     </div>
 
     <script>
-    // System przechowywania podręcznego oraz Wczytywanie Danych Edycji //
-    const loadedData =  <?php echo json_encode($loaded_data); ?document.addEventListener('DOMContentLoaded', function() {
-        const STORAGE_KEY = 'pomiary2_stan_globalny';
-        const header_ids = ['obiekt_nazwa', 'adres', 'data_pomiaru', 'pogoda', 'uklad_sieci', 'napiecie_u0', 'inzynier_e', 'uprawnienia_e', 'inzynier_d', 'uprawnienia_d'];
-        
-        function saveCache() {
-            let data = {};
-            header_ids.forEach(id => { 
-                let el = document.getElementById(id); 
-                if(el) data[id] = el.value; 
-            });
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        }
+        // System przechowywania podręcznego oraz Wczytywanie Danych Edycji //
+        const loadedData =  <? php echo json_encode($loaded_data); ?document.addEventListener('DOMContentLoaded', function () {
+            const STORAGE_KEY = 'pomiary2_stan_globalny';
+            const header_ids = ['obiekt_nazwa', 'adres', 'data_pomiaru', 'pogoda', 'uklad_sieci', 'napiecie_u0', 'inzynier_e', 'uprawnienia_e', 'inzynier_d', 'uprawnienia_d'];
 
-        if (loadedData && loadedData.naglowek) {
-            // Edytujemy, nadpisujemy formularz starymi danymi
+            function saveCache() {
+                let data = {};
+                header_ids.forEach(id => {
+                    let el = document.getElementById(id);
+                    if (el) data[id] = el.value;
+                });
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            }
+
+            if (loadedData && loadedData.naglowek) {
+                // Edytujemy, nadpisujemy formularz starymi danymi
+                header_ids.forEach(id => {
+                    let el = document.getElementById(id);
+                    if (el && loadedData.naglowek[id] !== undefined) {
+                        el.value = loadedData.naglowek[id];
+                    }
+                });
+            } else {
+                // Otwieramy nowy na czysto - ladujemy ewentualnie cache ulatwiajacy prace z localStorage
+                let saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    try {
+                        let j = JSON.parse(saved);
+                        header_ids.forEach(id => {
+                            let el = document.getElementById(id);
+                            if (el && j[id]) el.value = j[id];
+                        });
+                    } catch (e) { }
+                }
+            }
+
             header_ids.forEach(id => {
                 let el = document.getElementById(id);
-                if (el && loadedData.naglowek[id] !== undefined) {
-                    el.value = loadedData.naglowek[id];
-                }
+                if (el) el.addEventListener('input', saveCache);
             });
-        } else {
-            // Otwieramy nowy na czysto - ladujemy ewentualnie cache ulatwiajacy prace z localStorage
-            let saved = localStorage.getItem(STORAGE_KEY);
-            if(saved) {
-                try {
-                    let j = JSON.parse(saved);
-                    header_ids.forEach(id => {
-                        let el = document.getElementById(id);
-                        if(el && j[id]) el.value = j[id];
-                    });
-                }catch(e){}
-            }
-        }
 
-        header_ids.forEach(id => {
-            let el = document.getElementById(id);
-            if(el) el.addEventListener('input', saveCache);
+            // ŁADOWANIE WIERSZY Z JSONA LUB PUSTYCH (TRYB NOWY)
+            if (loadedData) {
+                // Oględziny
+                if (loadedData.ogledziny && loadedData.ogledziny.length > 0) {
+                    let trs = document.querySelectorAll('#tbl-ogledziny tbody tr');
+                    for (let i = 0; i < loadedData.ogledziny.length && i < trs.length; i++) {
+                        let sel = trs[i].querySelector('select');
+                        if (sel) sel.value = loadedData.ogledziny[i].wynik;
+                    }
+                }
+
+                // Riso
+                if (loadedData.riso && loadedData.riso.length > 0) {
+                    loadedData.riso.forEach(row => addRisoRow(row));
+                } else { addRisoRow(); }
+
+                // Swz
+                if (loadedData.swz && loadedData.swz.length > 0) {
+                    loadedData.swz.forEach(row => addSwzRow(row));
+                } else { addSwzRow(); }
+
+                // Rcd
+                if (loadedData.rcd && loadedData.rcd.length > 0) {
+                    loadedData.rcd.forEach(row => addRcdRow(row));
+                } else { addRcdRow(); }
+            } else {
+                // Nowy formularz
+                addRisoRow();
+                addSwzRow();
+                addRcdRow();
+            }
         });
 
-        // ŁADOWANIE WIERSZY Z JSONA LUB PUSTYCH (TRYB NOWY)
-        if (loadedData) {
-            // Oględziny
-            if (loadedData.ogledziny && loadedData.ogledziny.length > 0) {
-                let trs = document.querySelectorAll('#tbl-ogledziny tbody tr');
-                for (let i = 0; i < loadedData.ogledziny.length && i < trs.length; i++) {
-                    let sel = trs[i].querySelector('select');
-                    if (sel) sel.value = loadedData.ogledziny[i].wynik;
-                }
-            }
+        // -------- RISO DYNAMICS --------
+        function addRisoRow(data = null) {
+            const tbody = document.querySelector('#tbl-riso tbody');
+            const tr = document.createElement('tr');
+            tr.className = 'dynamic-row obw-riso-tr';
 
-            // Riso
-            if (loadedData.riso && loadedData.riso.length > 0) {
-                loadedData.riso.forEach(row => addRisoRow(row));
-            } else { addRisoRow(); }
+            let n = data ? data.nazwa : "Obwód niazd";
+            let u = data ? data.u_prob : "500";
+            let w = data ? data.wymagane : "1.0";
+            let z = data ? data.zmierzone : ">999";
 
-            // Swz
-            if (loadedData.swz && loadedData.swz.length > 0) {
-                loadedData.swz.forEach(row => addSwzRow(row));
-            } else { addSwzRow(); }
-
-            // Rcd
-            if (loadedData.rcd && loadedData.rcd.length > 0) {
-                loadedData.rcd.forEach(row => addRcdRow(row));
-            } else { addRcdRow(); }
-        } else {
-            // Nowy formularz
-            addRisoRow(); 
-            addSwzRow(); 
-            addRcdRow();
-        }
-    });
-
-    // -------- RISO DYNAMICS --------
-    function addRisoRow(data = null) {
-        const tbody = document.querySelector('#tbl-riso tbody');
-        const tr = document.createElement('tr');
-        tr.className = 'dynamic-row obw-riso-tr';
-        
-        let n= data ? data.nazwa : "Obwód niazd";
-        let u = data ? data.u_prob : "500";
-        let w = data ? data.wymagane : "1.0";
-        let z = data ? data.zmierzone : ">999";
-
-        tr.innerHTML = `
+            tr.innerHTML = `
             <td><input type="text" class="riso_nazwa" value="${n}" placeholder="Nazwa"></td>
             <td><select class="riso_u">
-              lue="500" ${u=='500'?'selected':''}>230/400V (500V DC probiercze)</option>
-                <option value="250" ${u=='250'?'selected':''}>SELV/PELV (250V DC probiercze)</option></select></td>
+              lue="500" ${u == '500' ? 'selected' : ''}>230/400V (500V DC probiercze)</option>
+                <option value="250" ${u == '250' ? 'selected' : ''}>SELV/PELV (250V DC probiercze)</option></select></td>
             <td><input type="text" class="riso_wymagane" value="${w}" readonly style="background:#eee"></td>
             <td><input type="text" class="riso_zmierzone" value="${z}" oninput="recalcRiso(this)"></td>
         `;
-          tbody . appendChil d (tr);
-        recalcRiso(tr.querySelector('.riso_u'));
-    }
+            tbody.appendChil d(tr);
+            recalcRiso(tr.querySelector('.riso_u'));
+        }
 
-    function recalcRiso( el ) {
-          let  t r = el.closest('tr');
-        let uProb = tr.querySelector('.riso_u').value;
-        let reqEl = tr.querySelector('.riso_wymagane');
-        reqEl.value = (uProb == '250') ? "0.5" : "1.0";
-        // Wyniki zatwierdza funkcja submitForms
-    }
+        function recalcRiso(el) {
+            let t r = el.closest('tr');
+            let uProb = tr.querySelector('.riso_u').value;
+            let reqEl = tr.querySelector('.riso_wymagane');
+            reqEl.value = (uProb == '250') ? "0.5" : "1.0";
+            // Wyniki zatwierdza funkcja submitForms
+        }
 
-    // -------- SWZ DYNAMICS --------
-    function addSwzRow(data = null) {
-        const tbody = document.querySelector('#tbl-swz tbody');
-        const tr = document.createElement('tr');
-        tr.className = 'dynamic-row obw-swz-tr';
+        // -------- SWZ DYNAMICS --------
+        function addSwzRow(data = null) {
+            const tbody = document.querySelector('#tbl-swz tbody');
+            const tr = document.createElement('tr');
+            tr.className = 'dynamic-row obw-swz-tr';
 
-        let n = data ? data.nazwa : "Obwód oświetlenia";
-        let c = data ? data.typ : "B";
-        let in_val = data ? data.in : "16";
-        let zszm = data ? data.zs_zm : "0.45";
+            let n = data ? data.nazwa : "Obwód oświetlenia";
+            let c = data ? data.typ : "B";
+            let in_val = data ? data.in : "16";
+            let zszm = data ? data.zs_zm : "0.45";
 
-        tr.innerHTML = `
+            tr.innerHTML = `
             <td><input type="text" class="swz_nazwa" value="${n}" placeholder="Korytarz główny"></td>
             <td>
                 <select class="swz_char">
-                    <option value="B" ${c=='B'?'selected':''}>B (krotność=5)</option>
-                    <option value="C" ${c=='C'?'selected':''}>C (krotność=10)</option>
-                    <option value="D" ${c=='D'?'selected':''}>D (krotność=20)</option>
+                    <option value="B" ${c == 'B' ? 'selected' : ''}>B (krotność=5)</option>
+                    <option value="C" ${c == 'C' ? 'selected' : ''}>C (krotność=10)</option>
+                    <option value="D" ${c == 'D' ? 'selected' : ''}>D (krotność=20)</option>
                 </select>
             </td>
             <td><input type="number" step="1" class="swz_in" value="${in_val}" ></td>
             <td><input type="number" step="0.01" class="swz_zs_zm" value="${zszm}" ></td>
         `;
-        tbody.appendChild(tr);
-    }
+            tbody.appendChild(tr);
+        }
 
-      / /  --------  R CD DYNAMICS --------
-    function addRcdRow(data = null) {
-        const  tb ody   = document . querySelector('#tbl-rcd tbody');
-        const tr = document.createElement (' tr' ) ;
+        / /  --------R CD DYNAMICS--------
+            function addRcdRow(data = null) {
+                const tb ody = document.querySelector('#tbl-rcd tbody');
+                const tr = document.createElement(' tr');
          t r.className = 'dynamic-row obw-rcd-tr';
 
-        let n = data ? data.nazwa : "RCD Gniazd Łazienka";
-        let typ = data ? data.typ_rcd : "AC";
-        let idn = data ? data.i_dn : "30";
-        let izm = data ? data.i_zm : "22.5";
-        let tazm = data ? data.ta_zm : "120";
-        let btn = data ? data.test_btn : "Sprawny";
+                let n = data ? data.nazwa : "RCD Gniazd Łazienka";
+                let typ = data ? data.typ_rcd : "AC";
+                let idn = data ? data.i_dn : "30";
+                let izm = data ? data.i_zm : "22.5";
+                let tazm = data ? data.ta_zm : "120";
+                let btn = data ? data.test_btn : "Sprawny";
 
-        tr.innerHTML = `
+                tr.innerHTML = `
             <td><input type="text" class="rcd_nazwa" value="${n}"></td>
             <td>
                 <select class="rcd_typ">
-                    <option value="AC" ${typ=='AC'?'selected':''}>AC</option>
-                    <option value="A" ${typ=='A'?'selected':''}>A</option>
-                    <option value="B" ${typ=='B'?'selected':''}>B (Prostowniki/PV)</option>
+                    <option value="AC" ${typ == 'AC' ? 'selected' : ''}>AC</option>
+                    <option value="A" ${typ == 'A' ? 'selected' : ''}>A</option>
+                    <option value="B" ${typ == 'B' ? 'selected' : ''}>B (Prostowniki/PV)</option>
                 </select>
             </td>
             <td><select class="rcd_idn">
-                <option value="30" ${idn=='30'?'selected':''}>30 mA</option>
-                <option value="100" ${idn=='100'?'selected':''}>100 mA</option>
-                <option value="300" ${idn=='300'?'selected':''}>300 mA</option></select></td>
+                <option value="30" ${idn == '30' ? 'selected' : ''}>30 mA</option>
+                <option value="100" ${idn == '100' ? 'selected' : ''}>100 mA</option>
+                <option value="300" ${idn == '300' ? 'selected' : ''}>300 mA</option></select></td>
             <td><input type="number" class="rcd_i zm " va l ue="${izm} " ></td>
             <td><input type="number" class="rcd_tazm" va lu e=" $ {tazm}"></ t d>
             <td><select class="rcd_testbtn">
-                  <op t ion value= " Sprawny" ${btn=='Sprawny'?'selected':''}>Sprawny</option>
-                <option value="Uszkodzony" ${btn=='Uszkodzony'?'selected':''}>Uszkodzony</option></select></td>
+                  <op t ion value= " Sprawny" ${btn == 'Sprawny' ? 'selected' : ''}>Sprawny</option>
+                <option value="Uszkodzony" ${btn == 'Uszkodzony' ? 'selected' : ''}>Uszkodzony</option></select></td>
           ` ; 
         t b ody.appendChild(tr);
-    }
-
-    // -------- KOMPILACJA I WYSYŁKA  F ORMUL A RZA ------ - -
-    function submitForms() {
-        let u0 = parseFloat(docume nt .getE l ementById( ' napiecie_u0').value) || 230;
-
-        // 1. Oględziny JSON
-        let ogledziny_arr = [];
-        let rowsOg = document.querySelectorAll('#tbl-ogledziny tbody tr');
-        rowsOg.forEach(tr => {
-            let td = tr.querySelectorAll('td');
-            ogledziny_arr.push({ nazwa: td[0].innerText, wynik:  td [1].query S elector('s e lect').value });
-        });
-        document.getElementById('in_ogledz in y').value =  J SON.string i fy(ogledziny_arr);
-
-        // 2. RISO JSON
-        let riso_arr = [];
-        document.querySelectorAll('.obw-riso-tr').forEach(tr => {
-            let zm = document.createElement('div');
-            let zVal = tr.querySelector('.riso_zmierzone').value;
-            let wVal = parseFloat(tr.querySelector('.riso_wymagane').value);
-            let zmValFloat = zVal.includes('>') ? 9999 : parseFloat(zVal);
-            let wynikStatus = (zmValFloat >= wVal) ? "POZYTYWNY" : "NEGATYWNY";
-
-            riso_arr.push({
-                nazwa: tr.querySelector('.riso_nazwa').value,
-                u_prob: tr.querySelector('.riso_u').value,
-                wymagane: wVal,
-                zmierzone: zVal,
-                wynik: wynikStatus
-            });
-        });
-        document.getElementById('in_riso').value = JSON.stringify(riso_arr);
-
-        // 3. SWZ JSON
-        let swz_arr = [];
-        document.querySelectorAll('.obw-swz-tr').forEach(tr => {
-            let charak = tr.querySelector('.swz_char').value;
-            let i_n = parseFloat(tr.querySelector('.swz_in').value);
-            let z_szm = parseFloat(tr.querySelector('.swz_zs_zm').value);
-            
-            let k = (charak === 'B') ? 5 : ((charak === 'C') ? 10 : 20);
-            let i_a = i_n * k;
-            
-            // WZOR 2/3: Z_dop * 0.66
-            let z_dop = u0 / i_a;
-            let z_dop_2_3 = (z_dop * 2) / 3;
-            let z_dop_format = z_dop_2_3.toFixed(2);
-            
-            let wynikStatus = (z_szm <= parseFloat(z_dop_format)) ? "POZYTYWNY" : "NEGATYWNY";
-
-            swz_arr.push({
-                nazwa: tr.querySelector('.swz_nazwa').value,
-                typ: charak,
-                in: i_n,
-                k: k,
-                ia: i_a,
-                zs_zm: z_szm,
-                zs_dop_skor: z_dop_format,
-                wynik: wynikStatus
-            });
-        });
-        document.getElementById('in_swz').value = JSON.stringify(swz_arr);
-
-        // 4. RCD JSON
-        let rcd_arr = [];
-        document.querySelectorAll('.obw-rcd-tr').forEach(tr => {
-            let zmT = parseFloat(tr.querySelector('.rcd_tazm').value);
-            let zmI = parseFloat(tr.querySelector('.rcd_izm').value);
-            let idn = parseFloat(tr.querySelector('.rcd_idn').value);
-            let btn = tr.querySelector('.rcd_testbtn').value;
-
-            let wynikStatus = "POZYTYWNY";
-            // Walidacja - czas do 300ms, prad 0.5-1.0
-            if (zmT > 300 || zmI < (0.5 * idn) || zmI > idn || btn === 'Uszkodzony') {
-                wynikStatus = "NEGATYWNY";
             }
 
-            rcd_arr.push({
-                nazwa: tr.querySelector('.rcd_nazwa').value,
-                typ_rcd: tr.querySelector('.rcd_typ').value,
-                i_dn: idn,
-                i_zm: zmI,
-                ta_zm: zmT,
-                test_btn: btn,
-                wynik: wynikStatus
-            });
-        });
-        document.getElementById('in_rcd').value = JSON.stringify(rcd_arr);
+        // -------- KOMPILACJA I WYSYŁKA  F ORMUL A RZA ------ - -
+        function submitForms() {
+            let u0 = parseFloat(docume nt.getE l ementById(' napiecie_u0').value) || 230;
 
-        // Wyslij
-        document.getElementById('monoForm').submit();
-    }
+            // 1. Oględziny JSON
+            let ogledziny_arr = [];
+            let rowsOg = document.querySelectorAll('#tbl-ogledziny tbody tr');
+            rowsOg.forEach(tr => {
+                let td = tr.querySelectorAll('td');
+                ogledziny_arr.push({ nazwa: td[0].innerText, wynik: td[1].query S elector('s e lect').value });
+            });
+            document.getElementById('in_ogledz in y').value = J SON.string i fy(ogledziny_arr);
+
+            // 2. RISO JSON
+            let riso_arr = [];
+            document.querySelectorAll('.obw-riso-tr').forEach(tr => {
+                let zm = document.createElement('div');
+                let zVal = tr.querySelector('.riso_zmierzone').value;
+                let wVal = parseFloat(tr.querySelector('.riso_wymagane').value);
+                let zmValFloat = zVal.includes('>') ? 9999 : parseFloat(zVal);
+                let wynikStatus = (zmValFloat >= wVal) ? "POZYTYWNY" : "NEGATYWNY";
+
+                riso_arr.push({
+                    nazwa: tr.querySelector('.riso_nazwa').value,
+                    u_prob: tr.querySelector('.riso_u').value,
+                    wymagane: wVal,
+                    zmierzone: zVal,
+                    wynik: wynikStatus
+                });
+            });
+            document.getElementById('in_riso').value = JSON.stringify(riso_arr);
+
+            // 3. SWZ JSON
+            let swz_arr = [];
+            document.querySelectorAll('.obw-swz-tr').forEach(tr => {
+                let charak = tr.querySelector('.swz_char').value;
+                let i_n = parseFloat(tr.querySelector('.swz_in').value);
+                let z_szm = parseFloat(tr.querySelector('.swz_zs_zm').value);
+
+                let k = (charak === 'B') ? 5 : ((charak === 'C') ? 10 : 20);
+                let i_a = i_n * k;
+
+                // WZOR 2/3: Z_dop * 0.66
+                let z_dop = u0 / i_a;
+                let z_dop_2_3 = (z_dop * 2) / 3;
+                let z_dop_format = z_dop_2_3.toFixed(2);
+
+                let wynikStatus = (z_szm <= parseFloat(z_dop_format)) ? "POZYTYWNY" : "NEGATYWNY";
+
+                swz_arr.push({
+                    nazwa: tr.querySelector('.swz_nazwa').value,
+                    typ: charak,
+                    in: i_n,
+                    k: k,
+                    ia: i_a,
+                    zs_zm: z_szm,
+                    zs_dop_skor: z_dop_format,
+                    wynik: wynikStatus
+                });
+            });
+            document.getElementById('in_swz').value = JSON.stringify(swz_arr);
+
+            // 4. RCD JSON
+            let rcd_arr = [];
+            document.querySelectorAll('.obw-rcd-tr').forEach(tr => {
+                let zmT = parseFloat(tr.querySelector('.rcd_tazm').value);
+                let zmI = parseFloat(tr.querySelector('.rcd_izm').value);
+                let idn = parseFloat(tr.querySelector('.rcd_idn').value);
+                let btn = tr.querySelector('.rcd_testbtn').value;
+
+                let wynikStatus = "POZYTYWNY";
+                // Walidacja - czas do 300ms, prad 0.5-1.0
+                if (zmT > 300 || zmI < (0.5 * idn) || zmI > idn || btn === 'Uszkodzony') {
+                    wynikStatus = "NEGATYWNY";
+                }
+
+                rcd_arr.push({
+                    nazwa: tr.querySelector('.rcd_nazwa').value,
+                    typ_rcd: tr.querySelector('.rcd_typ').value,
+                    i_dn: idn,
+                    i_zm: zmI,
+                    ta_zm: zmT,
+                    test_btn: btn,
+                    wynik: wynikStatus
+                });
+            });
+            document.getElementById('in_rcd').value = JSON.stringify(rcd_arr);
+
+            // Wyslij
+            document.getElementById('monoForm').submit();
+        }
     </script>
 
 </body>
