@@ -611,7 +611,9 @@ endif; ?>
 
     <script>
         // System przechowywania podręcznego oraz Wczytywanie Danych Edycji //
-        const loadedData =  <? php echo json_encode($loaded_data); ?document.addEventListener('DOMContentLoaded', function () {
+        const loadedData = <?php echo json_encode($loaded_data); ?>;
+
+        document.addEventListener('DOMContentLoaded', function () {
             const STORAGE_KEY = 'pomiary2_stan_globalny';
             const header_ids = ['obiekt_nazwa', 'adres', 'data_pomiaru', 'pogoda', 'uklad_sieci', 'napiecie_u0', 'inzynier_e', 'uprawnienia_e', 'inzynier_d', 'uprawnienia_d'];
 
@@ -870,5 +872,3 @@ endif; ?>
     </script>
 
 </body>
-
-</html>
