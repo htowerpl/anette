@@ -38,7 +38,12 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Problem**: Google całkowicie wycofało i uniemożliwiło włączenie starego `Google My Business API`, które jako jedyne pozwalało na pobieranie postów (`localPosts`). Nowe interfejsy (`Business Information API` etc.) nie posiadają jeszcze tej funkcjonalności.
 - **Eksperyment**: Podjęto próbę użycia endpointu v4 (`https://mybusiness.googleapis.com/v4/.../localPosts`), który mimo deprecjacji może nadal działać przy użyciu odpowiednich prefiksów ID (`accounts/...`, `locations/...`).
 - **Status**: Eksperyment niepowodzony (blokada po stronie Google). `news.php` przywrócono do korzystania wyłącznie z tabeli ręcznej `Anette_news`. Skrypt importujący pozostawiono jako narzędzie diagnostyczne.
-- **Rozwiązanie (CMS)**: Stworzono panel administracyjny (`api/admin.php`) z prostym logowaniem hasłem. Umożliwia on dodawanie, edycję i usuwanie wpisów z tabeli `Anette_news`. Dodano podgląd miniaturek na liście wpisów.
+- **Rozwiązanie (CMS)**: Stworzono panel administracyjny (`api/admin.php`) z logowaniem przez **Google OAuth**.
+  - Wykorzystuje plik `config_oauth.php` z bezpiecznego katalogu.
+  - Dostęp mają tylko adresy e-mail zdefiniowane w zewnętrznym pliku `config_emails.php` (w bezpiecznym katalogu).
+  - Umożliwia dodawanie, edycję i usuwanie wpisów z tabeli `Anette_news`.
+  - **Dostęp**: Dodano adres `htowerpl@gmail.com` do listy administratorów.
+  - **Konfiguracja**: Wymaga dodania adresu `https://anette.beauty/api/admin.php` (oraz wersji testowych, np. `https://test.anette.beauty/api/admin.php`) do sekcji **Authorized redirect URIs** w Google Cloud Console.
 
 ### Aktualności (News)
 - **Problem**: Tekst z bazy nie miał akapitów, a data była mało widoczna.
