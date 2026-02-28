@@ -31,18 +31,25 @@ if ($is_submitted) {
            .orzeczenie { margin-top: 40px; border: 2px solid #000; padding: 20px; font-size: 1.1em; font-weight: bold; }
            .signatures { margin-top: 50px; display: flex; justify-content: space-around; }
            .sig-box { border-top: 1px solid #000; width: 30%; text-align: center; padding-top: 5px; }
-            @media print {.no-print { display: none; } body { margin: 0; } }
+            @media print {
+                .no-print { display: none; }
+                @page { size: A4; margin: 15mm; }
+                body { margin: 0; padding: 0; font-size: 11pt; }
+                table { page-break-inside: auto; }
+                tr { page-break-inside: avoid; page-break-after: auto; }
+            }
           </style></head><body>";
 
-    echo "<button class='no-print' onclick='window.print()' style='padding: 10px 20px; font-size: 16px; cursor:pointer;'>Drukuj Protokół</button>";
+    echo "<button class='no-print' onclick='window.print()' style='padding: 10px 20px; font-size: 16px; margin-bottom: 20px; cursor:pointer;'>Drukuj Protokół</button>";
+    echo "<a href='index.php' class='no-print' style='margin-left: 15px; text-decoration: none; padding: 10px 20px; background: #eee; color: #000; border: 1px solid #ccc; font-size: 16px;'>Powrót</a>";
 
     echo "<h1>PROTOKÓŁ Z POMIARÓW ELEKTRYCZNYCH</h1>";
     echo "<h2>Badanie Skuteczności Samoczynnego Wyłączenia Zasilania (SWZ)</h2>";
     echo "<div class='header-info'>";
     echo "<strong>Obiekt:</strong> $obiekt_nazwa <br>";
+    echo "<strong>Data pomiaru:</strong> $data_pomiaru <br>";
     echo "<strong>Układ sieciowy zasilający:</strong> $uklad_sieci <br>";
     echo "<strong>Napięcie nominalne fazowe (U0):</strong> $napiecie_u0 V <br>";
-    echo "<strong>Data pomiaru:</strong> $data_pomiaru <br>";
     echo "<strong>Podstawa prawna:</strong> PN-HD 60364-6:2016-07, Prawo Budowlane Art. 62<br>";
     echo "<strong>Zasada oceny pętli zwarcia:</strong> Wdrożono rygorystyczny współczynnik temperaturowy 2/3.";
     echo "</div>";
