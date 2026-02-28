@@ -45,7 +45,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Rozwiązanie**: Zmodyfikowano `app.js` (funkcja `loadNewsFromApi`).
   - Data jest teraz **pogrubiona** i znajduje się **nad zdjęciem**.
   - Znaki nowej linii `\n` z bazy są zamieniane na `<br>` w HTML.
-  - Ustalono stałą wysokość zdjęć na `8.2rem` (ok. 6 linii tekstu daty) z `object-fit: cover`, aby zachować spójność wizualną na wszystkich urządzeniach.
+  - Zmieniono logikę wyświetlania zdjęć na elastyczną: zdjęcie **wypełnia 100% szerokości** (skaluje się), ale jego wysokość jest ograniczona do `max-height: 23rem` (6x ramki daty). Jeśli zdjęcie jest niższe – ramka się kurczy. Jeśli wyższe – pojawiają się marginesy boczne `var(--surface-alt)`.
 
 ### Optymalizacja Mobile
 - **Decyzja**: Używamy `window.matchMedia("(max-width: 840px)")` w JS do wykrywania urządzeń mobilnych.
