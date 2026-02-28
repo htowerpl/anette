@@ -1,0 +1,48 @@
+<?php
+// Baza danych SQLite dla Aplikacji Pomiary 2.0
+$db_file = __DIR__ . '/db/pomiary.sqlite';
+$is_new_db = !file_exists($db_file);
+
+try {
+    $db = new PDO('sqlite:' . $db_file);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    if ($is_new_db) {
+        // Inicjalizacja struktury bazy danych
+        $db->exec("
+            CREATE TABLE IF NOT EXISTS protokoly (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                obiekt_nazwa VARCHAR(255) NOT NULL,
+                adres VARCHAR(255),
+                data_pomiaru DATE NOT NULL,
+                uklad_sieci VARCHAR(50) NOT NULL,
+                napiecie_u0 INTEGER DEFAULT 230,
+                inzynier_e VARCHAR(255),
+                inzynier_d VARCHAR(255),
+                uprawnienia_e VARCHAR(100),
+                uprawnienia_d VARCHAR(100),
+                pogoda VARCHAR(255),
+                data_utworzenia DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        ");
+
+        $db->exec("
+            CREATE TABLE IF NOT EXISTS pomiary_linie (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                protokol_id INTEGER NOT NULL,
+                kategoria VARCHAR(50) NOT NULL, -- 'OGLEDZINY', 'RISO', 'SWZ', 'RCD'
+                nr_formularza INTEGER,
+                dane_json TEXT NOT NULL,
+                FOREIGN KEY (protokol_id) REFERENCES protokoly(id) ON DELETE CASCADE
+            )
+        ");
+
+        // Zabezpieczenie pliku bazy
+        chmod($db_file, 0666);
+    }
+}
+catch (PDOException $e) {
+    die("Błąd połączenia z bazą danych: " . $e->getMessage());
+}
+?>
