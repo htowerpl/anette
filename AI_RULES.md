@@ -99,3 +99,14 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 3.  [ ] **Media**: Wykonać konwersję zdjęć do WebP i fontów do WOFF2 (zadanie z Backlogu).
 4.  [x] **SEO**: Wygenerować plik `sitemap.xml` (np. online generator) po uruchomieniu strony i wgrać go do katalogu głównego.
 5.  [ ] **SSL**: Wymusić przekierowanie na HTTPS w panelu hostingu.
+
+---
+
+## PROJEKT POBOCZNY: Pomiary Elektryczne (Sub-projekt)
+**Lokalizacja**: `api/pomiary/`
+**Status**: Faza początkowa.
+**Cel**: Aplikacja do tworzenia i drukowania protokołów z pomiarów instalacji elektrycznej.
+**Zależności**: Projekt całkowicie niezależny od logiki `anette.beauty`.
+
+### Log Zmian (Pomiary)
+- **Inicjalizacja**: Utworzono katalog `api/pomiary` oraz plik `pomiary.php`.
