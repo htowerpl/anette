@@ -371,6 +371,30 @@ if ($render_protokol_id) {
         <h1>Kreator Monolityczny Pomiary 2.0</h1>
         <p style="text-align: center; color: #7f8c8d;">Jedna strona - jeden kompletny protokół do bazy danych.</p>
 
+        <div class="section-box" style="background:#eaf2f8; border-color:#b4ccde;">
+            <h2 style="margin-top:0; border-bottom: 2px solid #2980b9; color:#2980b9;">Wcześniej zapisane protokoły (Archiwum)</h2>
+            <?php
+            $stmt_arch = $db->query("SELECT id, obiekt_nazwa, data_pomiaru, inzynier_e, data_utworzenia FROM protokoly ORDER BY id DESC LIMIT 10");
+            $archiwa = $stmt_arch->fetchAll();
+            if (count($archiwa) > 0) {
+                echo "<table><thead><tr><th>ID</th><th>Data Pomiaru</th><th>Obiekt</th><th>Inżynier (E)</th><th>Utworzono</th><th>Akcja</th></tr></thead><tbody>";
+                foreach ($archiwa as $a) {
+                    echo "<tr>
+                            <td>" . htmlspecialchars($a['id']) . "</td>
+                            <td>" . htmlspecialchars($a['data_pomiaru']) . "</td>
+                            <td>" . htmlspecialchars($a['obiekt_nazwa']) . "</td>
+                            <td>" . htmlspecialchars($a['inzynier_e']) . "</td>
+                            <td>" . htmlspecialchars($a['data_utworzenia']) . "</td>
+                            <td><a href='index.php?view=" . htmlspecialchars($a['id']) . "' class='btn' style='background:#f39c12; padding: 5px 10px; font-size:0.8em;'>Pokaż/Drukuj</a></td>
+                          </tr>";
+                }
+                echo "</tbody></table>";
+            } else {
+                echo "<p>Brak zapisanych protokołów w bazie danych.</p>";
+            }
+            ?>
+        </div>
+
         <form id="monoForm" method="POST" action="index.php">
 
             <!-- NAGŁÓWEK DO BAZY (Wspólny do wszystkiego) -->
@@ -538,65 +562,54 @@ if ($render_protokol_id) {
     </div>
 
     <script>
-        // System przechowywania podręcznego w localStorage na wypadek odświeżenia strony //
-        document.addEventListener('DOMContentLoaded', function () {
-            const STORAGE_KEY = 'pomiary2_stan_globalny';
-            const inputs = Array.from(document.querySelectorAll('#monoForm input[type="text"], #monoForm input[type="date"], #monoForm input[type="number"], #monoForm select'));
+        // System przechowywania podręcznego w localStorage na wypadek odświeżenia s        y //
+        document.addEventListener('DOMContentLoad ed', () {
+            const STORAGE_KEY = 'pomiary            lobalny';
+            const inputs = Array.from(document.querySelectorAll('#monoForm input[type="text"], #monoForm input[type="date"], #monoForm input[type="number"],r            '));
 
-            // Zapis tylko głównych informacji nagłówkowych
-            const header_ids = ['obiekt_nazwa', 'adres', 'data_pomiaru', 'pogoda', 'uklad_sieci', 'napiecie_u0', 'inzynier_e', 'uprawnienia_e', 'inzynier_d', 'uprawnienia_d'];
+            // Zapis tylko głównych inform            łówkowych
+            const header_ids = ['obiekt_nazwa', 'adres', 'data_pomiaru', 'pogoda', 'uklad_sieci', 'napiecie_u0', 'inzynier_e', 'uprawnienia_e', 'inzynier_a            d'];
 
-            function saveCache() {
-                let data = {};
-                header_ids.forEach(id => {
-                    let el = document.getElementById(id);
-                    if (el) data[id] = el.value;
+            funct                e() {
+                ata = {};
+                e(id => {
+                    let el = d                    nt ById(id);
+                    ata[ue;
                 });
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                localStorage.setI            AGE            ON.stringify(data));
             }
 
-            let saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                try {
-                    let j = JSON.parse(saved);
-                    header_ids.forEach(id => {
-                        let el = document.getElementById(id);
-                        if (el && j[id]) el.value = j[id];
-                    });
-                } catch (e) { }
-            }
-
-            header_ids.forEach(id => {
-                let el = document.getElementById(id);
-                if (el) el.addEventListener('input', saveCache);
+        ed = localSt                m(STOR                          if (saved) {
+            let j = J                                          header_ids.forEach(i                                    let el = document.getEl                                                 if (e            d]) e = j[id];
+        } catch (e) { }
+        header_ids.forEach(id => {
+                             doc        t.get        entById(id);
+            if (el.addEventListener('input            ache);
             });
         });
 
-        // -------- RISO DYNAMICS --------
-        function addRisoRow() {
-            const tbody = document.querySelector('#tbl-riso tbody');
-            const tr = document.createElement('tr');
-            tr.className = 'dynamic-row obw-riso-tr';
-            tr.innerHTML = `
+        // -------- R            MICS --------
+        function addRisoRow                     const tbody = document.querySelec            l-riso tbody');
+        const tr = document.createElement('tr');
+        tr.className = 'dynamic-row obw-riso-tr';
+        tr.innerHTML = `
             <td><input type="text" class="riso_nazwa" value="Obwód Gniazd" placeholder="Nazwa"></td>
             <td><select class="riso_u"><option value="500">230/400V (500V DC probiercze)</option><option value="250">SELV/PELV (250V DC probiercze)</option></select></td>
-            <td><input type="text" class="riso_wymagane" value="1.0" readonly style="background:#eee"></td>
-            <td><input type="text" class="riso_zmierzone" value=">999" oninput="recalcRiso(this)"></td>
-        `;
-            tbody.appendChild(tr);
-            recalcRiso(tr.querySelector('.riso_u'));
+            <td><input type="text" class="riso_wymagane" value="1.0" readonly style="bac            #eee"></td>
+                       put type="text" class="riso_zmierzone" va        ">9        oninput="recalcRiso(this)"                   `;
+            tbody            hild(tr);
+        recalcRiso(tr.querySelect            o_u'));
         }
 
-        function recalcRiso(el) {
-            let tr = el.closest('tr');
-            let uProb = tr.querySelector('.riso_u').value;
-            let reqEl = tr.querySelector('.riso_wymagane');
-            reqEl.value = (uProb == '250') ? "0.5" : "1.0";
-            // Wyniki zatwierdza funkcja submitForms
+            function recalcRiso(e                     let tr = el.closest('tr');
+        b = tr.querySelector('.riso_u').value;
+                     et reqEl = tr.querySelector('.riso        agane');
+            re            e = (uProb == '250') ? "0.5" : "1.0";
+            // Wyn            ierdza funkcja submitForms
         }
 
-        // -------- SWZ DYNAMICS --------
-        function addSwzRow() {
+        --------SWZ DYNAMICS--------
+            fu            ddSwzRow() {
             const tbody = document.querySelector('#tbl-swz tbody');
             const tr = document.createElement('tr');
             tr.className = 'dynamic-row obw-swz-tr';
@@ -607,15 +620,14 @@ if ($render_protokol_id) {
                     <option value="B">B (krotność=5)</option>
                     <option value="C">C (krotność=10)</option>
                     <option value="D">D (krotność=20)</option>
-                </select>
-            </td>
-            <td><input type="number" step="1" class="swz_in" value="16" ></td>
-            <td><input type="number" step="0.01" class="swz_zs_zm" value="0.45" ></td>
+                </sele                    </td>
+                 td>        ut type="number" step="1" class="s        n" value="16" ></td>
+                <td><input type="number" step="0.01" class="swz_zs_zm"            0.45" ></td>
         `;
-            tbody.appendChild(tr);
+            tbody            hild(tr);
         }
 
-        // -------- RCD DYNAMICS --------
+        // --------             MICS --------
         function addRcdRow() {
             const tbody = document.querySelector('#tbl-rcd tbody');
             const tr = document.createElement('tr');
@@ -630,106 +642,90 @@ if ($render_protokol_id) {
                 </select>
             </td>
             <td><select class="rcd_idn"><option value="30">30 mA</option><option value="100">100 mA</option><option value="300">300 mA</option></select></td>
-            <td><input type="number" class="rcd_izm" value="22.5"></td>
-            <td><input type="number" class="rcd_tazm" value="120"></td>
-            <td><select class="rcd_testbtn"><option value="Sprawny">Sprawny</option><option value="Uszkodzony">Uszkodzony</option></select></td>
-        `;
-            tbody.appendChild(tr);
+            <td><input type="number" class="rcd_izm" value="22.5"></t                   <td><input type=        bel        "rcd_tazm" value="120"></td>
+            <td><s        t class="rcd_testbtn"><option value="Sprawny">Sprawny</option><optio        lue="Uszkodzony">Uszkodzony</option></select></td>
+            `;
+            tbody.ap            d(tr);
         }
 
         // Na start dodajemy po 1 przykładowym wierszu
-        window.onload = () => { addRisoRow(); addSwzRow(); addRcdRow(); };
+        ndow.onload = () => { Row(); addSwzRow(); addR };
 
         // -------- KOMPILACJA I WYSYŁKA FORMULARZA --------
-        function submitForms() {
-            let u0 = parseFloat(document.getElementById('napiecie_u0').value) || 230;
+             unction submitForms() {
+            let u0 = parseFloat(document.getEle                piecie_u0').value) || 230;
 
             // 1. Oględziny JSON
-            let ogledziny_arr = [];
-            let rowsOg = document.querySelectorAll('#tbl-ogledziny tbody tr');
-            rowsOg.forEach(tr => {
-                let td = tr.querySelectorAll('td');
-                ogledziny_arr.push({ nazwa: td[0].innerText, wynik: td[1].querySelector('select').value });
-            });
-            document.getElementById('in_ogledziny').value = JSON.stringify(ogledziny_arr);
+            let ogledziny_arr = rowsOg = document.querySelectorAll('#tbl-ogledziny tbody tr');
+            rows            ch(tr => {
+                let td = tr.quer            rAll('td');
+                ogledziny_arr.push({ nazwa: td                t, wynik: td[1].querySelector('select').                          });
+                document.getElementById('in_                value = JSON.stringify(ogledziny_arr);
 
-            // 2. RISO JSON
-            let riso_arr = [];
-            document.querySelectorAll('.obw-riso-tr').forEach(tr => {
-                let zm = document.createElement('div');
-                let zVal = tr.querySelector('.riso_zmierzone').value;
-                let wVal = parseFloat(tr.querySelector('.riso_wymagane').value);
-                let zmValFloat = zVal.includes('>') ? 9999 : parseFloat(zVal);
-                let wynikStatus = (zmValFloat >= wVal) ? "POZYTYWNY" : "NEGATYWNY";
+            // 2. RISO JS                   let riso_arr = [];
+            document.querySelectorAll('.o                .forEach(tr => {
+                let zm = document.createElement('div                        let zVal                    tor('.riso_zmierzone').value;
+                                    Float(tr.querySelector('.riso_wymagane').va                          let zmValF                    udes('>') ? 9999                     l);
+                               atus            lFlo            al) ? "POZYTYWNY" : "NEGATYWNY";
 
-                riso_arr.push({
-                    nazwa: tr.querySelector('.riso_nazwa').value,
-                    u_prob: tr.querySelector('.riso_u').value,
-                    wymagane: wVal,
-                    zmierzone: zVal,
+            riso_arr.push({
+                nazwa: Selector('.riso_na            lue,
+                    u_prob: tr.querySelector('.riso_                                   wymagane: wVal,
+                               ne: zVal,
                     wynik: wynikStatus
-                });
-            });
-            document.getElementById('in_riso').value = JSON.stringify(riso_arr);
+                                    });
+            document.getElementById('in_riso')N                iso_arr);
 
             // 3. SWZ JSON
-            let swz_arr = [];
-            document.querySelectorAll('.obw-swz-tr').forEach(tr => {
-                let charak = tr.querySelector('.swz_char').value;
-                let i_n = parseFloat(tr.querySelector('.swz_in').value);
-                let z_szm = parseFloat(tr.querySelector('.swz_zs_zm').value);
+            let swz_arr                       document.quel                r').forEach(tr => {
+                      t charak = tr.querySel                char').value;
+            let Float(tr.querySelector('.swz_in').value); m = parseFloat(tr.querySelector('.swz_zs_zm').value);
 
-                let k = (charak === 'B') ? 5 : ((charak === 'C') ? 10 : 20);
-                let i_a = i_n * k;
+            let k = (char ? 5 : ((charak                     20);
+            let i_a = i_n * k;
 
-                // WZOR 2/3: Z_dop * 0.66
-                let z_dop = u0 / i_a;
-                let z_dop_2_3 = (z_dop * 2) / 3;
-                let z_dop_format = z_dop_2_3.toFixed(2);
+                        ZOR 2 / 3: Z_do                                                  i_a;
+            let z_dop                    2) / 3;
+            dop_format = z_dop_2_3.toFi                             let wynikS                zm <            loat ormat)) ? "POZYTYWNY" : "NEGATYWNY";
 
-                let wynikStatus = (z_szm <= parseFloat(z_dop_format)) ? "POZYTYWNY" : "NEGATYWNY";
-
-                swz_arr.push({
-                    nazwa: tr.querySelector('.swz_nazwa').value,
+            swz_arr.push({
+                na            querySelector('.sw            ).value,
                     typ: charak,
-                    in: i_n,
+                               ,
                     k: k,
                     ia: i_a,
                     zs_zm: z_szm,
-                    zs_dop_skor: z_dop_format,
-                    wynik: wynikStatus
+                    zs_dop_skor: z_dop                                 wynik: wynikStatus
                 });
-            });
-            document.getElementById('in_swz').value = JSON.stringify(swz_arr);
+            ;
+            document.getElementById('in_swz').val                ringify(swz_arr);
 
-            // 4. RCD JSON
+            ON
             let rcd_arr = [];
-            document.querySelectorAll('.obw-rcd-tr').forEach(tr => {
-                let zmT = parseFloat(tr.querySelector('.rcd_tazm').value);
-                let zmI = parseFloat(tr.querySelector('.rcd_izm').value);
-                let idn = parseFloat(tr.querySelector('.rcd_idn').value);
-                let btn = tr.querySelector('.rcd_testbtn').value;
+            uerySelectorAll('.obw-rcd-tr').forEach(tr => {
+                let zmT = pa                    ySelector('.rcd_tazm').valu = parseFloat(t                    '.rcd_izm').value);
+            let idn = uerySelector('.rcd_idn').value);
+                                .querySelec                    n').value;
+            let wynikSt                    Y";
+            a - czas do 300ms,                 
+                                > 300 || zmI < (0.5 * idn) || zmI > idn || btn === 'Uszkodzony') {
+                tatus = "NEGATYWNY";
+            }
 
-                let wynikStatus = "POZYTYWNY";
-                // Walidacja - czas do 300ms, prad 0.5-1.0
-                if (zmT > 300 || zmI < (0.5 * idn) || zmI > idn || btn === 'Uszkodzony') {
-                    wynikStatus = "NEGATYWNY";
-                }
-
-                rcd_arr.push({
-                    nazwa: tr.querySelector('.rcd_nazwa').value,
-                    typ_rcd: tr.querySelector('.rcd_typ').value,
-                    i_dn: idn,
-                    i_zm: zmI,
-                    ta_zm: zmT,
-                    test_btn: btn,
-                    wynik: wynikStatus
-                });
+                    .push({
+                nazwa: tr.querySelector('.rcd_nazwa').value,
+                typ_rcd: tr.querySelector('.rcd_typ').value,
+                i_dn: idn,
+                i_zm: zmI,
+                ta_zm: zmT,
+                test_btn: btn,
+                wynik: wynikStatus
             });
-            document.getElementById('in_rcd').value = JSON.stringify(rcd_arr);
+        });
+        document.getElementById('in_rcd').value = JSON.stringify(rcd_arr);
 
-            // Wyslij
-            document.getElementById('monoForm').submit();
+        // Wyslij
+        document.getElementById('monoForm').submit();
         }
     </script>
 
