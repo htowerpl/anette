@@ -408,8 +408,16 @@ if ($render_protokol_id) {
             <h2 style="margin-top:0; border-bottom: 2px solid #2980b9; color:#2980b9;">Wcześniej zapisane protokoły
                 (Archiwum)</h2>
             <?php
-$stmt_arch = $db->query("SELECT id, obiekt_nazwa, data_pomiaru, inzynier_e, data_utworzenia FROM protokoly ORDER BY id DESC LIMIT 10");
-$archiwa = $stmt_arch->fetchAll();
+$archiwa = [];
+try {
+    $stmt_arch = $db->query("SELECT id, obiekt_nazwa, data_pomiaru, inzynier_e, data_utworzenia FROM protokoly ORDER BY id DESC LIMIT 10");
+    if ($stmt_arch) {
+        $archiwa = $stmt_arch->fetchAll();
+    }
+}
+catch (PDOException $e) {
+    echo "<p style='color:red;'>Błąd pobierania archiwum z bazy danych SQLite (prawdopodobnie stara wersja bez nowych kolumn np. data_utworzenia). Zresetuj i skasuj pomiary.sqlite.</p>";
+}
 if (count($archiwa) > 0) {
     echo "<table><thead><tr><th>ID</th><th>Data Pomiaru</th><th>Obiekt</th><th>Inżynier (E)</th><th>Utworzono</th><th>Akcja</th></tr></thead><tbody>";
     foreach ($archiwa as $a) {
