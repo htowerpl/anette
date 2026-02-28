@@ -104,108 +104,242 @@ if ($is_submitted) {
 
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Protokołu SWZ - Panel Inżynierski</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #eaeff2; margin: 0; padding: 20px; }
-       .container { max-width: 1200px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-       .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #34495e; }
-        input[type="text"], input[type="number"], select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-       .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #bdc3c7; padding: 10px; text-align: center; }
-        th { background-color: #34495e; color: #fff; }
-       .btn { background-color: #2ecc71; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; }
-       .btn:hover { background-color: #27ae60; }
-       .btn-add { background-color: #3498db; margin-bottom: 10px; }
-       .btn-add:hover { background-color: #2980b9; }
-       .btn-remove { background-color: #e74c3c; padding: 5px 10px; }
-       .btn-remove:hover { background-color: #c0392b; }
-        input[readonly] { background-color: #f2f2f2; font-weight: bold; color: #555; }
-       .status-ok { background-color: #d5f5e3; color: #27ae60; font-weight: bold; }
-       .status-err { background-color: #fadbd8; color: #c0392b; font-weight: bold; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eaeff2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #bdc3c7;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #34495e;
+            color: #fff;
+        }
+
+        .btn {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #27ae60;
+        }
+
+        .btn-add {
+            background-color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .btn-add:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-remove {
+            background-color: #e74c3c;
+            padding: 5px 10px;
+        }
+
+        .btn-remove:hover {
+            background-color: #c0392b;
+        }
+
+        input[readonly] {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .status-ok {
+            background-color: #d5f5e3;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .status-err {
+            background-color: #fadbd8;
+            color: #c0392b;
+            font-weight: bold;
+        }
+
+        .nav-menu {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-menu a {
+            display: inline-block;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .nav-menu a.active {
+            background: #3498db;
+            color: #fff;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>Panel Inżynierski - System Akwizycji Danych (PN-HD 60364-6)</h1>
-    <form id="protocolForm" method="POST" action="index.php" onsubmit="prepareDataForSubmit(event)">
-        
-        <div class="grid-2">
-            <div class="form-group">
-                <label>Nazwa Obiektu Budowlanego:</label>
-                <input type="text" name="obiekt_nazwa" required placeholder="np. Budynek biurowy, ul. Przemysłowa 5">
-            </div>
-            <div class="form-group">
-                <label>Data wykonania pomiaru:</label>
-                <input type="date" name="data_pomiaru" required>
-            </div>
-            <div class="form-group">
-                <label>Układ sieciowy zasilający:</label>
-                <select id="uklad_sieci" name="uklad_sieci" required>
-                    <option value="TN-S">TN-S (Separowany PE i N)</option>
-                    <option value="TN-C">TN-C (Wspólny PEN)</option>
-                    <option value="TN-C-S">TN-C-S (Punkt podziału)</option>
-                    <option value="TT">TT (Uziemienie indywidualne)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Napięcie nominalne względem ziemi U0 [V]:</label>
-                <input type="number" id="napiecie_u0" name="napiecie_u0" value="230" required onchange="recalculateAll()">
-            </div>
+    <div class="container">
+        <div class="nav-menu">
+            <a href="index.php" class="active">Moduł 1: SWZ (Pętla Zwarcia)</a>
+            <a href="rezystancja.php">Moduł 2: Rezystancja Izolacji</a>
+            <a href="ogledziny.php">Moduł 3: Oględziny</a>
+            <a href="rcd.php">Moduł 4: Wyłączniki RCD</a>
         </div>
 
-        <h3>Rejestr Pomiarów Impedancji Pętli Zwarciowej</h3>
-        <p style="font-size:0.9em; color:#7f8c8d;">Algorytm automatycznie uwzględnia temperaturowy współczynnik korekcyjny zjawiska grzania przewodów podczas zwarcia (2/3 z Zs). Charakterystyki czasowe dla 0.4s: B=5x, C=10x, D=20x.</p>
-        
-        <button type="button" class="btn btn-add" onclick="addRow()">+ Dodaj nowy obwód do pomiaru</button>
-        
-        <table id="measurementsTable">
-            <thead>
-                <tr>
-                    <th style="width: 25%">Nazwa Obwodu</th>
-                    <th style="width: 10%">Typ (Charakt.)</th>
-                    <th style="width: 10%">In [A]</th>
-                    <th style="width: 10%">Krotność</th>
-                    <th style="width: 10%">Ia [A] (Kalkul.)</th>
-                    <th style="width: 12%">Zmierzona Zs [Ω]</th>
-                    <th style="width: 10%">Dopuszcz. Zs [Ω] (Wzór 2/3)</th>
-                    <th style="width: 8%">Wynik</th>
-                    <th style="width: 5%">Akcja</th>
-                </tr>
-            </thead>
-            <tbody>
+        <h1>Panel Inżynierski - System Akwizycji Danych (PN-HD 60364-6)</h1>
+        <form id="protocolForm" method="POST" action="index.php" onsubmit="prepareDataForSubmit(event)">
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Nazwa Obiektu Budowlanego:</label>
+                    <input type="text" name="obiekt_nazwa" required
+                        placeholder="np. Budynek biurowy, ul. Przemysłowa 5">
+                </div>
+                <div class="form-group">
+                    <label>Data wykonania pomiaru:</label>
+                    <input type="date" name="data_pomiaru" required>
+                </div>
+                <div class="form-group">
+                    <label>Układ sieciowy zasilający:</label>
+                    <select id="uklad_sieci" name="uklad_sieci" required>
+                        <option value="TN-S">TN-S (Separowany PE i N)</option>
+                        <option value="TN-C">TN-C (Wspólny PEN)</option>
+                        <option value="TN-C-S">TN-C-S (Punkt podziału)</option>
+                        <option value="TT">TT (Uziemienie indywidualne)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Napięcie nominalne względem ziemi U0 [V]:</label>
+                    <input type="number" id="napiecie_u0" name="napiecie_u0" value="230" required
+                        onchange="recalculateAll()">
+                </div>
+            </div>
+
+            <h3>Rejestr Pomiarów Impedancji Pętli Zwarciowej</h3>
+            <p style="font-size:0.9em; color:#7f8c8d;">Algorytm automatycznie uwzględnia temperaturowy współczynnik
+                korekcyjny zjawiska grzania przewodów podczas zwarcia (2/3 z Zs). Charakterystyki czasowe dla 0.4s:
+                B=5x, C=10x, D=20x.</p>
+
+            <button type="button" class="btn btn-add" onclick="addRow()">+ Dodaj nowy obwód do pomiaru</button>
+
+            <table id="measurementsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 25%">Nazwa Obwodu</th>
+                        <th style="width: 10%">Typ (Charakt.)</th>
+                        <th style="width: 10%">In [A]</th>
+                        <th style="width: 10%">Krotność</th>
+                        <th style="width: 10%">Ia [A] (Kalkul.)</th>
+                        <th style="width: 12%">Zmierzona Zs [Ω]</th>
+                        <th style="width: 10%">Dopuszcz. Zs [Ω] (Wzór 2/3)</th>
+                        <th style="width: 8%">Wynik</th>
+                        <th style="width: 5%">Akcja</th>
+                    </tr>
+                </thead>
+                <tbody>
                 </tbody>
-        </table>
+            </table>
 
-        <input type="hidden" id="pomiary_data" name="pomiary_data" value="">
-        
-        <br><hr><br>
-        <div style="text-align: center;">
-            <button type="submit" class="btn" style="font-size: 1.2em; padding: 15px 30px;">Generuj Oficjalny Protokół z Orzeczeniem</button>
-        </div>
-    </form>
-</div>
+            <input type="hidden" id="pomiary_data" name="pomiary_data" value="">
 
-<script>
-    // Inicjalizacja pierwszego wiersza
-    window.onload = function() {
-        addRow();
-    };
+            <br>
+            <hr><br>
+            <div style="text-align: center;">
+                <button type="submit" class="btn" style="font-size: 1.2em; padding: 15px 30px;">Generuj Oficjalny
+                    Protokół z Orzeczeniem</button>
+            </div>
+        </form>
+    </div>
 
-    function addRow() {
-        const tbody = document.querySelector('#measurementsTable tbody');
-        const rowId = Date.now(); // unikalne ID wiersza
-        
-        const tr = document.createElement('tr');
-        tr.id = 'row_' + rowId;
-        
-        tr.innerHTML = `
+    <script>
+        // Inicjalizacja pierwszego wiersza
+        window.onload = function () {
+            addRow();
+        };
+
+        function addRow() {
+            const tbody = document.querySelector('#measurementsTable tbody');
+            const rowId = Date.now(); // unikalne ID wiersza
+
+            const tr = document.createElement('tr');
+            tr.id = 'row_' + rowId;
+
+            tr.innerHTML = `
             <td><input type="text" class="obw_nazwa" placeholder="np. Gniazda pokój 1" required></td>
             <td>
                 <select class="obw_typ" onchange="calculateRow(${rowId})">
@@ -223,92 +357,93 @@ if ($is_submitted) {
             <td><input type="text" class="obw_wynik" readonly style="text-align:center;"></td>
             <td><button type="button" class="btn btn-remove" onclick="removeRow(${rowId})">X</button></td>
         `;
-        tbody.appendChild(tr);
-        calculateRow(rowId);
-    }
+            tbody.appendChild(tr);
+            calculateRow(rowId);
+        }
 
-    function removeRow(rowId) {
-        const tr = document.getElementById('row_' + rowId);
-        if (tr) tr.remove();
-    }
+        function removeRow(rowId) {
+            const tr = document.getElementById('row_' + rowId);
+            if (tr) tr.remove();
+        }
 
-    function recalculateAll() {
-        const rows = document.querySelectorAll('#measurementsTable tbody tr');
-        rows.forEach(row => {
-            const id = row.id.split('_')[1];
-            if(id) calculateRow(parseInt(id));
-        });
-    }
+        function recalculateAll() {
+            const rows = document.querySelectorAll('#measurementsTable tbody tr');
+            rows.forEach(row => {
+                const id = row.id.split('_')[1];
+                if (id) calculateRow(parseInt(id));
+            });
+        }
 
-    // Rdzeń logiczny aplikacji - Implementacja wymagań normy PN-HD 60364-6
-    function calculateRow(rowId) {
-        const row = document.getElementById('row_' + rowId);
-        if (!row) return;
+        // Rdzeń logiczny aplikacji - Implementacja wymagań normy PN-HD 60364-6
+        function calculateRow(rowId) {
+            const row = document.getElementById('row_' + rowId);
+            if (!row) return;
 
-        const u0 = parseFloat(document.getElementById('napiecie_u0').value);
-        const typ = row.querySelector('.obw_typ').value;
-        const currentIn = parseFloat(row.querySelector('.obw_in').value);
-        const krotnoscInput = row.querySelector('.obw_krotnosc');
-        
-        let multiplier = parseFloat(krotnoscInput.value);
+            const u0 = parseFloat(document.getElementById('napiecie_u0').value);
+            const typ = row.querySelector('.obw_typ').value;
+            const currentIn = parseFloat(row.querySelector('.obw_in').value);
+            const krotnoscInput = row.querySelector('.obw_krotnosc');
 
-        // Algorytm doboru krotności prądu Ia dla czasu 0.4s w zależności od charakterystyki
-        // Norma nakazuje przyjmować górną granicę pasma zadziałania.
-        if (document.activeElement !== krotnoscInput) { // Zmień automatycznie tylko jeśli user sam nie wpisuje krotności
-            switch(typ) {
-                case 'B': multiplier = 5; break;
-                case 'C': multiplier = 10; break;
-                case 'D': multiplier = 20; break;
-                // Dla gG (bezpiecznik topikowy) krotności są nieliniowe (odczyt z ch-ki czasowo-prądowej), zostawiamy swobodę wpisu lub wartość default.
+            let multiplier = parseFloat(krotnoscInput.value);
+
+            // Algorytm doboru krotności prądu Ia dla czasu 0.4s w zależności od charakterystyki
+            // Norma nakazuje przyjmować górną granicę pasma zadziałania.
+            if (document.activeElement !== krotnoscInput) { // Zmień automatycznie tylko jeśli user sam nie wpisuje krotności
+                switch (typ) {
+                    case 'B': multiplier = 5; break;
+                    case 'C': multiplier = 10; break;
+                    case 'D': multiplier = 20; break;
+                    // Dla gG (bezpiecznik topikowy) krotności są nieliniowe (odczyt z ch-ki czasowo-prądowej), zostawiamy swobodę wpisu lub wartość default.
+                }
+                krotnoscInput.value = multiplier;
             }
-            krotnoscInput.value = multiplier;
+
+            const Ia = currentIn * multiplier;
+            row.querySelector('.obw_ia').value = Ia.toFixed(2);
+
+            // Fizyka ochrony przeciwporażeniowej: Zs * Ia <= U0  => Zs <= U0 / Ia
+            const zs_theoretical = u0 / Ia;
+
+            // Zastosowanie współczynnika rygoru temperaturowego (2/3) złącz miedzianych wg PN-HD 60364-6
+            const zs_corrected = zs_theoretical * (2 / 3);
+            row.querySelector('.obw_zsdop').value = zs_corrected.toFixed(2);
+
+            const measuredZs = parseFloat(row.querySelector('.obw_zszm').value);
+            const wynikInput = row.querySelector('.obw_wynik');
+
+            // Walidacja bezpieczeństwa instalacji
+            if (measuredZs > 0 && measuredZs <= zs_corrected) {
+                wynikInput.value = "POZYTYWNY";
+                wynikInput.className = "obw_wynik status-ok";
+            } else {
+                wynikInput.value = "NEGATYWNY";
+                wynikInput.className = "obw_wynik status-err";
+            }
         }
 
-        const Ia = currentIn * multiplier;
-        row.querySelector('.obw_ia').value = Ia.toFixed(2);
+        // Konwersja danych HTML Table do obiektu JSON w celu bezstratnej transmisji do PHP
+        function prepareDataForSubmit(e) {
+            const rows = document.querySelectorAll('#measurementsTable tbody tr');
+            let data = []; // FIX syntax error here
 
-        // Fizyka ochrony przeciwporażeniowej: Zs * Ia <= U0  => Zs <= U0 / Ia
-        const zs_theoretical = u0 / Ia;
-        
-        // Zastosowanie współczynnika rygoru temperaturowego (2/3) złącz miedzianych wg PN-HD 60364-6
-        const zs_corrected = zs_theoretical * (2/3);
-        row.querySelector('.obw_zsdop').value = zs_corrected.toFixed(2);
+            rows.forEach(row => {
+                let rowData = {
+                    nazwa: row.querySelector('.obw_nazwa').value,
+                    typ_zab: row.querySelector('.obw_typ').value,
+                    in: row.querySelector('.obw_in').value,
+                    krotnosc: row.querySelector('.obw_krotnosc').value,
+                    ia: row.querySelector('.obw_ia').value,
+                    zs_zm: row.querySelector('.obw_zszm').value,
+                    zs_dop: row.querySelector('.obw_zsdop').value,
+                    wynik: row.querySelector('.obw_wynik').value
+                };
+                data.push(rowData);
+            });
 
-        const measuredZs = parseFloat(row.querySelector('.obw_zszm').value);
-        const wynikInput = row.querySelector('.obw_wynik');
-
-        // Walidacja bezpieczeństwa instalacji
-        if (measuredZs > 0 && measuredZs <= zs_corrected) {
-            wynikInput.value = "POZYTYWNY";
-            wynikInput.className = "obw_wynik status-ok";
-        } else {
-            wynikInput.value = "NEGATYWNY";
-            wynikInput.className = "obw_wynik status-err";
+            document.getElementById('pomiary_data').value = JSON.stringify(data);
         }
-    }
-
-    // Konwersja danych HTML Table do obiektu JSON w celu bezstratnej transmisji do PHP
-    function prepareDataForSubmit(e) {
-        const rows = document.querySelectorAll('#measurementsTable tbody tr');
-        let data = []; // FIX syntax error here
-        
-        rows.forEach(row => {
-            let rowData = {
-                nazwa: row.querySelector('.obw_nazwa').value,
-                typ_zab: row.querySelector('.obw_typ').value,
-                in: row.querySelector('.obw_in').value,
-                krotnosc: row.querySelector('.obw_krotnosc').value,
-                ia: row.querySelector('.obw_ia').value,
-                zs_zm: row.querySelector('.obw_zszm').value,
-                zs_dop: row.querySelector('.obw_zsdop').value,
-                wynik: row.querySelector('.obw_wynik').value
-            };
-            data.push(rowData);
-        });
-
-        document.getElementById('pomiary_data').value = JSON.stringify(data);
-    }
-</script>
+    </script>
 
 </body>
+
 </html>
