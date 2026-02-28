@@ -370,6 +370,40 @@ if ($is_submitted) {
         }
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const STORAGE_KEY = 'pomiary_stan_header';
+            const fields = ['obiekt_nazwa', 'data_pomiaru', 'uklad_sieci', 'napiecie_u0'];
+            function restoreState() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    try {
+                        const data = JSON.parse(saved);
+                        fields.forEach(f => {
+                            const el = document.querySelector('[name="' + f + '"]');
+                            if (el && data[f]) {
+                                el.value = data[f];
+                                el.dispatchEvent(new Event('change'));
+                            }
+                        });
+                    } catch (e) { }
+                }
+            }
+            function saveState() {
+                const data = {};
+                fields.forEach(f => {
+                    const el = document.querySelector('[name="' + f + '"]');
+                    if (el) data[f] = el.value;
+                });
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            }
+            restoreState();
+            fields.forEach(f => {
+                const el = document.querySelector('[name="' + f + '"]');
+                if (el) { el.addEventListener('input', saveState); el.addEventListener('change', saveState); }
+            });
+        });
+    </script>
 </body>
 
 </html>

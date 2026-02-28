@@ -8,6 +8,8 @@ if ($is_submitted) {
     // Faza Renderingu Protokołu (Back-end)
     $obiekt_nazwa = htmlspecialchars($_POST['obiekt_nazwa'] ?? '');
     $data_pomiaru = htmlspecialchars($_POST['data_pomiaru'] ?? '');
+    $uklad_sieci = htmlspecialchars($_POST['uklad_sieci'] ?? '');
+    $napiecie_u0 = htmlspecialchars($_POST['napiecie_u0'] ?? '230');
     $napiecie_instalacji = htmlspecialchars($_POST['napiecie_instalacji'] ?? '230/400V');
     $pomiary_json = $_POST['pomiary_data'] ?? '[]';
     $pomiary = json_decode($pomiary_json, true);
@@ -28,7 +30,13 @@ if ($is_submitted) {
            .orzeczenie { margin-top: 40px; border: 2px solid #000; padding: 20px; font-size: 1.1em; font-weight: bold; }
            .signatures { margin-top: 50px; display: flex; justify-content: space-around; }
            .sig-box { border-top: 1px solid #000; width: 30%; text-align: center; padding-top: 5px; }
-            @media print {.no-print { display: none; } body { margin: 0; } }
+            @media print {
+                .no-print { display: none; }
+                @page { size: A4; margin: 15mm; }
+                body { margin: 0; padding: 0; font-size: 11pt; }
+                table { page-break-inside: auto; }
+                tr { page-break-inside: avoid; page-break-after: auto; }
+            }
           </style></head><body>";
 
     echo "<button class='no-print' onclick='window.print()' style='padding: 10px 20px; font-size: 16px; margin-bottom: 20px; cursor:pointer;'>Drukuj Protokół</button>";
@@ -38,8 +46,10 @@ if ($is_submitted) {
     echo "<h2>Badanie Rezystancji Izolacji Obwodów</h2>";
     echo "<div class='header-info'>";
     echo "<strong>Obiekt:</strong> $obiekt_nazwa <br>";
-    echo "<strong>Napięcie nominalne instalacji:</strong> $napiecie_instalacji <br>";
     echo "<strong>Data pomiaru:</strong> $data_pomiaru <br>";
+    echo "<strong>Układ sieciowy zasilający:</strong> $uklad_sieci <br>";
+    echo "<strong>Napięcie nominalne fazowe U0:</strong> $napiecie_u0 V <br>";
+    echo "<strong>Napięcie instalacji:</strong> $napiecie_instalacji <br>";
     echo "<strong>Podstawa prawna:</strong> PN-HD 60364-6:2016-07<br>";
     echo "<strong>Metodologia:</strong> Zabezpieczenia nadprądowe załączone, pomiar między zwartymi przewodami czynnymi (L+N) a przewodem ochronnym (PE).";
     echo "</div>";
@@ -260,15 +270,29 @@ if ($is_submitted) {
         <div class="grid-2">
             <div class="form-group">
                 <label>Nazwa Obiektu Budowlanego:</label>
-                <input type="text" name="obiekt_nazwa" required placeholder="np. Dom jednorodzinny">
+                <input type="text" name="obiekt_nazwa" id="obiekt_nazwa" required placeholder="np. Dom jednorodzinny">
             </div>
             <div class="form-group">
                 <label>Data wykonania pomiaru:</label>
-                <input type="date" name="data_pomiaru" required>
+                <input type="date" name="data_pomiaru" id="data_pomiaru" required>
+            </div>
+            <div class="form-group">
+                <label>Układ sieciowy zasilający:</label>
+                <select id="uklad_sieci" name="uklad_sieci" required>
+                    <option value="TN-S">TN-S (Separowany PE i N)</option>
+                    <option value="TN-C">TN-C (Wspólny PEN)</option>
+                    <option value="TN-C-S">TN-C-S (Punkt podziału)</option>
+                    <option value="TT">TT (Uziemienie indywidualne)</option>
+                    <option value="IT">IT (Sieć izolowana)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Napięcie nominalne fazowe U0 [V]:</label>
+                <input type="number" id="napiecie_u0" name="napiecie_u0" value="230" required>
             </div>
             <div class="form-group">
                 <label>Napięcie robocze instalacji:</label>
-                <input type="text" name="napiecie_instalacji" value="230/400 V" required>
+                <input type="text" name="napiecie_instalacji" id="napiecie_instalacji" value="230/400 V" required>
             </div>
         </div>
 
