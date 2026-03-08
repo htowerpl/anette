@@ -174,14 +174,13 @@ if ($render_protokol_id) {
             .pozytywny { color: green; font-weight: bold; }
             .negatywny { color: red; font-weight: bold; }
             .sekcja { page-break-before: always; }
-            .sekcja:first-of-type { page-break-before: auto; }
             .wzor { font-family: 'Courier New', monospace; font-size: 0.85em; background: #eee; padding: 2px 5px; border-radius: 3px; display: inline-block;}
             .signatures { margin-top: 20px; margin-bottom: 30px; display: flex; justify-content: space-around; page-break-inside: avoid;}
             .sig-box { border-top: 1px solid #000; width: 40%; text-align: center; padding-top: 5px; font-size: 10pt; }
             @media print {
                 .no-print { display: none; }
-                @page { size: A4; margin: 15mm; }
-                body { margin: 0; padding: 0; }
+                @page { size: A4; margin: 25mm; }
+                body { margin: 0; padding: 0; box-sizing: border-box; }
             }
           </style></head><body>";
 
@@ -197,39 +196,47 @@ if ($render_protokol_id) {
     $html_podpisy = "<div class='signatures'>";
     if (trim($protokol['inzynier_e']) === trim($protokol['inzynier_d']) && !empty($protokol['inzynier_e'])) {
         $html_podpisy .= "<div style='width: 40%;'></div>"; // Wypełniacz po lewej, spychanie na prawo
-        $html_podpisy .= "<div class='sig-box'>Osoba wykonująca i zatwierdzająca pomiary<br><strong>" . htmlspecialchars($protokol['inzynier_e']) . "</strong><br>Uprawnienia:<br>" . htmlspecialchars($protokol['uprawnienia_e']) . "<br>" . htmlspecialchars($protokol['uprawnienia_d']) . "<br><br><br></div>";
+        $html_podpisy .= "<div class='sig-box'>Osoba wykonująca i zatwierdzająca pomiary<br><strong>" . htmlspecialchars($protokol['inzynier_e']) . "</strong><br>Uprawnienia: " . htmlspecialchars($protokol['uprawnienia_e']) . ", " . htmlspecialchars($protokol['uprawnienia_d']) . "<div style='margin-top: 2cm;'>........................................<br><span style='font-size: 9pt;'>podpis</span></div></div>";
     } else {
-        $html_podpisy .= "<div class='sig-box'>Osoba wykonująca pomiary<br><strong>" . htmlspecialchars($protokol['inzynier_e']) . "</strong><br>Uprawnienia:<br>" . htmlspecialchars($protokol['uprawnienia_e']) . "<br><br><br></div>
-              <div class='sig-box'>Osoba sprawdzająca/zatwierdzająca<br><strong>" . htmlspecialchars($protokol['inzynier_d']) . "</strong><br>Uprawnienia:<br>" . htmlspecialchars($protokol['uprawnienia_d']) . "<br><br><br></div>";
+        $html_podpisy .= "<div class='sig-box'>Osoba wykonująca pomiary<br><strong>" . htmlspecialchars($protokol['inzynier_e']) . "</strong><br>Uprawnienia: " . htmlspecialchars($protokol['uprawnienia_e']) . "<div style='margin-top: 2cm;'>........................................<br><span style='font-size: 9pt;'>podpis</span></div></div>
+              <div class='sig-box'>Osoba sprawdzająca/zatwierdzająca<br><strong>" . htmlspecialchars($protokol['inzynier_d']) . "</strong><br>Uprawnienia: " . htmlspecialchars($protokol['uprawnienia_d']) . "<div style='margin-top: 2cm;'>........................................<br><span style='font-size: 9pt;'>podpis</span></div></div>";
     }
     $html_podpisy .= "</div>";
 
-    // NAGŁÓWEK PROTOKOŁU 
-    echo "<h1>PROTOKÓŁ Z POMIARÓW ELEKTRYCZNYCH</h1>";
-    echo "<div class='header-info'>";
-    echo "<div class='header-grid'>";
-    echo "<div><strong>Obiekt:</strong> {$protokol['obiekt_nazwa']}<br><strong>Adres:</strong> {$protokol['adres']}<br><strong>Data pomiaru:</strong> {$protokol['data_pomiaru']}<br><strong>Warunki środowiskowe:</strong> {$protokol['pogoda']}</div>";
-    echo "<div><strong>Układ sieciowy zasilający:</strong> {$protokol['uklad_sieci']}<br><strong>Napięcie nominalne fazowe U<sub>0</sub>:</strong> {$protokol['napiecie_u0']} V<br></div>";
-    echo "</div>";
-    echo "<hr style='margin:10px 0;'>";
-    if (trim($protokol['inzynier_e']) === trim($protokol['inzynier_d']) && !empty($protokol['inzynier_e'])) {
-        echo "<div><strong>Wykonał i Sprawdził (E+D):</strong> {$protokol['inzynier_e']}<br>Uprawnienia E: {$protokol['uprawnienia_e']}<br>Uprawnienia D: {$protokol['uprawnienia_d']}</div>";
-    } else {
-        echo "<div><strong>Wykonał pomiary (E):</strong> {$protokol['inzynier_e']}<br>Uprawnienia: {$protokol['uprawnienia_e']}<br><br><strong>Sprawdził (D):</strong> {$protokol['inzynier_d']}<br>Uprawnienia: {$protokol['uprawnienia_d']}</div>";
-    }
-    echo "<div><strong>Aparatura Miernicza:</strong><br>";
+    // NAGŁÓWEK PROTOKOŁU - Strona Tytułowa
+    echo "<div style='min-height: 80vh; display: flex; flex-direction: column; justify-content: center;'>";
+    echo "<h1 style='font-size: 24pt; margin-bottom: 5px; text-transform: uppercase;'>Protokół z Pomiarów<br>Elektrycznych</h1>";
+    echo "<h2 style='font-size: 14pt; margin-top: 0; font-weight: normal; margin-bottom: 40px;'>Oceny stanu technicznego instalacji</h2>";
+
+    echo "<div class='header-info' style='font-size: 13pt; line-height: 1.8; border: none; background: transparent;'>";
+    echo "<p><strong>Obiekt:</strong> " . htmlspecialchars($protokol['obiekt_nazwa']) . "</p>";
+    echo "<p><strong>Adres Instalacji:</strong> " . (empty($protokol['adres']) ? '..........................................................' : htmlspecialchars($protokol['adres'])) . "</p>";
+    echo "<p><strong>Data wykonania pomiaru:</strong> " . htmlspecialchars($protokol['data_pomiaru']) . "</p>";
+    echo "<p><strong>Warunki środowiskowe:</strong> " . htmlspecialchars($protokol['pogoda']) . "</p>";
+    echo "<p><strong>Układ sieciowy zasilający:</strong> " . htmlspecialchars($protokol['uklad_sieci']) . " &nbsp;|&nbsp; <strong>Napięcie nominalne fazowe U<sub>0</sub>:</strong> " . htmlspecialchars($protokol['napiecie_u0']) . " V</p>";
+    echo "<hr style='margin: 30px 0;'>";
+
+    // Dynamiczny wykaz inżynierów
+    echo $html_podpisy;
+
+    // Wykaz urządzeń
+    echo "<br><p><strong>Wykaz użytej aparatury pomiarowej:</strong></p><ul style='margin-top:0;'>";
     if (count($mierniki_lines) > 0) {
         foreach ($mierniki_lines as $m) {
-            echo "- " . htmlspecialchars($m['nazwa']) . " (Wzorcowane: " . htmlspecialchars($m['data_wzorc']) . ", Ważne do: " . htmlspecialchars($m['data_waznosc']) . ")<br>";
+            echo "<li>" . htmlspecialchars($m['nazwa']) . " (Wzorcowane: " . htmlspecialchars($m['data_wzorc']) . ", Ważne do: " . htmlspecialchars($m['data_waznosc']) . ")</li>";
         }
     } else if (!empty($protokol['miernik_nazwa'])) {
-        echo "- " . htmlspecialchars($protokol['miernik_nazwa']) . " (Świadectwo: " . htmlspecialchars($protokol['miernik_wzorcowanie']) . ")<br>";
+        echo "<li>" . htmlspecialchars($protokol['miernik_nazwa']) . " (Świadectwo: " . htmlspecialchars($protokol['miernik_wzorcowanie']) . ")</li>";
     } else {
-        echo "- Brak danych o sprzęcie -<br>";
+        echo "<li>Brak danych o sprzęcie pomiarowym.</li>";
     }
-    echo "</div>";
-    echo "</div>";
-    echo "</div>";
+    echo "</ul>";
+    
+    echo "</div>"; // Koniec header-info
+    echo "</div>"; // Koniec pionowego centratora tytułowego
+    
+    // Przymusowy podział na nową stronę
+    echo "<div style='page-break-after: always;'></div>";
 
     // 1. Oględziny
     if (count($ogledziny_lines) > 0) {
