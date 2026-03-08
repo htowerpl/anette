@@ -9,10 +9,13 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
   3. `git push`
 
 ## Kluczowe Ustalenia Techniczne
-1.  **Struktura One-Page / Multi-Page**: Projekt jest hybrydą. Główne sekcje są na osobnych podstronach (`pages/`), ale nawigacja i stopka są wstrzykiwane dynamicznie (`loadComponent` w `app.js`) z plików `_nav.html` i `_footer.html`.
-2.  **Backend**: Prosty PHP (`news.php`) zwracający JSON. Dane pochodzą z **ręcznej tabeli `Anette_news`**. Automatyzacja została wyłączona z powodu blokady API Google.
-3.  **Frontend**: Czysty JS (Vanilla). Brak frameworków typu React/Vue. Style w `styles.css` oparte na zmiennych CSS.
-4.  **Konfiguracja Serwera**: Pliki z danymi wrażliwymi (DB, OAuth) znajdują się w bezpiecznym katalogu `/home/opxwpceo/domains/google/` i są dołączane przez absolutne ścieżki.
+1.  **Dziennik Zmian (ChangeLog / AI_RULES)**: **ZASADA BEZWZGLĘDNA** - przed wykonaniem commita lub całkowitym ukończeniem zadania, wszystkie zaimplementowane udoskonalenia i poprawki muszą zostać niezwłocznie przypisane do sekcji "*Historia Decyzji i Zmian (Log)*" w tym pliku. To nasza stała "Pamięć Długotrwała". Niewykonanie tego to błąd krytyczny.
+2.  **Struktura One-Page / Multi-Page**: Projekt jest hybrydą. Główne sekcje są na osobnych podstronach (`pages/`), ale nawigacja i stopka są wstrzykiwane dynamicznie (`loadComponent` w `app.js`) z plików `_nav.html` i `_footer.html`.
+3.  **Backend**: Prosty PHP (`news.php`) zwracający JSON. Dane pochodzą z **ręcznej tabeli `Anette_news`**. Automatyzacja została wyłączona z powodu blokady API Google.
+4.  **Frontend**: Czysty JS (Vanilla). Brak frameworków typu React/Vue. Style w `styles.css` oparte na zmiennych CSS.
+5.  **Konfiguracja Serwera**: Pliki z danymi wrażliwymi (DB, OAuth) znajdują się w bezpiecznym katalogu `/home/opxwpceo/domains/google/` i są dołączane przez absolutne ścieżki.
+6.  **Środowisko Lokalne**: Użytkownik nie posiada zainstalowanego interpretera PHP na swojej maszynie lokalnej. Zabronione jest używanie przez AI komend terminalowych typu `php -S` lub `php -l` w celu testowania backendu lub sprawdzania składni. Weryfikacja kodu musi odbywać się statycznie lub za pośrednictwem serwera zewnętrznego użytkownika.
+7.  **Rzetelność i Brak Regresji (Zero Zgadywania)**: Projekt jest traktowany bardzo poważnie. Przebudowując kod (np. PHP/HTML) należy rygorystycznie uważać na utratę istniejącej funkcjonalności (jak np. zgubienie stanu `$_GET` przy zapisie, co skutkowało zniknięciem przycisków UX). Jeśli AI czegoś "nie wie" lub ma wątpliwości co do architektury – ma o tym poinformować wprost, zamiast wymyślać lub zgadywać w ciemno.
 
 ## Historia Decyzji i Zmian (Log)
 
@@ -99,6 +102,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 3.  [ ] **Media**: Wykonać konwersję zdjęć do WebP i fontów do WOFF2 (zadanie z Backlogu).
 4.  [x] **SEO**: Wygenerować plik `sitemap.xml` (np. online generator) po uruchomieniu strony i wgrać go do katalogu głównego.
 5.  [ ] **SSL**: Wymusić przekierowanie na HTTPS w panelu hostingu.
+6.  [ ] **Pomiary Elektryczne**: Stworzenie w `database.php` trwałych tabel typu SŁOWNIK (`inzynierowie_slownik` oraz `mierniki_slownik`) pod auto-uzupełnianie etykiet `<datalist>` w formularzach GUI dla powtarzalnego personelu i maszyn mierzących. (Plan oczekujący - patrz: `implementation_plan.md`).
 
 ---
 
@@ -109,4 +113,30 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 **Zależności**: Projekt całkowicie niezależny od logiki `anette.beauty`.
 
 ### Log Zmian (Pomiary)
-- **Inicjalizacja**: Utworzono katalog `api/pomiary` oraz plik `pomiary.php`.
+- **Formatowanie Wydruku (PDF)**: Zwiększono globalną czytelność protokołu zmieniając główną czcionkę dokumentu (tag `body`) z 11pt na 12pt dla zgodności z czytelnym formatem A4. Równocześnie zmniejszono do 10pt obszar pól na własnoręczne podpisy pod tabelami. Zmieniono tekst przed uprawnieniami na zwykłe wylistowanie "Uprawnienia:" i zrzucenie numerów do nowej linii, zachowując zunifikowany profesjonalny wygląd niezależnie od tego czy protokół podpisuje samotnie jedna Osoba E=D (przesunięta na prawo tak, jak tradycyjny stanowisko Sprawdzającego) czy dwoje osobnych inżynierów.
+- **Podpisy Multisekcyjne (PDF)**: Zmieniono mechanizm renderowania podpisów "Wykonał" i "Sprawdził" w pliku `index.php`. Zamiast generować te okienka wyłącznie jednokrotnie na dole ostatniej strony, cały blok z nazwiskami E/D wraz z certyfikatami elegancko doczepia się bezpośrednio pod każdą ukończoną wcześniej tabelą (Oględziny, SWZ, RCD, RISO). Dostosowano również odstępy CSS wydruku, aby podpisy przylegały do klamry tabeli.
+- **Nawigacja i Usprawnienia Bazy (UX)**: Dopracowano przepływ logiki przycisków w `index.php`.
+  - Dla całkiem nowych protokołów, nie posiadających jeszcze ID w bazie (nie zatwierdzonych) przycisk "Podgląd i Druk" ukazuje się jako celowo nieaktywny, szary przycisk (zamiast znikania). 
+  - W podglądzie Read-Only/PDF wprowadzono wyraźny przycisk pozwalający na powrót do formularza z trybem edycji bez utraty wybranego ekranu (`?edit=ID`). 
+  - Utworzono backend obsługujący ścieżkę usuwania (`?delete=ID`), który kaskadowo niszczy rekord przypisany z tablicy `protokoly` oraz powiązane z nim JSONy z tablicy `pomiary_linie`. W samym widoku archiwum pojawił się czerwony przycisk "Usuń" z wywoływanym monitem JavaScript upewniającym użytkownika.
+- **Podpisy E i D (UX/UI)**: Dodano checkbox "Ta sama osoba" w definicjach inżynierów. Zaznaczenie blokuje pole 'Sprawdzającego (D)' i kopiuje Imię 'Wykonawcy (E)'. W głównym nagłówku na wydruku HTML (PDF) i na dole przy polu do podpisu fizycznego, jeżeli imiona obu inżynierów są identyczne, poszczególne div'y inteligentnie scalają się w jeden elegancki blok "Wykonał i Sprawdził" z wypisanymi oba identyfikatorami uprawnień E i D pod spodem jednego nazwiska.
+- **Logika Interfejsu (UX/UI)**: Naprawiono błąd gubienia identyfikatora ID rekordu protokołu podczas operacji zapisu (`$_GET['edit']` czyściło zmienną do poziomu null). Przyciski na nowo renderują się w domach bez problemu z odczytem kontekstu.
+- **Kasowanie Omyłek**: Rozszerzono strukturę tabel `MIERNIKI`, `RISO`, `SWZ` i `RCD` w głównym formularzu dodając czerwoną kolumnę z przyciskiem do czyszczenia wiersza (`X`).
+- **Aparatura Pomiarowa (JSON)**: Całkowicie usunięto pojedyncze, płaskie kolumny rejestrujące w bazie miernik i jego certyfikat. Od teraz w `index.php` sprzęt dodawany jest jako wieloelementowa lista dynamiczna tabeli HTML, która ląduje w bazie jako rekord JSON kategorii `MIERNIKI` obok innych JSONów w tabeli `pomiary_linie`. 
+  - Dodano od zera dwa pola z wizualnym wyborem dat z kalendarza GUI dla wzorcowań. 
+  - Dołączono automatyczne uzupełnianie się ważności na równe 365 dni od daty wydania (z możliwością modyfikacji z ręki). 
+  - W podglądzie PDF stare rekordy bez wpisów JSON są ładowane po weryfikacji starej zmiennej (backward compatibility).
+- **Rozdzielenie procesu (UX)**: Akcja "Zapisz do bazy" ładuje ponownie otwarty formularz zachowując dane i dopina komunikat sukcesu, a "Podgląd i Opcje Druku" wyświetlane są po zapisie jako osobny przycisk przenoszący do dokumentu HTML generowanego na zasadzie Read-Only/PDF-Ready.
+- **Rozwój Funkcji Pomiarowych**: Wdrożono poprawki normatywne zgodnie z udostępnionym `knowledge_base.md`. 
+  - Do `database.php` w tabeli `protokoly` dodano kolumny `miernik_nazwa` oraz `miernik_wzorcowanie`. Baza używa `CREATE TABLE IF NOT EXISTS` zapobiegając usterkom odczytów dla starych środowisk bez najświeższych modyfikacji oraz skryptów `ALTER TABLE`.
+  - W `index.php` dodano w HTML i JS ich obsługę. 
+  - Moduł samoczynnego wyłączenia (SWZ) wspiera teraz wybór Układu Sieci (TT/TN) oraz wprowadzanie współczynnika temperatury z palca.
+  - Testy RCD uaktualniono o mnożniki `5x I delta` ze zmniejszonymi czasami do 40ms. Wszystkie powyższe zmiany są również brane pod uwagę w ostatecznym renderingu PDO `echo` dla wydruku podsumowania dokumentu HTML (PDF).
+- **Inicjalizacja**: Utworzono katalog `api/pomiary` oraz plik `index.php` (punkt wejścia).
+- **Naprawa Błędów**: Poprawiono uszkodzoną składnię JavaScript w formularzu `index.php` (m.in. funkcje `addRisoRow`, `addSwzRow`, `addRcdRow`), umożliwiając poprawne generowanie i wysyłanie pakietów JSON do bazy danych.
+
+### Audyt Bezpieczeństwa i SEO (Marzec 2026)
+- **Repozytorium**: Usunięto artefakty gita (`et --hard...`) oraz pliki testowe (`test_braces.py`).
+- **Endpointy News**: Usunięto zduplikowany plik `api/get_news.php` w ramach porządków. Główne zapytania trafiają do `news.php`.
+- **Google Sync API**: Zabezpieczono skrypt `api/sync_google.php` wyłączając publiczne wyświetlanie błędów (`display_errors=0`) i wprowadzając ciche logowanie.
+- **SEO**: Zastąpiono docelowy plik reguł botów plikiem `robots_anette.txt` (z odblokowanym dostępem do `/assets/`). W głównym `robots.txt` wprowadzono całkowitą blokadę środowiska testowego (`Disallow: /`).

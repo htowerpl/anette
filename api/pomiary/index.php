@@ -21,6 +21,9 @@ if ($is_submitted) {
     $uprawnienia_d = htmlspecialchars($_POST['uprawnienia_d'] ?? '');
     $pogoda = htmlspecialchars($_POST['pogoda'] ?? '');
 
+    // Mierniki
+    $mierniki_json = $_POST['mierniki_data'] ?? '[]';
+
     // Oględziny
     $ogledziny_json = $_POST['ogledziny_data'] ?? '[]';
     // Rezystancja Izolacji
@@ -37,12 +40,14 @@ if ($is_submitted) {
             $stmt = $db->prepare("
                 UPDATE protokoly SET 
                 obiekt_nazwa=?, adres=?, data_pomiaru=?, uklad_sieci=?, napiecie_u0=?, 
-                inzynier_e=?, uprawnienia_e=?, inzynier_d=?, uprawnienia_d=?, pogoda=?
+                inzynier_e=?, uprawnienia_e=?, inzynier_d=?, uprawnienia_d=?, pogoda=?,
+                miernik_nazwa=?, miernik_wzorcowanie=?
                 WHERE id=?
             ");
             $stmt->execute([
                 $obiekt_nazwa, $adres, $data_pomiaru, $uklad_sieci, $napiecie_u0,
-                $inzynier_e, $uprawnienia_e, $inzynier_d, $uprawnienia_d, $pogoda, $edycja_id
+                $inzynier_e, $uprawnienia_e, $inzynier_d, $uprawnienia_d, $pogoda,
+                $miernik_nazwa, $miernik_wzorcowanie, $edycja_id
             ]);
             $protokol_id = $edycja_id;
 
@@ -53,12 +58,13 @@ if ($is_submitted) {
         else {
             $stmt = $db->prepare("
                 INSERT INTO protokoly 
-                (obiekt_nazwa, adres, data_pomiaru, uklad_sieci, napiecie_u0, inzynier_e, uprawnienia_e, inzynier_d, uprawnienia_d, pogoda) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (obiekt_nazwa, adres, data_pomiaru, uklad_sieci, napiecie_u0, inzynier_e, uprawnienia_e, inzynier_d, uprawnienia_d, pogoda, miernik_nazwa, miernik_wzorcowanie) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $stmt->execute([
                 $obiekt_nazwa, $adres, $data_pomiaru, $uklad_sieci, $napiecie_u0,
-                $inzynier_e, $uprawnienia_e, $inzynier_d, $uprawnienia_d, $pogoda
+                $inzynier_e, $uprawnienia_e, $inzynier_d, $uprawnienia_d, $pogoda,
+                $miernik_nazwa, $miernik_wzorcowanie
             ]);
             $protokol_id = $db->lastInsertId();
             $success_msg = "Pomyślnie utworzono i zapisano Protokół ID: $protokol_id w bazie danych!";
@@ -72,13 +78,15 @@ if ($is_submitted) {
         $insert_linie->execute([$protokol_id, 'RISO', $riso_json]);
         // SWZ
         $insert_linie->execute([$protokol_id, 'SWZ', $swz_json]);
+        // Mierniki
+        $insert_linie->execute([$protokol_id, 'MIERNIKI', $mierniki_json]);
         // RCD
         $insert_linie->execute([$protokol_id, 'RCD', $rcd_json]);
 
         $db->commit();
 
-        // Render View Mode
-        $render_protokol_id = $protokol_id;
+        // Pozostaw w trybie edycji po zapisie (nie ładuj od razu widoku podglądu)
+        $edit_protokol_id = $protokol_id;
 
     }
     catch (Exception $e) {
@@ -91,8 +99,26 @@ else {
     $render_protokol_id = $_GET['view'] ?? null;
 }
 
+// Obsługa Kasowania Rekordów z Archiwum
+if (isset($_GET['delete'])) {
+    $delete_id = (int)$_GET['delete'];
+    try {
+        $db->beginTransaction();
+        $db->prepare("DELETE FROM pomiary_linie WHERE protokol_id = ?")->execute([$delete_id]);
+        $db->prepare("DELETE FROM protokoly WHERE id = ?")->execute([$delete_id]);
+        $db->commit();
+        $success_msg = "Protokół ID: $delete_id został trwale usunięty z bazy.";
+        // Reset id żeby powrócił do trybu startowego po restarcie
+        $edit_protokol_id = null;
+        $render_protokol_id = null;
+    } catch (Exception $e) {
+        $db->rollBack();
+        die("Błąd usuwania rekordu: " . $e->getMessage());
+    }
+}
+
 // Sprawdzanie czy wczytujemy dane do edycji
-$edit_protokol_id = $_GET['edit'] ?? null;
+$edit_protokol_id = $_GET['edit'] ?? ($edit_protokol_id ?? null);
 $loaded_data = null;
 
 function getLines($db, $pid, $cat)
@@ -113,7 +139,8 @@ if ($edit_protokol_id) {
             'ogledziny' => getLines($db, $edit_protokol_id, 'OGLEDZINY'),
             'riso' => getLines($db, $edit_protokol_id, 'RISO'),
             'swz' => getLines($db, $edit_protokol_id, 'SWZ'),
-            'rcd' => getLines($db, $edit_protokol_id, 'RCD')
+            'rcd' => getLines($db, $edit_protokol_id, 'RCD'),
+            'mierniki' => getLines($db, $edit_protokol_id, 'MIERNIKI')
         ];
     }
 }
@@ -132,10 +159,11 @@ if ($render_protokol_id) {
     $riso_lines = getLines($db, $render_protokol_id, 'RISO');
     $swz_lines = getLines($db, $render_protokol_id, 'SWZ');
     $rcd_lines = getLines($db, $render_protokol_id, 'RCD');
+    $mierniki_lines = getLines($db, $render_protokol_id, 'MIERNIKI');
 
     echo "<!DOCTYPE html><html lang='pl'><head><meta charset='UTF-8'><title>Protokół #{$render_protokol_id}</title>";
     echo "<style>
-            body { font-family: 'Times New Roman', serif; line-height: 1.4; margin: 40px; color: #333; font-size: 11pt; }
+            body { font-family: 'Times New Roman', serif; line-height: 1.4; margin: 40px; color: #333; font-size: 12pt; }
             h1, h2, h3 { text-align: center; }
             .header-info { margin-bottom: 20px; padding: 15px; border: 1px solid #000; background-color: #f9f9f9; }
             .header-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -148,8 +176,8 @@ if ($render_protokol_id) {
             .sekcja { page-break-before: always; }
             .sekcja:first-of-type { page-break-before: auto; }
             .wzor { font-family: 'Courier New', monospace; font-size: 0.85em; background: #eee; padding: 2px 5px; border-radius: 3px; display: inline-block;}
-            .signatures { margin-top: 50px; display: flex; justify-content: space-around; page-break-inside: avoid;}
-            .sig-box { border-top: 1px solid #000; width: 40%; text-align: center; padding-top: 5px; }
+            .signatures { margin-top: 20px; margin-bottom: 30px; display: flex; justify-content: space-around; page-break-inside: avoid;}
+            .sig-box { border-top: 1px solid #000; width: 40%; text-align: center; padding-top: 5px; font-size: 10pt; }
             @media print {
                 .no-print { display: none; }
                 @page { size: A4; margin: 15mm; }
@@ -157,12 +185,24 @@ if ($render_protokol_id) {
             }
           </style></head><body>";
 
-    echo "<button class='no-print' onclick='window.print()' style='padding: 10px 20px; margin-bottom: 20px; cursor:pointer;'>Drukuj Protokół</button>";
+    echo "<button class='no-print' onclick='window.print()' style='padding: 10px 20px; margin-bottom: 20px; cursor:pointer; background:#2ecc71; color:white; border:none; border-radius:3px;'>Drukuj Protokół</button>";
+    echo "<a href='index.php?edit={$render_protokol_id}' class='no-print' style='margin-left: 15px; padding: 10px 20px; background: #3498db; color:white; border:none; border-radius:3px; text-decoration:none;'>🡄 Powrót do edycji</a>";
     echo "<a href='index.php' class='no-print' style='margin-left: 15px; padding: 10px 20px; background: #eee; border: 1px solid #ccc; text-decoration:none; color:#000;'>Nowy Dokument</a>";
 
     if ($success_msg) {
         echo "<div class='no-print' style='background: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; font-weight: bold;'>$success_msg</div>";
     }
+
+    // Szablon Podpisów E/D doczepiany pod tabelami
+    $html_podpisy = "<div class='signatures'>";
+    if (trim($protokol['inzynier_e']) === trim($protokol['inzynier_d']) && !empty($protokol['inzynier_e'])) {
+        $html_podpisy .= "<div style='width: 40%;'></div>"; // Wypełniacz po lewej, spychanie na prawo
+        $html_podpisy .= "<div class='sig-box'>Osoba wykonująca i zatwierdzająca pomiary<br><strong>" . htmlspecialchars($protokol['inzynier_e']) . "</strong><br>Uprawnienia:<br>" . htmlspecialchars($protokol['uprawnienia_e']) . "<br>" . htmlspecialchars($protokol['uprawnienia_d']) . "<br><br><br></div>";
+    } else {
+        $html_podpisy .= "<div class='sig-box'>Osoba wykonująca pomiary<br><strong>" . htmlspecialchars($protokol['inzynier_e']) . "</strong><br>Uprawnienia:<br>" . htmlspecialchars($protokol['uprawnienia_e']) . "<br><br><br></div>
+              <div class='sig-box'>Osoba sprawdzająca/zatwierdzająca<br><strong>" . htmlspecialchars($protokol['inzynier_d']) . "</strong><br>Uprawnienia:<br>" . htmlspecialchars($protokol['uprawnienia_d']) . "<br><br><br></div>";
+    }
+    $html_podpisy .= "</div>";
 
     // NAGŁÓWEK PROTOKOŁU 
     echo "<h1>PROTOKÓŁ Z POMIARÓW ELEKTRYCZNYCH</h1>";
@@ -172,9 +212,22 @@ if ($render_protokol_id) {
     echo "<div><strong>Układ sieciowy zasilający:</strong> {$protokol['uklad_sieci']}<br><strong>Napięcie nominalne fazowe U<sub>0</sub>:</strong> {$protokol['napiecie_u0']} V<br></div>";
     echo "</div>";
     echo "<hr style='margin:10px 0;'>";
-    echo "<div class='header-grid'>";
-    echo "<div><strong>Wykonał pomiary (E):</strong> {$protokol['inzynier_e']}<br>Uprawnienia: {$protokol['uprawnienia_e']}</div>";
-    echo "<div><strong>Sprawdził (D):</strong> {$protokol['inzynier_d']}<br>Uprawnienia: {$protokol['uprawnienia_d']}</div>";
+    if (trim($protokol['inzynier_e']) === trim($protokol['inzynier_d']) && !empty($protokol['inzynier_e'])) {
+        echo "<div><strong>Wykonał i Sprawdził (E+D):</strong> {$protokol['inzynier_e']}<br>Uprawnienia E: {$protokol['uprawnienia_e']}<br>Uprawnienia D: {$protokol['uprawnienia_d']}</div>";
+    } else {
+        echo "<div><strong>Wykonał pomiary (E):</strong> {$protokol['inzynier_e']}<br>Uprawnienia: {$protokol['uprawnienia_e']}<br><br><strong>Sprawdził (D):</strong> {$protokol['inzynier_d']}<br>Uprawnienia: {$protokol['uprawnienia_d']}</div>";
+    }
+    echo "<div><strong>Aparatura Miernicza:</strong><br>";
+    if (count($mierniki_lines) > 0) {
+        foreach ($mierniki_lines as $m) {
+            echo "- " . htmlspecialchars($m['nazwa']) . " (Wzorcowane: " . htmlspecialchars($m['data_wzorc']) . ", Ważne do: " . htmlspecialchars($m['data_waznosc']) . ")<br>";
+        }
+    } else if (!empty($protokol['miernik_nazwa'])) {
+        echo "- " . htmlspecialchars($protokol['miernik_nazwa']) . " (Świadectwo: " . htmlspecialchars($protokol['miernik_wzorcowanie']) . ")<br>";
+    } else {
+        echo "- Brak danych o sprzęcie -<br>";
+    }
+    echo "</div>";
     echo "</div>";
     echo "</div>";
 
@@ -187,7 +240,9 @@ if ($render_protokol_id) {
             $klasa = ($wynik == 'P') ? 'pozytywny' : (($wynik == 'N') ? 'negatywny' : '');
             echo "<tr><td style='text-align:left;'>" . htmlspecialchars($ogl['nazwa']) . "</td><td class='$klasa'>$wynik</td></tr>";
         }
-        echo "</tbody></table></div>";
+        echo "</tbody></table>";
+        echo $html_podpisy;
+        echo "</div>";
     }
 
     // 2. Rezystancja Izolacji
@@ -201,7 +256,9 @@ if ($render_protokol_id) {
             echo "<tr><td>$lp</td><td style='text-align:left;'>" . htmlspecialchars($row['nazwa']) . "</td><td>" . htmlspecialchars($row['u_prob']) . "</td>";
             echo "<td>" . htmlspecialchars($row['wymagane']) . "</td><td>" . htmlspecialchars($row['zmierzone']) . "</td><td class='$klasa'>" . htmlspecialchars($row['wynik']) . "</td></tr>";
         }
-        echo "</tbody></table></div>";
+        echo "</tbody></table>";
+        echo $html_podpisy;
+        echo "</div>";
     }
 
     // 3. Pętla Zwarcia SWZ
@@ -212,14 +269,19 @@ if ($render_protokol_id) {
               <span class='wzor'>Z<sub>dop</sub> = U<sub>0</sub> / I<sub>a</sub></span>, 
               <span class='wzor'>Z<sub>dop_ciepły</sub> = 2/3 &times; Z<sub>dop</sub></span></p>";
 
-        echo "<table><thead><tr><th>Lp.</th><th>Obwód / Urządzenie</th><th>Typ/In [A]</th><th>Krotność (k)</th><th>I<sub>a</sub> [A]</th><th>Zmierzone Z<sub>s</sub> [Ω]</th><th>Dopuszczalne 2/3 Z<sub>dop</sub> [Ω]</th><th>Wynik</th></tr></thead><tbody>";
+        echo "<table><thead><tr><th>Lp.</th><th>Obwód / Urządzenie</th><th>Układ</th><th>Typ/In [A]</th><th>Współcz.</th><th>I<sub>a</sub> [A]</th><th>Zmierzone Z<sub>s</sub>/R<sub>a</sub> [Ω]</th><th>Dopuszczalne Z<sub>dop_skor</sub> [Ω]</th><th>Wynik</th></tr></thead><tbody>";
         foreach ($swz_lines as $idx => $row) {
             $lp = $idx + 1;
             $klasa = ($row['wynik'] == 'POZYTYWNY') ? 'pozytywny' : 'negatywny';
-            echo "<tr><td>$lp</td><td style='text-align:left;'>" . htmlspecialchars($row['nazwa']) . "</td><td>" . htmlspecialchars($row['typ']) . " " . htmlspecialchars($row['in']) . "A</td>";
-            echo "<td>" . htmlspecialchars($row['k']) . "</td><td>" . htmlspecialchars($row['ia']) . "</td><td>" . htmlspecialchars($row['zs_zm']) . "</td><td>" . htmlspecialchars($row['zs_dop_skor']) . "</td><td class='$klasa'>" . htmlspecialchars($row['wynik']) . "</td></tr>";
+            echo "<tr><td>$lp</td><td style='text-align:left;'>" . htmlspecialchars($row['nazwa']) . "</td>";
+            echo "<td>" . (isset($row['net_type']) ? htmlspecialchars($row['net_type']) : 'TN') . "</td>";
+            echo "<td>" . htmlspecialchars($row['typ']) . " " . htmlspecialchars($row['in']) . "A</td>";
+            echo "<td>" . (isset($row['temp_wsp']) ? htmlspecialchars($row['temp_wsp']) : '0.66') . "</td>";
+            echo "<td>" . htmlspecialchars($row['ia']) . "</td><td>" . htmlspecialchars($row['zs_zm']) . "</td><td>" . htmlspecialchars($row['zs_dop_skor']) . "</td><td class='$klasa'>" . htmlspecialchars($row['wynik']) . "</td></tr>";
         }
-        echo "</tbody></table></div>";
+        echo "</tbody></table>";
+        echo $html_podpisy;
+        echo "</div>";
     }
 
     // 4. RCD
@@ -227,21 +289,18 @@ if ($render_protokol_id) {
         echo "<div class='sekcja'><h2>4. Badanie Wyłączników Różnicowoprądowych (RCD)</h2>";
         echo "<p>Wzory dla pomiarów czasu testowego przy $1\times I_{\Delta n}$ z normy PN-EN 61557-6.</p>";
 
-        echo "<table><thead><tr><th>Lp.</th><th>Typ RCD / Oznacz.</th><th>Typ Prądu</th><th>I<sub>&Delta;n</sub> [mA]</th><th>I<sub>&Delta;</sub> Zmierzone [mA]</th><th>t<sub>A</sub> Zmierzone [ms]</th><th>Przycisk TEST</th><th>Wynik</th></tr></thead><tbody>";
+        echo "<table><thead><tr><th>Lp.</th><th>Typ RCD / Oznacz.</th><th>Typ Prądu (A/AC/B)</th><th>Test</th><th>I<sub>&Delta;n</sub> [mA]</th><th>I<sub>&Delta;</sub> Zmierzone [mA]</th><th>t<sub>A</sub> Zmierzone [ms]</th><th>Przycisk TEST</th><th>Wynik</th></tr></thead><tbody>";
         foreach ($rcd_lines as $idx => $row) {
             $lp = $idx + 1;
             $klasa = ($row['wynik'] == 'POZYTYWNY') ? 'pozytywny' : 'negatywny';
             echo "<tr><td>$lp</td><td style='text-align:left;'>" . htmlspecialchars($row['nazwa']) . "</td><td>" . htmlspecialchars($row['typ_rcd']) . "</td>";
+            echo "<td>" . (isset($row['test_mode']) ? htmlspecialchars($row['test_mode']) : '1x') . "</td>";
             echo "<td>" . htmlspecialchars($row['i_dn']) . "</td><td>" . htmlspecialchars($row['i_zm']) . "</td><td>" . htmlspecialchars($row['ta_zm']) . "</td><td>" . htmlspecialchars($row['test_btn']) . "</td><td class='$klasa'>" . htmlspecialchars($row['wynik']) . "</td></tr>";
         }
-        echo "</tbody></table></div>";
+        echo "</tbody></table>";
+        echo $html_podpisy;
+        echo "</div>";
     }
-
-    // Podpisy - zawsze na samym dole protokołu
-    echo "<div class='signatures'>
-            <div class='sig-box'>Osoba wykonująca pomiary (Uprawnienia " . $protokol['uprawnienia_e'] . ")<br><br><br></div>
-            <div class='sig-box'>Osoba sprawdzająca/zatwierdzająca (Uprawnienia " . $protokol['uprawnienia_d'] . ")<br><br><br></div>
-          </div>";
 
     echo "</body></html>";
     exit;
@@ -416,7 +475,7 @@ try {
     }
 }
 catch (PDOException $e) {
-    echo "<p style='color:red;'>Błąd pobierania archiwum z bazy danych SQLite (prawdopodobnie stara wersja bez nowych kolumn np. data_utworzenia). Zresetuj i skasuj pomiary.sqlite.</p>";
+    echo "<p style='color:red;'>Błąd pobierania archiwum z bazy danych SQLite: " . $e->getMessage() . "</p>";
 }
 if (count($archiwa) > 0) {
     echo "<table><thead><tr><th>ID</th><th>Data Pomiaru</th><th>Obiekt</th><th>Inżynier (E)</th><th>Utworzono</th><th>Akcja</th></tr></thead><tbody>";
@@ -430,6 +489,7 @@ if (count($archiwa) > 0) {
                         <td>
                             <a href='index.php?view=" . htmlspecialchars($a['id']) . "' class='btn' style='background:#f39c12; padding: 5px 10px; font-size:0.8em;'>Pokaż/Drukuj</a>
                             <a href='index.php?edit=" . htmlspecialchars($a['id']) . "' class='btn' style='background:#3498db; padding: 5px 10px; font-size:0.8em; margin-left:5px;'>Edytuj</a>
+                            <a href='index.php?delete=" . htmlspecialchars($a['id']) . "' class='btn' style='background:#e74c3c; padding: 5px 10px; font-size:0.8em; margin-left:5px;' onclick='return confirm(\"Czy na pewno chcesz usunąć protokół ID: " . htmlspecialchars($a['id']) . "?\");'>Usuń</a>
                         </td>
                       </tr>";
     }
@@ -442,6 +502,12 @@ else {
         </div>
 
         <form id="monoForm" method="POST" action="index.php">
+            <?php if ($success_msg): ?>
+            <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; font-weight: bold; border: 1px solid #c3e6cb;">
+                <?php echo $success_msg; ?>
+            </div>
+            <?php endif; ?>
+
             <?php if ($edit_protokol_id): ?>
             <input type="hidden" name="edycja_id" value="<?php echo htmlspecialchars($edit_protokol_id); ?>">
             <div
@@ -502,7 +568,12 @@ endif; ?>
                         <input type="text" name="uprawnienia_e" id="uprawnienia_e" required placeholder="E/123/2021">
                     </div>
                     <div class="form-group">
-                        <label>Osoba Sprawdzająca (D):</label>
+                        <label>
+                            Osoba Sprawdzająca (D):
+                            <label style="display:inline; margin-left:10px; font-weight:normal; font-size: 0.9em; cursor:pointer;">
+                                <input type="checkbox" id="same_person_ed" onchange="toggleSamePerson(this)"> Ta sama osoba
+                            </label>
+                        </label>
                         <input type="text" name="inzynier_d" id="inzynier_d" required placeholder="Tomasz Nowak">
                     </div>
                     <div class="form-group">
@@ -510,6 +581,24 @@ endif; ?>
                         <input type="text" name="uprawnienia_d" id="uprawnienia_d" required placeholder="D/456/2021">
                     </div>
                 </div>
+
+                <hr style="border-top:1px dashed #ccc; margin:20px 0;">
+                <h3>Aparatura Pomiarowa i Narzędzia</h3>
+                <div class="formula-info">Data ważności przelicza się automatycznie dodając równy rok do daty wzorcowania, aczkolwiek możesz ją ręcznie zmienić.</div>
+                <button type="button" class="btn btn-add" onclick="addMiernikRow()">+ Dodaj Miernik</button>
+                <table id="tbl-mierniki">
+                    <thead>
+                        <tr>
+                            <th>Użyty Miernik (Nazwa / Model)</th>
+                            <th>Data Wzorcowania (Kalibracji)</th>
+                            <th>Data Ważności Świadectwa</th>
+                            <th>Usuń</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <!-- Ukryty input MIERNIKI do json z backendem -->
+                <input type="hidden" name="mierniki_data" id="in_mierniki">
             </div>
 
             <!-- SEKCJA 1: OGLĘDZINY -->
@@ -560,6 +649,7 @@ endif; ?>
                             <th>U robocze/probiercze</th>
                             <th>Wymagane [MΩ]</th>
                             <th>Zmierzone [MΩ]</th>
+                            <th>Usuń</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -572,17 +662,21 @@ endif; ?>
                 <h2>Krok 3: Samoczynne Wyłączenie Zasilania (SWZ)</h2>
                 <div class="formula-info"><strong>Wzory (wyliczane za Ciebie):</strong> I<sub>a</sub> = I<sub>n</sub> *
                     Krotność <br>
-                    Z<sub>dopuszczalne</sub> = Z<sub>dop_ciepły</sub> = ( U<sub>0</sub> / I<sub>a</sub> ) * 0.66<br>
-                    <strong>Warunek normy: Zmierzona Z<sub>s</sub> &le; Z<sub>dop_ciepły</sub></strong>
+                    <strong>TN:</strong> Z<sub>dopuszczalne</sub> = ( U<sub>0</sub> / I<sub>a</sub> ). Wsp. temperaturowy 0.66 (dla starych układów 0.8).<br>
+                    <strong>TT:</strong> Ochronę zazwyczaj weryfikuje RCD. Wpisz wymóg R<sub>a</sub> zamiast Z<sub>s</sub>.<br>
+                    <strong>Warunek normy: Zmierzona Z<sub>s</sub> / R<sub>a</sub> &le; Z<sub>dopuszczalne (skorygowane)</sub></strong>
                 </div>
-                <button type="button" class="btn btn-add" onclick="addSwzRow()">+ Dodaj obwód Pętli Zwarcia Zs</button>
+                <button type="button" class="btn btn-add" onclick="addSwzRow()">+ Dodaj obwód Pętli Zwarcia Zs / Ra</button>
                 <table id="tbl-swz">
                     <thead>
                         <tr>
                             <th>Nazwa Obwodu</th>
-                            <th>Zabezp (B/C/D)</th>
-                            <th>Prąd In [A]</th>
-                            <th>Zs Zmierzone [Ω]</th>
+                            <th>Typ Sieci</th>
+                            <th>Zabezp (B/C/D) / RCD</th>
+                            <th>Prąd In/I&#916;n [A]</th>
+                            <th>Temp. Wsp.</th>
+                            <th>Zmierzone [&Omega;]</th>
+                            <th>Usuń</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -605,6 +699,7 @@ endif; ?>
                             <th>I_Δ zmierzone [mA]</th>
                             <th>t_A zmierzone [ms]</th>
                             <th>Przycisk TEST</th>
+                            <th>Usuń</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -612,8 +707,15 @@ endif; ?>
                 <input type="hidden" name="rcd_data" id="in_rcd">
             </div>
 
-            <button type="button" class="btn btn-submit" onclick="submitForms()">Zatwierdź pomiary i Zapisz do
-                Bazy</button>
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button type="button" class="btn btn-submit" style="margin-top: 0; flex: 1;" onclick="submitForms()">Zatwierdź pomiary i Zapisz do Bazy</button>
+                
+                <?php if ($edit_protokol_id): ?>
+                <a href="index.php?view=<?php echo htmlspecialchars($edit_protokol_id); ?>" class="btn" style="background-color: #f39c12; flex: 1; text-align: center; font-size: 18px; padding: 15px; display: inline-block; box-sizing: border-box; text-decoration: none;">🔍 Przejdź do Podglądu i Opcji Druku</a>
+                <?php else: ?>
+                <a href="#" class="btn" style="background-color: #7f8c8d; flex: 1; text-align: center; font-size: 18px; padding: 15px; display: inline-block; box-sizing: border-box; text-decoration: none; cursor: not-allowed; opacity: 0.6;" onclick="event.preventDefault();">🔍 Przejdź do Podglądu i Opcji Druku</a>
+                <?php endif; ?>
+            </div>
         </form>
     </div>
 
@@ -682,17 +784,89 @@ endif; ?>
                     loadedData.swz.forEach(row => addSwzRow(row));
                 } else { addSwzRow(); }
 
+                // Mierniki
+                if (loadedData.mierniki && loadedData.mierniki.length > 0) {
+                    loadedData.mierniki.forEach(row => addMiernikRow(row));
+                } else if (loadedData.naglowek && loadedData.naglowek.miernik_nazwa && loadedData.naglowek.miernik_nazwa !== '') {
+                    // Wsteczna kompatybilność, starszy protokół wciąga dane z usuniętych pól
+                    addMiernikRow({
+                        nazwa: loadedData.naglowek.miernik_nazwa, 
+                        data_wzorc: '', 
+                        data_waznosc: loadedData.naglowek.miernik_wzorcowanie
+                    });
+                } else { addMiernikRow(); }
+
                 // Rcd
                 if (loadedData.rcd && loadedData.rcd.length > 0) {
                     loadedData.rcd.forEach(row => addRcdRow(row));
                 } else { addRcdRow(); }
             } else {
                 // Nowy formularz
+                addMiernikRow();
                 addRisoRow();
                 addSwzRow();
                 addRcdRow();
             }
+
+            // Autodetekcja tej samej osoby przy edycji/pamięci
+            let e_name = document.getElementById('inzynier_e').value;
+            let d_name = document.getElementById('inzynier_d').value;
+            if (e_name && e_name === d_name) {
+                let cb = document.getElementById('same_person_ed');
+                if(cb) { cb.checked = true; toggleSamePerson(cb); }
+            }
+
         });
+
+        // -------- WSPÓLNY INŻYNIER (E+D) --------
+        function toggleSamePerson(cb) {
+            let e_name = document.getElementById('inzynier_e');
+            let d_name = document.getElementById('inzynier_d');
+            if (cb.checked) {
+                d_name.value = e_name.value;
+                d_name.setAttribute('readonly', 'true');
+                d_name.style.backgroundColor = '#f1f1f1';
+                e_name.addEventListener('input', syncNames);
+            } else {
+                d_name.removeAttribute('readonly');
+                d_name.style.backgroundColor = '';
+                e_name.removeEventListener('input', syncNames);
+            }
+        }
+        function syncNames() {
+            if(document.getElementById('same_person_ed').checked) {
+                document.getElementById('inzynier_d').value = document.getElementById('inzynier_e').value;
+            }
+        }
+
+        // -------- MIERNIKI DYNAMICS --------
+        function addMiernikRow(data = null) {
+            const tbody = document.querySelector('#tbl-mierniki tbody');
+            const tr = document.createElement('tr');
+            tr.className = 'dynamic-row obw-miernik-tr';
+
+            let n = data ? data.nazwa : "Sonel MPI-540";
+            let d_wzorc = data ? data.data_wzorc : "";
+            let d_wazne = data ? data.data_waznosc : "";
+
+            tr.innerHTML = `
+            <td><input type="text" class="miernik_nazwa" value="${n}" placeholder="Nazwa"></td>
+            <td><input type="date" class="miernik_wzorc" value="${d_wzorc}" onchange="calcMiernikWaznosc(this)"></td>
+            <td><input type="date" class="miernik_waznosc" value="${d_wazne}"></td>
+            <td><button type="button" class="btn" style="background:#e74c3c; padding:5px 10px;" onclick="this.closest('tr').remove()">X</button></td>
+        `;
+            tbody.appendChild(tr);
+        }
+
+        function calcMiernikWaznosc(el) {
+            let tr = el.closest('tr');
+            let wzorc = tr.querySelector('.miernik_wzorc').value;
+            if(wzorc) {
+                let d = new Date(wzorc);
+                d.setFullYear(d.getFullYear() + 1);
+                tr.querySelector('.miernik_waznosc').value = d.toISOString().split('T')[0];
+            }
+        }
 
         // -------- RISO DYNAMICS --------
         function addRisoRow(data = null) {
@@ -700,7 +874,7 @@ endif; ?>
             const tr = document.createElement('tr');
             tr.className = 'dynamic-row obw-riso-tr';
 
-            let n = data ? data.nazwa : "Obwód niazd";
+            let n = data ? data.nazwa : "Obwód gniazd";
             let u = data ? data.u_prob : "500";
             let w = data ? data.wymagane : "1.0";
             let z = data ? data.zmierzone : ">999";
@@ -708,17 +882,18 @@ endif; ?>
             tr.innerHTML = `
             <td><input type="text" class="riso_nazwa" value="${n}" placeholder="Nazwa"></td>
             <td><select class="riso_u">
-              lue="500" ${u == '500' ? 'selected' : ''}>230/400V (500V DC probiercze)</option>
+                <option value="500" ${u == '500' ? 'selected' : ''}>230/400V (500V DC probiercze)</option>
                 <option value="250" ${u == '250' ? 'selected' : ''}>SELV/PELV (250V DC probiercze)</option></select></td>
             <td><input type="text" class="riso_wymagane" value="${w}" readonly style="background:#eee"></td>
             <td><input type="text" class="riso_zmierzone" value="${z}" oninput="recalcRiso(this)"></td>
+            <td><button type="button" class="btn" style="background:#e74c3c; padding:5px 10px;" onclick="this.closest('tr').remove()">X</button></td>
         `;
-            tbody.appendChil d(tr);
+            tbody.appendChild(tr);
             recalcRiso(tr.querySelector('.riso_u'));
         }
 
         function recalcRiso(el) {
-            let t r = el.closest('tr');
+            let tr = el.closest('tr');
             let uProb = tr.querySelector('.riso_u').value;
             let reqEl = tr.querySelector('.riso_wymagane');
             reqEl.value = (uProb == '250') ? "0.5" : "1.0";
@@ -732,72 +907,108 @@ endif; ?>
             tr.className = 'dynamic-row obw-swz-tr';
 
             let n = data ? data.nazwa : "Obwód oświetlenia";
+            let net = data ? data.net_type : "TN";
             let c = data ? data.typ : "B";
             let in_val = data ? data.in : "16";
+            let wsp = data ? data.temp_wsp : "0.66 (Nowa)";
             let zszm = data ? data.zs_zm : "0.45";
 
             tr.innerHTML = `
             <td><input type="text" class="swz_nazwa" value="${n}" placeholder="Korytarz główny"></td>
             <td>
-                <select class="swz_char">
-                    <option value="B" ${c == 'B' ? 'selected' : ''}>B (krotność=5)</option>
-                    <option value="C" ${c == 'C' ? 'selected' : ''}>C (krotność=10)</option>
-                    <option value="D" ${c == 'D' ? 'selected' : ''}>D (krotność=20)</option>
+                <select class="swz_net">
+                    <option value="TN" ${net == 'TN' ? 'selected' : ''}>TN (Zs)</option>
+                    <option value="TT" ${net == 'TT' ? 'selected' : ''}>TT (Ra RCD)</option>
                 </select>
             </td>
-            <td><input type="number" step="1" class="swz_in" value="${in_val}" ></td>
-            <td><input type="number" step="0.01" class="swz_zs_zm" value="${zszm}" ></td>
+            <td>
+                <select class="swz_char">
+                    <option value="B" ${c == 'B' ? 'selected' : ''}>B (krot=5)</option>
+                    <option value="C" ${c == 'C' ? 'selected' : ''}>C (krot=10)</option>
+                    <option value="D" ${c == 'D' ? 'selected' : ''}>D (krot=20)</option>
+                    <option value="RCD" ${c == 'RCD' ? 'selected' : ''}>RCD (dla TT)</option>
+                </select>
+            </td>
+            <td><input type="number" step="0.01" class="swz_in" value="${in_val}"></td>
+            <td>
+                <select class="swz_wsp">
+                    <option value="0.66" ${wsp == '0.66 (Nowa)' ? 'selected' : ''}>0.66 (Nowa)</option>
+                    <option value="0.80" ${wsp == '0.80 (Stara)' ? 'selected' : ''}>0.80 (Stara)</option>
+                    <option value="1.00" ${wsp == '1.00 (TT)' ? 'selected' : ''}>1.00 (TT)</option>
+                </select>
+            </td>
+            <td><input type="number" step="0.01" class="swz_zs_zm" value="${zszm}"></td>
+            <td><button type="button" class="btn" style="background:#e74c3c; padding:5px 10px;" onclick="this.closest('tr').remove()">X</button></td>
         `;
             tbody.appendChild(tr);
         }
 
-        / /  --------R CD DYNAMICS--------
-            function addRcdRow(data = null) {
-                const tb ody = document.querySelector('#tbl-rcd tbody');
-                const tr = document.createElement(' tr');
-         t r.className = 'dynamic-row obw-rcd-tr';
+        // -------- RCD DYNAMICS --------
+        function addRcdRow(data = null) {
+            const tbody = document.querySelector('#tbl-rcd tbody');
+            const tr = document.createElement('tr');
+            tr.className = 'dynamic-row obw-rcd-tr';
 
-                let n = data ? data.nazwa : "RCD Gniazd Łazienka";
-                let typ = data ? data.typ_rcd : "AC";
-                let idn = data ? data.i_dn : "30";
-                let izm = data ? data.i_zm : "22.5";
-                let tazm = data ? data.ta_zm : "120";
-                let btn = data ? data.test_btn : "Sprawny";
+            let n = data ? data.nazwa : "RCD Gniazd Łazienka";
+            let typ = data ? data.typ_rcd : "AC";
+            let mode = data ? data.test_mode : "1x";
+            let idn = data ? data.i_dn : "30";
+            let izm = data ? data.i_zm : "22.5";
+            let tazm = data ? data.ta_zm : "120";
+            let btn = data ? data.test_btn : "Sprawny";
 
-                tr.innerHTML = `
+            tr.innerHTML = `
             <td><input type="text" class="rcd_nazwa" value="${n}"></td>
             <td>
                 <select class="rcd_typ">
                     <option value="AC" ${typ == 'AC' ? 'selected' : ''}>AC</option>
                     <option value="A" ${typ == 'A' ? 'selected' : ''}>A</option>
-                    <option value="B" ${typ == 'B' ? 'selected' : ''}>B (Prostowniki/PV)</option>
+                    <option value="B" ${typ == 'B' ? 'selected' : ''}>B (PV/Ładowarki)</option>
+                </select>
+            </td>
+            <td>
+                <select class="rcd_mode">
+                    <option value="1x" ${mode == '1x' ? 'selected' : ''}>1x I&#916;n</option>
+                    <option value="5x" ${mode == '5x' ? 'selected' : ''}>5x I&#916;n (40ms)</option>
                 </select>
             </td>
             <td><select class="rcd_idn">
                 <option value="30" ${idn == '30' ? 'selected' : ''}>30 mA</option>
                 <option value="100" ${idn == '100' ? 'selected' : ''}>100 mA</option>
                 <option value="300" ${idn == '300' ? 'selected' : ''}>300 mA</option></select></td>
-            <td><input type="number" class="rcd_i zm " va l ue="${izm} " ></td>
-            <td><input type="number" class="rcd_tazm" va lu e=" $ {tazm}"></ t d>
+            <td><input type="number" class="rcd_izm" value="${izm}" style="width:70px"></td>
+            <td><input type="number" class="rcd_tazm" value="${tazm}" style="width:70px"></td>
             <td><select class="rcd_testbtn">
-                  <op t ion value= " Sprawny" ${btn == 'Sprawny' ? 'selected' : ''}>Sprawny</option>
+                  <option value="Sprawny" ${btn == 'Sprawny' ? 'selected' : ''}>Sprawny</option>
                 <option value="Uszkodzony" ${btn == 'Uszkodzony' ? 'selected' : ''}>Uszkodzony</option></select></td>
-          ` ; 
-        t b ody.appendChild(tr);
-            }
+            <td><button type="button" class="btn" style="background:#e74c3c; padding:5px 10px;" onclick="this.closest('tr').remove()">X</button></td>
+            `; 
+            tbody.appendChild(tr);
+        }
 
-        // -------- KOMPILACJA I WYSYŁKA  F ORMUL A RZA ------ - -
+        // -------- KOMPILACJA I WYSYŁKA FORMULARZA --------
         function submitForms() {
-            let u0 = parseFloat(docume nt.getE l ementById(' napiecie_u0').value) || 230;
+            let u0 = parseFloat(document.getElementById('napiecie_u0').value) || 230;
+
+            // 0. Mierniki JSON
+            let mierniki_arr = [];
+            document.querySelectorAll('.obw-miernik-tr').forEach(tr => {
+                mierniki_arr.push({
+                    nazwa: tr.querySelector('.miernik_nazwa').value,
+                    data_wzorc: tr.querySelector('.miernik_wzorc').value,
+                    data_waznosc: tr.querySelector('.miernik_waznosc').value
+                });
+            });
+            document.getElementById('in_mierniki').value = JSON.stringify(mierniki_arr);
 
             // 1. Oględziny JSON
             let ogledziny_arr = [];
             let rowsOg = document.querySelectorAll('#tbl-ogledziny tbody tr');
             rowsOg.forEach(tr => {
                 let td = tr.querySelectorAll('td');
-                ogledziny_arr.push({ nazwa: td[0].innerText, wynik: td[1].query S elector('s e lect').value });
+                ogledziny_arr.push({ nazwa: td[0].innerText, wynik: td[1].querySelector('select').value });
             });
-            document.getElementById('in_ogledz in y').value = J SON.string i fy(ogledziny_arr);
+            document.getElementById('in_ogledziny').value = JSON.stringify(ogledziny_arr);
 
             // 2. RISO JSON
             let riso_arr = [];
@@ -821,26 +1032,46 @@ endif; ?>
             // 3. SWZ JSON
             let swz_arr = [];
             document.querySelectorAll('.obw-swz-tr').forEach(tr => {
+                let net_type = tr.querySelector('.swz_net').value;
                 let charak = tr.querySelector('.swz_char').value;
                 let i_n = parseFloat(tr.querySelector('.swz_in').value);
                 let z_szm = parseFloat(tr.querySelector('.swz_zs_zm').value);
+                let raw_wsp = tr.querySelector('.swz_wsp');
+                let wsp_label = raw_wsp.options[raw_wsp.selectedIndex].text;
+                let wsp_val = parseFloat(raw_wsp.value);
 
-                let k = (charak === 'B') ? 5 : ((charak === 'C') ? 10 : 20);
-                let i_a = i_n * k;
+                let i_a;
+                let z_dop;
 
-                // WZOR 2/3: Z_dop * 0.66
-                let z_dop = u0 / i_a;
-                let z_dop_2_3 = (z_dop * 2) / 3;
-                let z_dop_format = z_dop_2_3.toFixed(2);
+                if (net_type === 'TT' || charak === 'RCD') {
+                    // TT lub RCD -> Ochrona przy Ra <= 50V / Idn
+                    // Traktujemy i_n w inpucie jako I_delta_n w Amperach (np 0.03A = 30mA)
+                    i_a = i_n; 
+                    let uL = 50; // Napięcie dotykowe długotrwale dopuszczalne (Zazwyczaj 50V dla klimatu normalnego)
+                    z_dop = uL / i_a;
+                } else {
+                    // TN z nadprądowymi
+                    let k = (charak === 'B') ? 5 : ((charak === 'C') ? 10 : 20);
+                    i_a = i_n * k;
+                    z_dop = u0 / i_a;
+                }
 
-                let wynikStatus = (z_szm <= parseFloat(z_dop_format)) ? "POZYTYWNY" : "NEGATYWNY";
+                // Kalkulacja ze współczynnikiem (0.66 nowa / 0.8 stara / 1.0 TT)
+                let z_dop_skor = z_dop * wsp_val;
+                let z_dop_format = z_dop_skor.toFixed(2);
+
+                let wynikStatus = (z_szm <= z_dop_skor) ? "POZYTYWNY" : "NEGATYWNY";
+
+                let k_info = (charak === 'RCD' || net_type === 'TT') ? '-' : (charak === 'B' ? 5 : (charak === 'C' ? 10 : 20));
 
                 swz_arr.push({
                     nazwa: tr.querySelector('.swz_nazwa').value,
+                    net_type: net_type,
                     typ: charak,
                     in: i_n,
-                    k: k,
-                    ia: i_a,
+                    temp_wsp: wsp_label,
+                    k: k_info,
+                    ia: i_a.toFixed(2),
                     zs_zm: z_szm,
                     zs_dop_skor: z_dop_format,
                     wynik: wynikStatus
@@ -851,20 +1082,28 @@ endif; ?>
             // 4. RCD JSON
             let rcd_arr = [];
             document.querySelectorAll('.obw-rcd-tr').forEach(tr => {
+                let typ_rcd = tr.querySelector('.rcd_typ').value;
+                let mode = tr.querySelector('.rcd_mode').value;
                 let zmT = parseFloat(tr.querySelector('.rcd_tazm').value);
                 let zmI = parseFloat(tr.querySelector('.rcd_izm').value);
                 let idn = parseFloat(tr.querySelector('.rcd_idn').value);
                 let btn = tr.querySelector('.rcd_testbtn').value;
 
                 let wynikStatus = "POZYTYWNY";
-                // Walidacja - czas do 300ms, prad 0.5-1.0
-                if (zmT > 300 || zmI < (0.5 * idn) || zmI > idn || btn === 'Uszkodzony') {
+                
+                // Walidacja - czas max zależy od mnożnika (1xIdn = 300ms, 5xIdn = 40ms)
+                let max_time = (mode === '5x') ? 40 : 300;
+                let required_current_min = (mode === '5x') ? (5 * 0.5 * idn) : (0.5 * idn);
+                let required_current_max = (mode === '5x') ? (5 * idn) : idn;
+
+                if (zmT > max_time || zmI < required_current_min || zmI > required_current_max || btn === 'Uszkodzony') {
                     wynikStatus = "NEGATYWNY";
                 }
 
                 rcd_arr.push({
                     nazwa: tr.querySelector('.rcd_nazwa').value,
-                    typ_rcd: tr.querySelector('.rcd_typ').value,
+                    typ_rcd: typ_rcd,
+                    test_mode: mode,
                     i_dn: idn,
                     i_zm: zmI,
                     ta_zm: zmT,

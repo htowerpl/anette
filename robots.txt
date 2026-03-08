@@ -1,6 +1,2 @@
 User-agent: *
-Allow: /
-Disallow: /assets/
-Disallow: /news.php
-
-Sitemap: https://anette.beauty/sitemap.xml
+Disallow: /
