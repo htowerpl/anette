@@ -65,10 +65,12 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Zmiana**: Usunięto z niej nawigację (`nav`) oraz stopkę (`footer`). Zawiera tylko logo, wideo i przycisk wejścia.
 - **Wideo**: Zastąpiono osadzony odtwarzacz YouTube lokalnym plikiem `pages/Anette.mp4` (Globalnie).
   - **Optymalizacja i Bezpieczeństwo (Wdrożono Marzec 2026)**: Usunięto zawodny atrybut `onended` z HTML.
-  - Zaimplementowano asynchroniczny strumień JS, sprawdzający zwrot `video.play()`. Przechwytuje incydenty blokowania autoodtwarzania przez przeglądarki (np. Tryb Oszczędzania Baterii iOS) wymuszając płynny fallback (nadpisanie okienka wideo awaryjnym przyciskiem "Odtwórz Intro").
-  - Wdrożono awaryjny "Bezpiecznik Timeout" 10.5-sekundowy (10500ms) dla 9-sekundowego filmu, który niezależnie od błędów technicznych wypchnie odwiedzającego na stronę aktualności.
+  - Oczyszczono plik `index.html` z surowych kodów script. Cała izolowana logika odtwarzania została powierzona `initIntroVideo()` na końcu dokumentu `app.js`.
+  - **Dynamika Zakończenia (Timeupdate)**: Czas nasłuchu `timeupdate` ucina wideo na `Czas Całkowity - 0.5s`, wymuszając naturalne płynne zaniknięcie znane z wycofanego wideo z YouTube. Usunięto surowe wyciemnienia. Ogranicza to wbudowane błędy flashu końca HTML5.
+  - Zaimplementowano asynchroniczny strumień JS, po usunięciu natarczywego "Odtwórz Demo", aplikacja w pełni ignoruje restrykcyjne blokady przeglądarki polem `catch(error)`. Tło wypełnia niezmiennie okładka grafiki statycznej.
+  - Wdrożono awaryjny "Bezpiecznik Timeout" 10.5-sekundowy (10500ms) dla 9-sekundowego filmu, który niezależnie od blokad lub usterek autoodtwarzania z błędu wyżej, wypchnie odwiedzającego na stronę aktualności.
   - Pod tag wideo powiązano pre-loadowany plik grafiki startowej `pages/Anette_in.webp` w atrybucie `poster`.
-  - Przestrzeń pod wideo (`.video-frame`) została zabezpieczona stałym atrybutem `aspect-ratio: 16/9`, aby zapobiec szarpaniu tła podczas wczytywania zasobów. Zmieniono tło na kompatybilne z całą sekcją surface.
+  - Przestrzeń pod wideo (`.video-frame`) została zabezpieczona stałym atrybutem `aspect-ratio: 16/9`, aby zapobiec szarpaniu tła podczas wczytywania zasobów. Tło obramowania wyświetla niezmienną kopię bazową `pages/Anette_in.webp` na poczet późniejszego `Fade-outu`.
 - **Cache Busting**: Wprowadzono politykę łamania pamięci podręcznej przy użyciu wersji dodawanej do adresów w formacie daty (np. `?v=20260309`).  
   - **ZASADA GLOBALNA**: Zmieniając jakiekolwiek pliki statyczne (Style CSS, Pliki JavaScript, Pliki Wideo lub Główne banery), AI (oraz człowiek) zobowiązani są do inkrementacji numeru parametrycznego `?v=` nie tylko w pliku `index.html`, **ale również we wszystkich głównych plikach znajdujących się w obrębie całego projektu** (wszystkie podstrony HTML w katalogu `pages/`). Gwarantuje to ogołocenie klientek z nieświeżych wersji plików zalegających na ich urządzeniach na każdej możliwej ścieżce wejścia.
 

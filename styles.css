@@ -288,15 +288,15 @@ nav {
   aspect-ratio: 16 / 9; /* Rezerwuje miejsce przed załadowaniem filmu */
   overflow: hidden;
   box-shadow: var(--shadow);
-  background: var(--surface); /* Zastąpienie ostrej czerni, aby ładnie korespondowało na wypadek niedostępności */
+  background: var(--surface) url("pages/Anette_in.webp?v=20260309_2") no-repeat center center;
+  background-size: cover;
 }
 
 .video-frame video {
   width: 100%;
   height: auto;
   display: block;
-  background: transparent url("pages/Anette_in.webp") no-repeat center center;
-  background-size: cover;
+  transition: opacity 0.4s ease;
 }
 
 .skip-button {

@@ -199,7 +199,7 @@
     const script = document.querySelector('script[src*="assets/js/app.js"]');
     if (script) {
       const src = script.getAttribute('src');
-      return src.replace("assets/js/app.js", "");
+      return src.split("assets/js/app.js")[0];
     }
     return "";
   };
@@ -299,6 +299,49 @@
     }
   };
 
+  // --- Obsługa Intro Video na Stronie Głównej ---
+  const initIntroVideo = () => {
+    const video = document.getElementById("intro-video");
+    if (!video) return; // Funkcja odpala się tylko na index.html
+
+    const targetUrl = "pages/aktualnosci/aktualnosci.html";
+    
+    let redirected = false;
+    const redirect = function() {
+      if (!redirected) {
+        redirected = true;
+        window.location.href = targetUrl;
+      }
+    };
+
+    // 1. Zabezpieczenie na wypadek niezaładowania 
+    setTimeout(redirect, 10500);
+
+    // 2. Dynamiczne wcześniejsze zakończenie odtwarzania (0.5s przed końcem) symulujące dawny efekt z YouTube
+    video.addEventListener("timeupdate", function() {
+      if (video.duration && video.currentTime >= video.duration - 0.5 && !redirected) {
+        video.style.opacity = '0';
+        setTimeout(redirect, 300); // Czas płynnego opacity w CSS - 0.3s
+      }
+    });
+    
+    // Fallback gwarancyjny
+    video.addEventListener("ended", function() {
+      if (!redirected) {
+        video.style.opacity = '0';
+        setTimeout(redirect, 300);
+      }
+    });
+
+    // 3. Próba wymuszenia startu i kontrola restrykcji autoplay w urządzeniach mobilnych
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(error => {
+        console.warn("Autoplay zablokowany bez interakcji z użytkownikiem. Za 10.5 sekundy klient zostanie przekierowany z postera wideo do domyślnych Aktualności. Błąd:", error);
+      });
+    }
+  };
+
   // --- Koniec nowego kodu ---
   
   document.addEventListener("DOMContentLoaded", function () {
@@ -312,5 +355,6 @@
     initReviewsFallback();
     loadNewsFromApi();
     handleHashNavigation();
+    initIntroVideo(); // Ładuje skrypt powitalny z wideo jeśli idziemy ze Strony Głównej
   });
 })();
