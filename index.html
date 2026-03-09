@@ -8,9 +8,10 @@
   <meta name="theme-color" content="#d67c2d">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/brand/favicon-16.png">
-  <link rel="stylesheet" href="styles.css">
-  <script src="assets/js/typography.js" defer></script>
-  <script src="assets/js/app.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20260309">
+  <link rel="preload" as="image" href="pages/Anette_in.webp?v=20260309">
+  <script src="assets/js/typography.js?v=20260309" defer></script>
+  <script src="assets/js/app.js?v=20260309" defer></script>
 </head>
 <body>
   <main>
@@ -23,22 +24,68 @@
           </span>
         </h1>
         <div class="video-frame">
-          <iframe
-            id="intro-player"
-            src="https://www.youtube.com/embed/nQw3lIjjaJg?autoplay=1&mute=1&enablejsapi=1&playsinline=1&start=2"
-            title="Usługi kosmetyczne Gliwice Anette"
-            frameborder="0"
-            loading="lazy"
-            allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen>
-          </iframe>
+          <video id="intro-video" muted playsinline poster="pages/Anette_in.webp?v=20260309">
+            <source src="pages/Anette.mp4?v=20260309" type="video/mp4">
+            Twoja przeglądarka nie obsługuje wideo.
+          </video>
+          <!-- Komunikat awaryjny dla rygorystycznych przeglądarek blokujących autoplay -->
+          <div id="play-overlay" class="play-overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); z-index: 10;">
+             <button id="manual-play-btn" class="button" style="background-color: var(--accent); color: white; border-color: var(--accent); font-size: 1.2rem; padding: 1rem 2.5rem; border-radius: 8px !important;">Odtwórz intro</button>
+          </div>
         </div>
         <a class="button skip-button" href="pages/aktualnosci/aktualnosci.html">Pomiń</a>
       </div>
     </section>
   </main>
 
-  <script src="https://www.youtube.com/iframe_api" async></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const video = document.getElementById("intro-video");
+      const overlay = document.getElementById("play-overlay");
+      const manualPlayBtn = document.getElementById("manual-play-btn");
+      const targetUrl = "pages/aktualnosci/aktualnosci.html";
+      
+      let redirected = false;
+      const redirect = function() {
+        if (!redirected) {
+          redirected = true;
+          window.location.href = targetUrl;
+        }
+      };
+
+      // 1. Zabezpieczenie: Maksymalny czas oczekiwania (10 sekund dla 9-sekundowego filmu)
+      // Daje dodatkową sekundę z marginesem na start, jeśli film ładuje się w tle.
+      setTimeout(redirect, 10500);
+
+      // 2. Standardowe zakończenie odtwarzania
+      video.addEventListener("ended", redirect);
+      
+      // 3. Próba wymuszenia startu i kontrola restrykcji autoplay
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          // Wideo wystartowało automatycznie.
+          overlay.style.display = 'none';
+        }).catch(error => {
+          // Autoplay zablokowany (np. przez tryb oszczędzania energii w iOS lub politykę przeglądarki).
+          // Pokazujemy przycisk "Odtwórz intro".
+          console.warn("Autoplay zablokowany, włączono fallback manualny:", error);
+          overlay.style.display = 'flex';
+          
+          // Opcjonalnie: zmniejszamy timeout fallbacku w tym trybie, aby strona nadal domyślnie sama przeskoczyła
+          // np. po 5 sekundach od wejścia bez interakcji:
+          // setTimeout(redirect, 5000); 
+        });
+      }
+
+      // 4. Obsługa ręcznego kliknięcia, jeśli przeglądarka uniemożliwiła autoplay
+      if (manualPlayBtn) {
+        manualPlayBtn.addEventListener("click", function() {
+          video.play();
+          overlay.style.display = 'none';
+        });
+      }
+    });
+  </script>
 </body>
 </html>

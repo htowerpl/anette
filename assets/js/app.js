@@ -63,83 +63,6 @@
     });
   }
 
-  function initHomepageVideo() {
-    var playerContainer = document.getElementById("intro-player");
-    if (!playerContainer) {
-      // Jeśli nie ma playera na stronie (np. podstrony), nie uruchamiaj logiki YouTube
-      return;
-    }
-    var endTimer = null;
-
-    var hasRedirected = false;
-    var skipButton = document.querySelector(".skip-button");
-    if (skipButton) {
-      skipButton.addEventListener("click", function () {
-        hasRedirected = true;
-      });
-    }
-
-    function redirectToNews() {
-      if (endTimer) clearInterval(endTimer);
-      if (hasRedirected) {
-        return;
-      }
-      hasRedirected = true;
-      window.location.href = "pages/aktualnosci/aktualnosci.html";
-    }
-
-    function createPlayer() {
-      if (!(window.YT && typeof window.YT.Player === "function")) {
-        return false;
-      }
-
-      new window.YT.Player("intro-player", {
-        events: {
-          onReady: function (event) {
-            try {
-              event.target.mute();
-            } catch (error) {
-              // ignore if mute is unavailable
-            }
-            event.target.playVideo();
-          },
-          onStateChange: function (event) {
-            // Gdy film gra (PLAYING = 1), uruchom sprawdzanie czasu
-            if (event.data === window.YT.PlayerState.PLAYING && !endTimer) {
-              endTimer = setInterval(function() {
-                try {
-                  var duration = event.target.getDuration();
-                  var currentTime = event.target.getCurrentTime();
-                  // Jeśli do końca zostało mniej niż 9 sekund, przekieruj
-                  if (duration > 0 && currentTime >= (duration - 9)) {
-                    redirectToNews();
-                  }
-                } catch (e) {}
-              }, 500);
-            }
-            if (event.data === window.YT.PlayerState.ENDED) {
-              redirectToNews();
-            }
-          }
-        }
-      });
-
-      return true;
-    }
-
-    if (createPlayer()) {
-      return;
-    }
-
-    var attempts = 0;
-    var poller = setInterval(function () {
-      attempts += 1;
-      if (createPlayer() || attempts > 40) {
-        clearInterval(poller);
-      }
-    }, 250);
-  }
-
   function initReviewsFallback() {
     var widgetContainer = document.querySelector('.review-widget div[class*="elfsight-app"]');
     // Pobieramy elementy statyczne, które chcemy ukryć po załadowaniu widżetu
@@ -386,7 +309,6 @@
 
     // Inicjalizuj pozostałe skrypty
     setupAccordion("data-detail-group");
-    initHomepageVideo();
     initReviewsFallback();
     loadNewsFromApi();
     handleHashNavigation();

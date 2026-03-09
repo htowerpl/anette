@@ -63,7 +63,14 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 ### Strona Główna (Splash Screen)
 - **Decyzja**: Strona główna (`index.html`) pełni funkcję ekranu powitalnego (Intro).
 - **Zmiana**: Usunięto z niej nawigację (`nav`) oraz stopkę (`footer`). Zawiera tylko logo, wideo i przycisk wejścia.
-- **Wideo**: Start od 2. sekundy, wyciszone (autoplay muted), automatyczne przejście do serwisu na **9 sekund** przed końcem.
+- **Wideo**: Zastąpiono osadzony odtwarzacz YouTube lokalnym plikiem `pages/Anette.mp4` (Globalnie).
+  - **Optymalizacja i Bezpieczeństwo (Wdrożono Marzec 2026)**: Usunięto zawodny atrybut `onended` z HTML.
+  - Zaimplementowano asynchroniczny strumień JS, sprawdzający zwrot `video.play()`. Przechwytuje incydenty blokowania autoodtwarzania przez przeglądarki (np. Tryb Oszczędzania Baterii iOS) wymuszając płynny fallback (nadpisanie okienka wideo awaryjnym przyciskiem "Odtwórz Intro").
+  - Wdrożono awaryjny "Bezpiecznik Timeout" 10.5-sekundowy (10500ms) dla 9-sekundowego filmu, który niezależnie od błędów technicznych wypchnie odwiedzającego na stronę aktualności.
+  - Pod tag wideo powiązano pre-loadowany plik grafiki startowej `pages/Anette_in.webp` w atrybucie `poster`.
+  - Przestrzeń pod wideo (`.video-frame`) została zabezpieczona stałym atrybutem `aspect-ratio: 16/9`, aby zapobiec szarpaniu tła podczas wczytywania zasobów. Zmieniono tło na kompatybilne z całą sekcją surface.
+- **Cache Busting**: Wprowadzono politykę łamania pamięci podręcznej przy użyciu wersji dodawanej do adresów w formacie daty (np. `?v=20260309`).  
+  - **ZASADA GLOBALNA**: Zmieniając jakiekolwiek pliki statyczne (Style CSS, Pliki JavaScript, Pliki Wideo lub Główne banery), AI (oraz człowiek) zobowiązani są do inkrementacji numeru parametrycznego `?v=` nie tylko w pliku `index.html`, **ale również we wszystkich głównych plikach znajdujących się w obrębie całego projektu** (wszystkie podstrony HTML w katalogu `pages/`). Gwarantuje to ogołocenie klientek z nieświeżych wersji plików zalegających na ich urządzeniach na każdej możliwej ścieżce wejścia.
 
 ### Zabiegi (Treatments)
 - **Problem Mobile**: Panel boczny (Wskazania) wyświetlał się przed treścią (kwestia `order` w CSS).
@@ -83,10 +90,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Aktualności**: Przycisk "Więcej" automatycznie wykrywa numer telefonu, zmienia etykietę na "Zadzwoń" i dodaje ikonę słuchawki (SVG).
 
 ## Planowane Zadania (Backlog)
-- **Lepsze Intro Mobile**: Zastąpienie czarnego ekranu na mobile krótkim, lokalnym wideo (`intro-mobile.mp4`).
-  - Cel: Zachowanie "efektu wow" bez ładowania ciężkiego YouTube.
-  - Działanie: Autoplay (muted), po zakończeniu auto-redirect do Aktualności.
-  - Status: Czekamy na plik wideo od użytkownika.
+- **Cleanup JS**: Wykonano. Usunięto stary kod obsługi YouTube API z pliku `app.js`.
 - **Optymalizacja Mediów (Wydajność)**:
   - **Zdjęcia**: Konwersja plików PNG (`recepcja_001`, `makijaz-zabieg`, `lipoliza-zabieg`) na format **WebP** (znaczna redukcja wagi).
   - **Fonty**: Konwersja fontów z formatu `.otf` na `.woff2` w `styles.css`.
