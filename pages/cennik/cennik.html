@@ -12,6 +12,64 @@
   <link rel="stylesheet" href="../../styles.css?v=20260309_2">
   <script src="../../assets/js/typography.js?v=20260309_2" defer></script>
   <script src="../../assets/js/app.js?v=20260309_2" defer></script>
+  <!-- Schema.org JSON-LD OfferCatalog dla AI -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    "name": "Cennik Zabiegów Kosmetycznych Anette",
+    "description": "Szczegółowy wykaz zabiegów kosmetycznych w Gabinecie Kosmetycznym Anette.",
+    "itemListElement": [
+      {
+        "@type": "OfferCatalog",
+        "name": "Zabiegi na Twarz",
+        "itemListElement": [
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "BB Glow"}, "price": "170", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "C-Fusion Glow"}, "price": "180", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Czyszczenie manualne"}, "price": "180", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Exo Power"}, "price": "170", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Enoterapia"}, "price": "150", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "RF bipolarne + laser (twarz)"}, "price": "250", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "RF bipolarne + laser (szyja/dekolt)"}, "price": "300", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Infuzja tlenowa"}, "price": "250", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Makijaż permanentny ust"}, "price": "590", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Masaż Kobido"}, "price": "170", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Mezoterapia bezigłowa + ampułka"}, "price": "180", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "PRX-T33"}, "price": "199", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Retix.C"}, "price": "180", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Stymulatory tkankowe"}, "price": "299", "priceCurrency": "PLN"}
+        ]
+      },
+      {
+        "@type": "OfferCatalog",
+        "name": "Estetyka Oka",
+        "itemListElement": [
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Henna Brow (pudrowa)"}, "price": "40", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Laminacja brwi + henna + wosk"}, "price": "100", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Lifting rzęs + keratyna"}, "price": "110", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Makijaż permanentny brwi"}, "price": "550", "priceCurrency": "PLN"}
+        ]
+      },
+      {
+        "@type": "OfferCatalog",
+        "name": "Depilacja",
+        "itemListElement": [
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Bikini – całość"}, "price": "65", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Nogi – całe"}, "price": "99", "priceCurrency": "PLN"}
+        ]
+      },
+      {
+        "@type": "OfferCatalog",
+        "name": "Zabiegi na Ciało",
+        "itemListElement": [
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Dermomasaż (30 min)"}, "price": "150", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Lipolaser + Laser bio. + dermo."}, "price": "200", "priceCurrency": "PLN"},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Lipoliza (1 ampułka)"}, "price": "300", "priceCurrency": "PLN"}
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <nav id="main-nav"></nav>
@@ -99,7 +157,7 @@
           <li><span class="service-name">Dermomasaż (30 min)</span> <span class="service-price">150 zł</span></li>
           <li><span class="service-name">Dermomasaż (pakiet 4x30 min)</span> <span class="service-price">450 zł</span></li>
           <li><span class="service-name">Lipolaser + Laser bio. + dermo.</span> <span class="service-price">200 zł</span></li>
-          <li><span class="service-name"><a href="../zabiegi/zabiegi.html#lipoliza">Lipoliza (1 ampułka)</a></span> <span class="service-price">300 zł</span></li>
+          <li><span class="service-name"><a href="../zabiegi/zabiegi.html#lipoliza-iniekcyjna">Lipoliza (1 ampułka)</a></span> <span class="service-price">300 zł</span></li>
           <li><span class="service-name">Liposukcja kawitacyjna + IR</span> <span class="service-price">120 zł</span></li>
         </ul>
       </article>

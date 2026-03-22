@@ -49,6 +49,6 @@ try {
 
     echo json_encode($news);
 } catch (\PDOException $e) {
-    sendError('Błąd pobierania danych: ' . $e->getMessage());
+    sendError('Błąd pobierania danych');
 }
 ?>

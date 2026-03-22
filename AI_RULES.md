@@ -19,6 +19,10 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 
 ## Historia Decyzji i Zmian (Log)
 
+### Optymalizacja pod AI Crawlery (AEO)
+- **Robots.txt**: Zaktualizowano plik `robots_anette.txt`, dodając jawne reguły `Allow: /` dla botów `GPTBot`, `CCBot` oraz `ChatGPT-User`, aby umożliwić i zasygnalizować otwartość na skanowanie struktury przez wiodące modele LLM.
+- **Cennik (OfferCatalog)**: Wdrożono bogaty schemat znaczników strukturalnych `JSON-LD` w `pages/cennik/cennik.html`, zmapowano usługi i uwarunkowania cenowe formując je jako spójny obiekt (Zabiegi na Twarz, Estetyka Oka itd.), co zoptymalizuje podsumowania z cennika w wynikach AI.
+
 ### Nawigacja
 - **Decyzja**: Menu jest ładowane dynamicznie z `_nav.html`.
 - **Stan obecny**: Kolejność linków: **Aktualności, Zabiegi, Technologia, Opinie, O gabinecie, Kontakt**.
@@ -34,7 +38,6 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Wymagania API**: Do pełnej funkcjonalności (diagnostyka + import postów) wymagane jest włączenie w Google Cloud Console **trzech** interfejsów API:
   1.  **My Business Account Management API** (do znajdowania `account_id`)
   2.  **My Business Business Information API** (do znajdowania `location_id`)
-  3.  **Google My Business API** (starsze API, wciąż wymagane do pobierania postów/aktualności). **Uwaga:** Może być ukryte w wyszukiwarce. Należy użyć bezpośredniego linku: `https://console.cloud.google.com/apis/library/mybusiness.googleapis.com`.
   3.  **Google My Business API** (starsze API, wciąż wymagane do pobierania postów/aktualności). **Uwaga:** Jest ukryte w wyszukiwarce. Należy użyć bezpośredniego linku: `https://console.cloud.google.com/apis/library/mybusiness.googleapis.com`.
 
 ### Roadblock: Google API
@@ -92,6 +95,10 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Aktualności**: Przycisk "Więcej" automatycznie wykrywa numer telefonu, zmienia etykietę na "Zadzwoń" i dodaje ikonę słuchawki (SVG).
 
 ## Planowane Zadania (Backlog)
+- **Wdrożenie Raportu Bezpieczeństwa i Funkcjonalności**:
+  - **Zadanie**: Wykorzystanie wygenerowanego raportu analizy (`.agent/analysis_results.md`) w celu systematycznego łatania luk bezpieczeństwa (XSS, brak CSRF, brak autoryzacji w dziale pomiarów) oraz refaktoryzacji monolitu `api/pomiary/index.php`. AI przed rozpoczęciem prac poprawkowych w tych rejonach musi bezwzględnie zaczytać ten plik.
+  - **Status**: Do wdrożenia sukcesywnie we wskazanej przez użytkownika kolejności.
+
 - **Cleanup JS**: Wykonano. Usunięto stary kod obsługi YouTube API z pliku `app.js`.
 - **Optymalizacja Mediów (Wydajność)**:
   - **Zdjęcia**: Konwersja plików PNG (`recepcja_001`, `makijaz-zabieg`, `lipoliza-zabieg`) na format **WebP** (znaczna redukcja wagi).
