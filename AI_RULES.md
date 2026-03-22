@@ -20,6 +20,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 ## Historia Decyzji i Zmian (Log)
 
 ### Optymalizacja pod AI Crawlery (AEO)
+- **Semantyka HTML (EEAT)**: Zgodnie z nowymi wytycznymi zaktualizowano architekturę podstron `zabiegi.html` oraz `o-gabinecie.html`. Wdrożono semantyczne tagowanie (`<article>` dla samodzielnych opisów zabiegów/tekstu, `<aside>` dla ramki bocznej i przeciwwskazań). Jasna hierarchia kodu znacząco odciąża parsery wyszukiwarek.
 - **Robots.txt**: Zaktualizowano plik `robots_anette.txt`, dodając jawne reguły `Allow: /` dla botów `GPTBot`, `CCBot` oraz `ChatGPT-User`, aby umożliwić i zasygnalizować otwartość na skanowanie struktury przez wiodące modele LLM.
 - **Cennik (OfferCatalog)**: Wdrożono bogaty schemat znaczników strukturalnych `JSON-LD` w `pages/cennik/cennik.html`, zmapowano usługi i uwarunkowania cenowe formując je jako spójny obiekt (Zabiegi na Twarz, Estetyka Oka itd.), co zoptymalizuje podsumowania z cennika w wynikach AI.
 
