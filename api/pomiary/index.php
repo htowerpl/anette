@@ -91,7 +91,8 @@ if ($is_submitted) {
     }
     catch (Exception $e) {
         $db->rollBack();
-        die("Błąd zapisu do bazy: " . $e->getMessage());
+        error_log('Pomiary - błąd zapisu: ' . $e->getMessage());
+        die("Błąd zapisu do bazy danych.");
     }
 }
 else {
@@ -113,7 +114,8 @@ if (isset($_GET['delete'])) {
         $render_protokol_id = null;
     } catch (Exception $e) {
         $db->rollBack();
-        die("Błąd usuwania rekordu: " . $e->getMessage());
+        error_log('Pomiary - błąd usuwania: ' . $e->getMessage());
+        die("Błąd usuwania rekordu.");
     }
 }
 

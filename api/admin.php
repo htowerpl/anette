@@ -48,16 +48,19 @@ if (empty($_SESSION['admin_logged_in'])) {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Opcjonalnie, jeśli serwer ma stare certyfikaty
         $response = curl_exec($ch);
         curl_close($ch);
         
         $data = json_decode($response, true);
         
         if (!empty($data['access_token'])) {
-            // Pobierz dane użytkownika (email)
+            // Pobierz dane użytkownika (email) przez cURL
             $userUrl = 'https://www.googleapis.com/oauth2/v2/userinfo?access_token=' . $data['access_token'];
-            $userInfo = json_decode(file_get_contents($userUrl), true);
+            $ch2 = curl_init($userUrl);
+            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch2, CURLOPT_TIMEOUT, 10);
+            $userInfo = json_decode(curl_exec($ch2), true);
+            curl_close($ch2);
             
             if (!empty($userInfo['email']) && in_array($userInfo['email'], $ALLOWED_EMAILS)) {
                 $_SESSION['admin_logged_in'] = true;
@@ -155,7 +158,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     } catch (PDOException $e) {
-        $message = "<div class='error'>Błąd bazy: " . $e->getMessage() . "</div>";
+        error_log('Admin CMS - błąd zapisu: ' . $e->getMessage());
+        $message = "<div class='error'>Wystąpił błąd podczas zapisu do bazy danych.</div>";
     }
 }
 
@@ -165,7 +169,8 @@ try {
     $stmt = $conn->query("SELECT * FROM Anette_news ORDER BY date DESC, id DESC");
     $newsList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    $message = "<div class='error'>Nie można pobrać listy: " . $e->getMessage() . "</div>";
+    error_log('Admin CMS - błąd odczytu: ' . $e->getMessage());
+    $message = "<div class='error'>Nie można pobrać listy wpisów.</div>";
 }
 ?>
 

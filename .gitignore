@@ -6,3 +6,19 @@ node_modules/
 
 # Katalog na lokalne, nieśledzone skrypty i konfiguracje
 /google_restricted/
+
+# Binarka PHP (wrzucona przypadkowo)
+/php
+
+# Pliki konfiguracyjne z danymi wrażliwymi (produkcyjne wersje na serwerze)
+/config_emails.php
+/oauth_callback.php
+/api/oauth_callback.php
+
+# Endpointy diagnostyczne / jednorazowe (usunięte w audycie bezpieczeństwa 03.2026)
+/api/sync_google.php
+/api/import_google_news.php
+/api/run_token_setup.php
+
+# Pliki testowe
+/api/pomiary/test.php

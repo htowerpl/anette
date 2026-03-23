@@ -54,10 +54,11 @@ try {
     ");
 
     // Zabezpieczenie pliku bazy
-    chmod($db_file, 0666);
+    chmod($db_file, 0644);
 
 }
 catch (PDOException $e) {
-    die("Błąd połączenia z bazą danych: " . $e->getMessage());
+    error_log('Pomiary DB - błąd połączenia: ' . $e->getMessage());
+    die("Błąd połączenia z bazą danych.");
 }
 ?>

@@ -1,2 +1,0 @@
-<?php
-echo "TEST PHP DEPLOYMENT SUCCESS";

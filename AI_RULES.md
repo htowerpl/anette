@@ -20,6 +20,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 ## Historia Decyzji i Zmian (Log)
 
 ### Optymalizacja pod AI Crawlery (AEO)
+- **Punkt Przywracania (Checkpoint)**: Ustanowiono stabilny punkt przywracania przed wdrożeniem tekstowym (Po zatwierdzonym commicie: `b98ba42`). Zabezpiecza to czysty stan wdrożonej semantyki oraz technicznych schematów w razie potrzeby wycofania eksperymentów bazujących na słowach kluczowych i linkach zewnętrznych.
 - **Semantyka HTML (EEAT)**: Zgodnie z nowymi wytycznymi zaktualizowano architekturę podstron `zabiegi.html` oraz `o-gabinecie.html`. Wdrożono semantyczne tagowanie (`<article>` dla samodzielnych opisów zabiegów/tekstu, `<aside>` dla ramki bocznej i przeciwwskazań). Jasna hierarchia kodu znacząco odciąża parsery wyszukiwarek.
 - **Robots.txt**: Zaktualizowano plik `robots_anette.txt`, dodając jawne reguły `Allow: /` dla botów `GPTBot`, `CCBot` oraz `ChatGPT-User`, aby umożliwić i zasygnalizować otwartość na skanowanie struktury przez wiodące modele LLM.
 - **Cennik (OfferCatalog)**: Wdrożono bogaty schemat znaczników strukturalnych `JSON-LD` w `pages/cennik/cennik.html`, zmapowano usługi i uwarunkowania cenowe formując je jako spójny obiekt (Zabiegi na Twarz, Estetyka Oka itd.), co zoptymalizuje podsumowania z cennika w wynikach AI.
@@ -32,19 +33,18 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 - **Layout Cennika**: Zmieniono układ na kolumnowy (Masonry) i przeniesiono najdłuższą sekcję na początek listy dla lepszego balansu. Nota prawna przeniesiona na górę.
 - **Cleanup**: Usunięto zduplikowany i nieaktualny plik `cennik.html` z katalogu głównego.
 - **Architektura Danych**: Doprecyzowano w dokumentacji, że `news.php` to interfejs do lokalnej bazy danych, a nie proxy do Google API.
-- **Automatyzacja News**: Wdrożono skrypt `api/import_google_news.php` pobierający posty z Google API do tabeli `Anette_news_g`. Przełączono `news.php` na nową tabelę. Skonfigurowano użycie plików serwerowych (`config_oauth.php`).
-- **Problem API**: Błąd `invalid_grant` (wygasły token). Stworzono narzędzie `setup_google_token.php` do generowania nowego `refresh_token`.
-  - **Zalecenie bezpieczeństwa**: Skrypt `setup_google_token.php` jest przechowywany lokalnie w katalogu `google_restricted/` (ignorowanym przez Git). W razie potrzeby należy go wgrać do bezpiecznego katalogu na serwerze (`/home/opxwpceo/domains/google/`). Do jego uruchomienia służy publiczny "loader" `api/run_token_setup.php`, który należy usunąć z serwera po użyciu.
+- **Automatyzacja News** *(ARCHIWALNE — skrypty usunięte w audycie 03.2026)*: Wdrożono skrypt `api/import_google_news.php` pobierający posty z Google API. Eksperyment zakończony niepowodzeniem (blokada Google API). Skrypt usunięty z repozytorium.
+- **Problem API**: Błąd `invalid_grant` (wygasły token). Narzędzie `setup_google_token.php` przechowywane w `google_restricted/` (ignorowanym przez Git). Publiczny loader `api/run_token_setup.php` usunięty z repozytorium w ramach audytu.
 - **Diagnostyka API**: Dodano narzędzie `google_restricted/find_google_ids.php` do jednorazowego wyszukania `account_id` i `location_id`. Należy je wgrać na serwer ręcznie, użyć i natychmiast usunąć.
 - **Wymagania API**: Do pełnej funkcjonalności (diagnostyka + import postów) wymagane jest włączenie w Google Cloud Console **trzech** interfejsów API:
   1.  **My Business Account Management API** (do znajdowania `account_id`)
   2.  **My Business Business Information API** (do znajdowania `location_id`)
-  3.  **Google My Business API** (starsze API, wciąż wymagane do pobierania postów/aktualności). **Uwaga:** Jest ukryte w wyszukiwarce. Należy użyć bezpośredniego linku: `https://console.cloud.google.com/apis/library/mybusiness.googleapis.com`.
+  3.  **Google My Business API** (starsze API, wycofane przez Google). **Status:** Niedostępne — patrz sekcja "Roadblock".
 
 ### Roadblock: Google API
 - **Problem**: Google całkowicie wycofało i uniemożliwiło włączenie starego `Google My Business API`, które jako jedyne pozwalało na pobieranie postów (`localPosts`). Nowe interfejsy (`Business Information API` etc.) nie posiadają jeszcze tej funkcjonalności.
 - **Eksperyment**: Podjęto próbę użycia endpointu v4 (`https://mybusiness.googleapis.com/v4/.../localPosts`), który mimo deprecjacji może nadal działać przy użyciu odpowiednich prefiksów ID (`accounts/...`, `locations/...`).
-- **Status**: Eksperyment niepowodzony (blokada po stronie Google). `news.php` przywrócono do korzystania wyłącznie z tabeli ręcznej `Anette_news`. Skrypt importujący pozostawiono jako narzędzie diagnostyczne.
+- **Status**: Eksperyment niepowodzony (blokada po stronie Google). `news.php` przywrócono do korzystania wyłącznie z tabeli ręcznej `Anette_news`. Skrypty importujące (`sync_google.php`, `import_google_news.php`) usunięte z repozytorium w audycie 03.2026.
 - **Rozwiązanie (CMS)**: Stworzono panel administracyjny (`api/admin.php`) z logowaniem przez **Google OAuth**.
   - Wykorzystuje plik `config_oauth.php` z bezpiecznego katalogu.
   - Dostęp mają tylko adresy e-mail zdefiniowane w zewnętrznym pliku `config_emails.php` (w bezpiecznym katalogu).
@@ -115,7 +115,7 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 2.  [x] **Config DB**: Wgrać plik `config_db.php` poza katalog publiczny (dla bezpieczeństwa) i uzupełnić go danymi nowej bazy.
 3.  [ ] **Media**: Wykonać konwersję zdjęć do WebP i fontów do WOFF2 (zadanie z Backlogu).
 4.  [x] **SEO**: Wygenerować plik `sitemap.xml` (np. online generator) po uruchomieniu strony i wgrać go do katalogu głównego.
-5.  [ ] **SSL**: Wymusić przekierowanie na HTTPS w panelu hostingu.
+5.  [x] **SSL**: Wymusić przekierowanie na HTTPS w panelu hostingu. *(Zweryfikowano 03.2026 — działa)*
 6.  [ ] **Pomiary Elektryczne**: Stworzenie w `database.php` trwałych tabel typu SŁOWNIK (`inzynierowie_slownik` oraz `mierniki_slownik`) pod auto-uzupełnianie etykiet `<datalist>` w formularzach GUI dla powtarzalnego personelu i maszyn mierzących. (Plan oczekujący - patrz: `implementation_plan.md`).
 
 ---
@@ -151,6 +151,9 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 
 ### Audyt Bezpieczeństwa i SEO (Marzec 2026)
 - **Repozytorium**: Usunięto artefakty gita (`et --hard...`) oraz pliki testowe (`test_braces.py`).
-- **Endpointy News**: Usunięto zduplikowany plik `api/get_news.php` w ramach porządków. Główne zapytania trafiają do `news.php`.
-- **Google Sync API**: Zabezpieczono skrypt `api/sync_google.php` wyłączając publiczne wyświetlanie błędów (`display_errors=0`) i wprowadzając ciche logowanie.
+- **Endpointy News**: Usunięto zduplikowany plik `api/get_news.php`. Główne zapytania trafiają do `news.php`.
+- **Likwidacja martwego kodu Google API**: Usunięto z repozytorium endpointy `api/sync_google.php`, `api/import_google_news.php`, `api/run_token_setup.php` oraz puste placeholdery (`config_emails.php`, `oauth_callback.php`). Pliki dodane do `.gitignore`.
+- **Wycieki danych diagnostycznych**: Wyciszono `$e->getMessage()` we wszystkich plikach PHP (`admin.php`, `pomiary/index.php`, `pomiary/database.php`). Szczegóły błędów trafiają do `error_log()` zamiast na ekran.
+- **Panel Admin (`admin.php`)**: Usunięto `CURLOPT_SSL_VERIFYPEER=false`, zamieniono `file_get_contents` na `cURL` przy pobieraniu danych użytkownika Google.
+- **Baza SQLite (Pomiary)**: Zmieniono `chmod 0666` na `0644`. Dodano `.htaccess` z `Deny from all` w katalogu `db/` blokujący publiczne pobieranie pliku bazy.
 - **SEO**: Zastąpiono docelowy plik reguł botów plikiem `robots_anette.txt` (z odblokowanym dostępem do `/assets/`). W głównym `robots.txt` wprowadzono całkowitą blokadę środowiska testowego (`Disallow: /`).
