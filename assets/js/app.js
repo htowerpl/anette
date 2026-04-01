@@ -1,4 +1,14 @@
 (function () {
+  function escapeHtml(unsafe) {
+      if(!unsafe) return '';
+      return unsafe.toString()
+           .replace(/&/g, "&amp;")
+           .replace(/</g, "&lt;")
+           .replace(/>/g, "&gt;")
+           .replace(/"/g, "&quot;")
+           .replace(/'/g, "&#039;");
+  }
+
   function updateYearStamp() {
     var stamp = document.getElementById("year");
     if (stamp) {
@@ -143,8 +153,10 @@
           const dateObj = new Date(item.date);
           const dateStr = dateObj.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' });
 
-          // Zamiana znaków nowej linii (\n) na znaczniki HTML <br>
-          const contentHtml = item.content ? item.content.replace(/\r\n|\r|\n/g, '<br>') : '';
+          // Zamiana znaków nowej linii (\n) na znaczniki HTML <br> po uprzedniej sanitizacji
+          const escapedContent = item.content ? escapeHtml(item.content) : '';
+          const contentHtml = escapedContent.replace(/\r\n|\r|\n/g, '<br>');
+          const escapedTitle = item.title ? escapeHtml(item.title) : '';
 
           let linkHtml = '';
           if (item.link) {
@@ -169,7 +181,7 @@
               </div>
               ${imageHtml}
               <div class="news-card__body">
-                ${item.title ? `<p class="news-card__tagline">${item.title}</p>` : ''}
+                ${escapedTitle ? `<p class="news-card__tagline">${escapedTitle}</p>` : ''}
                 <p>${contentHtml}</p>
                 ${linkHtml}
               </div>

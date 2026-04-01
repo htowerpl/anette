@@ -9,9 +9,37 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../../assets/brand/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="../../assets/brand/favicon-16.png">
 
-  <link rel="stylesheet" href="../../styles.css?v=20260309_2">
-  <script src="../../assets/js/typography.js?v=20260309_2" defer></script>
-  <script src="../../assets/js/app.js?v=20260309_2" defer></script>
+  <link rel="stylesheet" href="../../styles.css?v=20260325_1">
+  <script src="../../assets/js/typography.js?v=20260325_1" defer></script>
+  <script src="../../assets/js/app.js?v=20260325_1" defer></script>
+
+  <!-- Schemat BeautySalon (GEO / AEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BeautySalon",
+    "name": "Gabinet Kosmetyczny Anette",
+    "url": "https://anette.beauty",
+    "@id": "https://anette.beauty/#salon",
+    "logo": "https://anette.beauty/assets/brand/logo-header.png",
+    "image": "https://anette.beauty/pages/kontakt/media/recepcja_001.png",
+    "telephone": "+48695397578",
+    "priceRange": "$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ul. Cichociemnych 18",
+      "addressLocality": "Gliwice",
+      "postalCode": "44-100",
+      "addressCountry": "PL"
+    },
+    "sameAs": [
+      "https://share.google/C0kluExzE2SswTPll",
+      "https://youtu.be/nQw3lIjjaJg",
+      "https://panoramafirm.pl/%C5%9Bl%C4%85skie,,gliwice,cichociemnych,18/anette_gabinet_kosmetyczny_aneta_szachniewicz-zyctfy_rj.html",
+      "https://www.gowork.pl/gabinet-kosmetyczny-anette-aneta-szachniewicz,24256864/dane-kontaktowe-firmy"
+    ]
+  }
+  </script>
 </head>
 <body>
   <nav id="main-nav"></nav>
@@ -25,27 +53,27 @@
 
       <div class="contact-wrapper">
         <!-- Wizytówka z danymi i zdjęciem -->
-        <div class="contact-card-grid">
+        <div class="contact-card-grid" itemscope itemtype="https://schema.org/BeautySalon">
           <div class="contact-details-content">
             <div>
-              <h3>Gabinet Kosmetyczny Anette</h3>
-              <address>
-                ul. Cichociemnych 18<br>
-                44-100 Gliwice
+              <h3 itemprop="name">Gabinet Kosmetyczny Anette</h3>
+              <address itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                <span itemprop="streetAddress">ul. Cichociemnych 18</span><br>
+                <span itemprop="postalCode">44-100</span> <span itemprop="addressLocality">Gliwice</span>
               </address>
             </div>
             
             <div class="contact-data">
-              <a href="tel:+48695397578" class="contact-item">
+              <a href="tel:+48695397578" class="contact-item" itemprop="telephone">
                 <span class="contact-icon">📞</span> +48 695 397 578
               </a>
-              <a href="mailto:kontakt@anette.beauty" class="contact-item">
+              <a href="mailto:kontakt@anette.beauty" class="contact-item" itemprop="email">
                 <span class="contact-icon">✉️</span> kontakt@anette.beauty
               </a>
             </div>
 
             <div class="contact-social">
-              <a href="https://share.google/C0kluExzE2SswTPll" target="_blank" rel="noopener noreferrer" class="button">
+              <a href="https://share.google/C0kluExzE2SswTPll" target="_blank" rel="noopener noreferrer" class="button" itemprop="sameAs">
                 Google
               </a>
             </div>

@@ -19,6 +19,15 @@ Ten plik służy jako pamięć długotrwała dla asystenta AI. Należy go czyta�
 
 ## Historia Decyzji i Zmian (Log)
 
+### Wdrożenie Optymalizacji GEO i Schematów JSON-LD
+- **Wdrozenie schematów BeautySalon**: Wstrzyknięto zoptymalizowane fragmenty JSON-LD identyfikujące biznes i lokację na stronach `o-gabinecie.html` oraz `kontakt.html`.
+- **Wdrożenie schematów FAQPage**: Dodano niewidoczne metadane Q&A na temat specjalistycznych zabiegów w `zabiegi.html` oraz ogólne FAQ gabinetu na `o-gabinecie.html`. Wzmacnia to bezpośrednie cytaty modeli RAG i asystentów wyszukiwania (Google AI Overviews).
+- **Hybrydowe SEO (Zamiana z klasycznej Sekcji Usług GEO)**: Wycofano inwazyjne, wypunktowane listy w formacie "Answer-First" dodane we wczesnych fazach. W celu ochrony spójności czystego, autorskiego tekstu na stronie (szczególnie w `o-gabinecie.html`), zastosowano w 100% niewidoczną architekturę `Microdata`. Przypięto dedykowane etykiety `itemscope` oraz `itemprop` głęboko na odpowiednich tagach HTML (dyskretnie mapując m.in. `addressLocality` oraz `streetAddress`). Płynnie połączono formy fleksyjne z twardymi zadeklarowaniami poprzez wykorzystanie algorytmu `content="Gliwice"`.
+- **Aktualizacja Atrybutów (Entity Graph)**: Skoncentrowano profile autorytetu poprzez wstrzyknięcie pełnej paczki odnośników ze stopki (YouTube, Panorama Firm, GoWork) do globalnej tablicy `sameAs` obiektu JSON-LD, cementując tożsamość lokalną.
+- **Synchronizacja Rzeczywistości OfferCatalog**: Słownik `JSON-LD` w module `cennik.html` został rozbudowany ze szczątkowej struktury do kompletnego słownika, pokrywającego teraz 100% faktycznego cennika rzędów HTML. Zaniechano punktowego tagowania kilkudziesięciu węzłów `<li>` w widocznym body elementem Microdata, przenosząc ciężar parsowania wyłącznie na globalny "niewidzialny podręcznik cennika" zaczytywany ekspresowo i bezblokowo ze strefy `<head>`.
+- **Cache-Busting**: Zaktualizowano parametry zapytań o pliki zasobów w całym projekcie na `?v=20260325_1` w celu przełamania pamięci podręcznej po edycji arkusza CSS.
+
+
 ### Optymalizacja pod AI Crawlery (AEO)
 - **Punkt Przywracania (Checkpoint)**: Ustanowiono stabilny punkt przywracania przed wdrożeniem tekstowym (Po zatwierdzonym commicie: `b98ba42`). Zabezpiecza to czysty stan wdrożonej semantyki oraz technicznych schematów w razie potrzeby wycofania eksperymentów bazujących na słowach kluczowych i linkach zewnętrznych.
 - **Semantyka HTML (EEAT)**: Zgodnie z nowymi wytycznymi zaktualizowano architekturę podstron `zabiegi.html` oraz `o-gabinecie.html`. Wdrożono semantyczne tagowanie (`<article>` dla samodzielnych opisów zabiegów/tekstu, `<aside>` dla ramki bocznej i przeciwwskazań). Jasna hierarchia kodu znacząco odciąża parsery wyszukiwarek.

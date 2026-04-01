@@ -288,7 +288,7 @@ nav {
   aspect-ratio: 16 / 9; /* Rezerwuje miejsce przed załadowaniem filmu */
   overflow: hidden;
   box-shadow: var(--shadow);
-  background: var(--surface) url("pages/Anette_in.webp?v=20260309_2") no-repeat center center;
+  background: var(--surface) url("pages/Anette_in.webp?v=20260325_1") no-repeat center center;
   background-size: cover;
 }
 
@@ -1675,4 +1675,57 @@ footer a {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================= */
+/* GEO & AEO Optymalizacje (Answer-First)    */
+/* ========================================= */
+.services-geo-section {
+  padding: 2.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-top: 2rem;
+}
+
+.services-geo-section h2 {
+  font-size: 1.8rem;
+  margin-top: 0;
+  margin-bottom: 1.2rem;
+  color: var(--accent);
+}
+
+.lead-answer {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  margin-bottom: 1.8rem;
+  color: var(--text);
+}
+
+.lead-answer strong {
+  font-weight: 700;
+  color: var(--text);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.services-list {
+  padding-left: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.services-list li {
+  margin-bottom: 0.8rem;
+}
+
+.services-list strong {
+  color: var(--accent);
+}
+
+.contact-geo {
+  font-style: normal;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  line-height: 1.6;
+  color: var(--muted);
 }

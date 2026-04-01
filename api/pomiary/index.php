@@ -1,5 +1,106 @@
 <?php
 // Aplikacja: Pomiary 2.0 (Monolit)
+// Bezpieczeństwo: Google OAuth
+session_start();
+
+$oauthConfigPath = '/home/opxwpceo/domains/google/config_oauth.php';
+$emailsConfigPath = '/home/opxwpceo/domains/google/config_emails.php';
+
+if (!file_exists($emailsConfigPath)) {
+    die("Błąd: Brak pliku konfiguracji e-maili na serwerze.");
+}
+$ALLOWED_EMAILS = require $emailsConfigPath;
+
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header('Location: index.php');
+    exit;
+}
+
+if (empty($_SESSION['pomiary_logged_in'])) {
+    if (!file_exists($oauthConfigPath)) {
+        die("Błąd: Brak pliku konfiguracji OAuth na serwerze.");
+    }
+    $oauthConfig = require $oauthConfigPath;
+    
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $redirectUri = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+
+    if (isset($_GET['code'])) {
+        $tokenUrl = 'https://oauth2.googleapis.com/token';
+        $params = [
+            'code' => $_GET['code'],
+            'client_id' => $oauthConfig['client_id'],
+            'client_secret' => $oauthConfig['client_secret'],
+            'redirect_uri' => $redirectUri,
+            'grant_type' => 'authorization_code'
+        ];
+        $ch = curl_init($tokenUrl);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        
+        $data = json_decode($response, true);
+        if (!empty($data['access_token'])) {
+            $userUrl = 'https://www.googleapis.com/oauth2/v2/userinfo?access_token=' . $data['access_token'];
+            $ch2 = curl_init($userUrl);
+            curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch2, CURLOPT_TIMEOUT, 10);
+            $userInfo = json_decode(curl_exec($ch2), true);
+            curl_close($ch2);
+            
+            if (!empty($userInfo['email']) && in_array($userInfo['email'], $ALLOWED_EMAILS)) {
+                $_SESSION['pomiary_logged_in'] = true;
+                $_SESSION['pomiary_email'] = $userInfo['email'];
+                header('Location: ' . strtok($redirectUri, '?'));
+                exit;
+            } else {
+                $loginError = "Brak dostępu dla adresu: " . htmlspecialchars($userInfo['email'] ?? 'nieznany');
+            }
+        } else {
+            $loginError = "Błąd logowania Google (brak tokena).";
+        }
+    }
+
+    $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query([
+        'client_id' => $oauthConfig['client_id'],
+        'redirect_uri' => $redirectUri,
+        'response_type' => 'code',
+        'scope' => 'email profile',
+        'access_type' => 'online'
+    ]);
+?>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <title>Logowanie | Pomiary 2.0</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #eef2f5; margin: 0; }
+        .login-box { background: white; padding: 3rem 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 400px; }
+        .google-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: #fff; color: #757575; border: 1px solid #ddd; padding: 12px 24px; border-radius: 4px; text-decoration: none; font-weight: 500; font-family: Roboto, sans-serif; transition: background 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .google-btn:hover { background: #f8f8f8; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+        .google-icon { width: 18px; height: 18px; }
+        .error { color: red; font-size: 0.9rem; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2 style="margin-top:0; margin-bottom: 2rem; color: #2c3e50;">Aplikacja Pomiary 2.0</h2>
+        <a href="<?php echo htmlspecialchars($authUrl); ?>" class="google-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="" class="google-icon">
+            Zaloguj przez Google
+        </a>
+        <?php if(isset($loginError)) echo "<div class='error'>$loginError</div>"; ?>
+    </div>
+</body>
+</html>
+<?php
+    exit;
+}
+
 // Przechowywanie w lokalnej bazie SQLite
 require_once __DIR__ . '/database.php';
 
@@ -469,8 +570,14 @@ if ($render_protokol_id) {
 <body>
 
     <div class="container">
-        <h1>Kreator Monolityczny Pomiary 2.0</h1>
-        <p style="text-align: center; color: #7f8c8d;">Jedna strona - jeden kompletny protokół do bazy danych.</p>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>Kreator Monolityczny Pomiary 2.0</h1>
+            <div>
+                <span style="font-size: 0.9em; color: #666; margin-right: 15px;"><?php echo htmlspecialchars($_SESSION['pomiary_email'] ?? ''); ?></span>
+                <a href="?logout=1" class="btn" style="background:#e74c3c; padding: 5px 15px;">Wyloguj</a>
+            </div>
+        </div>
+        <p style="text-align: center; color: #7f8c8d; margin-top: 0;">Jedna strona - jeden kompletny protokół do bazy danych.</p>
 
         <div class="section-box" style="background:#eaf2f8; border-color:#b4ccde;">
             <h2 style="margin-top:0; border-bottom: 2px solid #2980b9; color:#2980b9;">Wcześniej zapisane protokoły
@@ -730,7 +837,8 @@ endif; ?>
 
     <script>
         // System przechowywania podręcznego oraz Wczytywanie Danych Edycji //
-        const loadedData = <?php echo json_encode($loaded_data); ?>;
+        // Flagi zabezpieczają przed iniekcją znaków HTML (Stored XSS)
+        const loadedData = <?php echo json_encode($loaded_data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 
         document.addEventListener('DOMContentLoaded', function () {
             const STORAGE_KEY = 'pomiary2_stan_globalny';

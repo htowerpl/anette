@@ -9,9 +9,63 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../../assets/brand/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="../../assets/brand/favicon-16.png">
 
-  <link rel="stylesheet" href="../../styles.css?v=20260309_2">
-  <script src="../../assets/js/typography.js?v=20260309_2" defer></script>
-  <script src="../../assets/js/app.js?v=20260309_2" defer></script>
+  <link rel="stylesheet" href="../../styles.css?v=20260325_1">
+  <script src="../../assets/js/typography.js?v=20260325_1" defer></script>
+  <script src="../../assets/js/app.js?v=20260325_1" defer></script>
+
+  <!-- Schemat BeautySalon (GEO / AEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BeautySalon",
+    "name": "Gabinet Kosmetyczny Anette",
+    "url": "https://anette.beauty",
+    "@id": "https://anette.beauty/#salon",
+    "logo": "https://anette.beauty/assets/brand/logo-header.png",
+    "image": "https://anette.beauty/pages/o-gabinecie/media/recepcja2.jpg",
+    "telephone": "+48695397578",
+    "priceRange": "$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ul. Cichociemnych 18",
+      "addressLocality": "Gliwice",
+      "postalCode": "44-100",
+      "addressCountry": "PL"
+    },
+    "sameAs": [
+      "https://share.google/C0kluExzE2SswTPll",
+      "https://youtu.be/nQw3lIjjaJg",
+      "https://panoramafirm.pl/%C5%9Bl%C4%85skie,,gliwice,cichociemnych,18/anette_gabinet_kosmetyczny_aneta_szachniewicz-zyctfy_rj.html",
+      "https://www.gowork.pl/gabinet-kosmetyczny-anette-aneta-szachniewicz,24256864/dane-kontaktowe-firmy"
+    ]
+  }
+  </script>
+
+  <!-- Schemat FAQPage (GEO / AEO - Pytania Ogólne) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Jakie usługi kosmetyczne oferuje Gabinet Kosmetyczny Anette w Gliwicach?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "W ofercie gabinetu znajdują się zabiegi na twarz i ciało, makijaż permanentny brwi i ust, lipoliza iniekcyjna, mezoterapia mikroigłowa, dermomasaż oraz depilacja (w tym bikini i henna pudrowa brwi)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Jak umówić się na wizytę w gabinecie Anette Beauty?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Na wizytę w naszym salonie zapraszamy do kontaktu telefonicznego pod numerem +48 695 397 578."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <nav id="main-nav"></nav>
@@ -29,13 +83,13 @@
       </div>
 
       <div class="about-grid premium">
-        <article class="about-text">
+        <article class="about-text" itemscope itemtype="https://schema.org/BeautySalon">
           <p>
-            Nazywam się Aneta Szachniewicz i prowadzę własną działalność w Gliwicach, w pawilonie handlowym przy ul.
-            Cichociemnych 18. Z miejscem tym jestem związana od wielu lat jako kosmetyczka, a od września 2020 roku także
-            jako właścicielka Gabinetu Kosmetycznego „Anette”.
+            Nazywam się <span itemprop="founder">Aneta Szachniewicz</span> i prowadzę własną działalność w <span itemprop="addressLocality" content="Gliwice">Gliwicach</span>, w pawilonie handlowym przy <span itemprop="streetAddress">ul.
+            Cichociemnych 18</span>. Z miejscem tym jestem związana od wielu lat jako kosmetyczka, a od września 2020 roku także
+            jako właścicielka Gabinetu Kosmetycznego „<span itemprop="name">Anette</span>”.
           </p>
-          <p>
+          <p itemprop="description">
             Głównym profilem mojej działalności są usługi kosmetyczne. Zajmuję się wykonywaniem zabiegów pielęgnacyjnych
             i ujędrniających na ciało i twarz, przekłuwaniem uszu oraz makijażem permanentnym brwi i ust. W ofercie mojego
             gabinetu znajdą Państwo między innymi liposukcję ultradźwiękową, mezoterapię mikroigłową, dermo-masaż i

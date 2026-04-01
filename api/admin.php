@@ -65,6 +65,7 @@ if (empty($_SESSION['admin_logged_in'])) {
             if (!empty($userInfo['email']) && in_array($userInfo['email'], $ALLOWED_EMAILS)) {
                 $_SESSION['admin_logged_in'] = true;
                 $_SESSION['admin_email'] = $userInfo['email'];
+                $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Generuj token CSRF
                 header('Location: ' . strtok($redirectUri, '?')); // Przekieruj na czysty URL (bez ?code=...)
                 exit;
             } else {
@@ -126,6 +127,10 @@ $message = '';
 
 // Obsługa formularza (Zapis / Usuwanie)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die("<div class='error'>Błąd bezpieczeństwa (CSRF). Odśwież stronę i spróbuj ponownie.</div>");
+    }
+    
     try {
         if (isset($_POST['delete_id'])) {
             // Usuwanie
@@ -229,6 +234,7 @@ try {
         <div class="form-panel">
             <form method="post" id="newsForm">
                 <h2 id="formTitle">Dodaj nową aktualność</h2>
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                 <input type="hidden" name="id" id="id">
                 
                 <div>
@@ -263,6 +269,7 @@ try {
             </form>
 
             <form method="post" id="deleteForm" style="display:none; margin-top:0; padding:0; box-shadow:none;">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                 <input type="hidden" name="delete_id" id="delete_id">
                 <button type="submit" class="delete" onclick="return confirm('Czy na pewno usunąć ten wpis?')">Usuń ten wpis</button>
             </form>
