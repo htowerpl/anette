@@ -1,0 +1,9 @@
+<IfModule mod_headers.c>
+    # Blokada cache dla plików HTML i PHP 
+    # Dzięki temu klient po wejściu na anette.beauty zawsze dostanie nowy nagłówek, a nowe .css/.js zaciągną się same dzięki parametrowi ?v=
+    <FilesMatch "\.(html|htm|php)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires 0
+    </FilesMatch>
+</IfModule>
