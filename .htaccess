@@ -1,9 +1,25 @@
+# Zatrzymanie buforowania HTML (Apache)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# Zatrzymanie agresywnego buforowania (GetSpace / LiteSpeed)
+<IfModule LiteSpeed>
+    CacheDisable public /
+    CacheDisable private /
+    RewriteEngine On
+    RewriteRule \.(html|htm)$ - [E=Cache-Control:no-cache]
+</IfModule>
+
 <IfModule mod_headers.c>
-    # Blokada cache dla plików HTML i PHP 
-    # Dzięki temu klient po wejściu na anette.beauty zawsze dostanie nowy nagłówek, a nowe .css/.js zaciągną się same dzięki parametrowi ?v=
-    <FilesMatch "\.(html|htm|php)$">
-        Header set Cache-Control "no-cache, no-store, must-revalidate"
+    <FilesMatch "\.(html|htm)$">
+        Header unset ETag
+        Header unset Cache-Control
+        Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
         Header set Pragma "no-cache"
-        Header set Expires 0
+        Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
     </FilesMatch>
 </IfModule>
+
+FileETag None
