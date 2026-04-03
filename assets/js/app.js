@@ -345,6 +345,14 @@
       }
     });
 
+    // Tap Target Redirect (Wideo działa jak przycisk na mobile i desktop)
+    video.addEventListener("click", function() {
+      if (!redirected) {
+        video.style.opacity = '0';
+        setTimeout(redirect, 200);
+      }
+    });
+
     // 3. Próba wymuszenia startu i kontrola restrykcji autoplay w urządzeniach mobilnych
     const playPromise = video.play();
     if (playPromise !== undefined) {

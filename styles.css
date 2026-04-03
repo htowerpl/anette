@@ -271,13 +271,23 @@ nav {
   gap: 1.6rem;
   text-align: center;
   justify-items: center;
+  animation: fadeIn 1.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .intro-title {
   margin: 0;
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   letter-spacing: 0.04em;
-  color: #ff8400;
+  background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #ff8400; /* Fallback z pomarańczowego */
 }
 
 .video-frame {
@@ -287,9 +297,16 @@ nav {
   height: auto;
   aspect-ratio: 16 / 9; /* Rezerwuje miejsce przed załadowaniem filmu */
   overflow: hidden;
-  box-shadow: var(--shadow);
-  background: var(--surface) url("pages/Anette_in.webp?v=20260325_1") no-repeat center center;
+  box-shadow: 0 16px 40px rgba(15, 10, 22, 0.4);
+  background: var(--surface) url("pages/Anette_in.webp?v=20260403_1") no-repeat center center;
   background-size: cover;
+  cursor: pointer;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.video-frame:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 24px 50px rgba(15, 10, 22, 0.6);
 }
 
 .video-frame video {
@@ -302,6 +319,19 @@ nav {
 .skip-button {
   margin: 0.5rem auto 0;
   display: inline-flex;
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f6faf8;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.skip-button:hover,
+.skip-button:focus-visible {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: var(--accent);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 header {
